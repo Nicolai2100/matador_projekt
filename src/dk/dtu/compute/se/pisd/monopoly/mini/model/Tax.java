@@ -16,6 +16,10 @@ public class Tax extends Space {
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
 		// TODO note that tax concerns all assets an not just cash
 		controller.paymentToBank(player, player.getBalance() / 10);
+
+		if (player.isBroke()){
+			throw new PlayerBrokeException(player);
+		}
 	}
 
 }

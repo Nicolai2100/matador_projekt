@@ -20,9 +20,8 @@ public class PlayerBrokeException extends Exception {
 	 * @param player the broke player.
 	 */
 	public PlayerBrokeException(Player player) {
-		super("Player went broke");
+		super(player.getName() + " went broke");
 		this.player = player;
-		//player.setBroke(true);
 	}
 
 	/**

@@ -15,6 +15,7 @@ public class GameControllerTest {
 
     @Before
     public void ini(){
+
         game = new Game();
 
         GameController gameController = new GameController(game);
@@ -23,6 +24,7 @@ public class GameControllerTest {
     }
     @org.junit.Test
     public void offerToBuild() {
+
         Property property = new Property();
         List<Space> spaces = game.getSpaces();
 

@@ -97,40 +97,18 @@ public class GameController {
                     this.makeMove(player);
                     //Her  skal han kunne købe hus
                 } catch (PlayerBrokeException e) {
-                    gui.showMessage(e.getMessage() + " got broke!");
                 }
                 catch (GameEndedException w) {
-                    gui.showMessage("Spillet er slut!");
-                    terminated = true;
+                    gui.showMessage(w.getMessage());
+                    if (winner())
+                        terminated = true;
+                }
+                finally {
                 }
             // We could react to the player having gone broke
             }
 
 
-            // Check whether we have a winner
-            Player winner = null;
-            int countActive = 0;
-            for (Player p : players) {
-                if (!p.isBroke()) {
-                    countActive++;
-                    winner = p;
-                }
-            }
-            if (countActive == 1) {
-                gui.showMessage(
-                        "Player " + winner.getName() +
-                                " has won with " + winner.getBalance() + "$.");
-                break;
-            } else if (countActive < 1) {
-                // This can actually happen in very rare conditions and only
-                // if the last player makes a stupid mistake (like buying something
-                // in an auction in the same round when the last but one player went
-                // bankrupt)
-                gui.showMessage(
-                        "All players are broke.");
-                break;
-
-            }
 
             // TODO offer all players the options to trade etc.
 
@@ -148,6 +126,50 @@ public class GameController {
         }
 
         dispose();
+    }
+    public boolean gameEnds(){
+        boolean returnBool = false;
+
+            int countBroke = 0;
+            for (Player p : game.getPlayers()) {
+                if (p.isBroke()) {
+                    countBroke++;
+                }
+            }
+            if (countBroke >= game.getPlayers().size()-1){
+                returnBool = true;
+
+            }
+        return returnBool;
+    }
+
+
+    public boolean winner(){
+        // Check whether we have a winner
+        boolean returnBool = false;
+        Player winner = null;
+        int countActive = 0;
+        for (Player p : game.getPlayers()) {
+            if (!p.isBroke()) {
+                countActive++;
+                winner = p;
+            }
+        }
+        if (countActive == 1) {
+            gui.showMessage(
+                    "Player " + winner.getName() +
+                            " has won with " + winner.getBalance() + "$.");
+            returnBool = true;
+        } else if (countActive < 1) {
+            // This can actually happen in very rare conditions and only
+            // if the last player makes a stupid mistake (like buying something
+            // in an auction in the same round when the last but one player went
+            // bankrupt)
+            gui.showMessage(
+                    "All players are broke.");
+            returnBool = false;
+        }
+        return returnBool;
     }
 
     /**
@@ -318,6 +340,7 @@ public class GameController {
             } catch (PlayerBrokeException e) {
                 // if the payment fails due to the player being broke,
                 // an auction (among the other players is started
+                player.setBroke(true);
                 auction(property);
                 // then the current move is aborted by casting the
                 // PlayerBrokeException again
@@ -349,18 +372,12 @@ public class GameController {
             obtainCash(payer, amount);
             if (payer.getBalance() < amount) {
                 playerBrokeTo(payer, receiver);
+                if (gameEnds())
+                    throw new GameEndedException();
                 throw new PlayerBrokeException(payer);
             }
-            int brokeInt = 0;
-            for (Player playerAll: game.getPlayers()
-            ) {
-                if (playerAll.isBroke()){
-                    brokeInt++;
-                }
-            }
-            if (brokeInt >= game.getPlayers().size()){
-                throw new GameEndedException();
-            }
+
+
         }
         gui.showMessage("Player " + payer.getName() + " pays " + amount + "$ to player " + receiver.getName() + ".");
         payer.payMoney(amount);
@@ -393,17 +410,9 @@ public class GameController {
             obtainCash(player, amount);
             if (amount > player.getBalance()) {
                 playerBrokeToBank(player);
+                if (gameEnds())
+                    throw new GameEndedException();
                 throw new PlayerBrokeException(player);
-            }
-            int brokeInt = 0;
-            for (Player playerAll: game.getPlayers()
-            ) {
-                if (playerAll.isBroke()){
-                    brokeInt++;
-                }
-            }
-            if (brokeInt >= game.getPlayers().size()){
-                throw new GameEndedException();
             }
         }
         gui.showMessage("Player " + player.getName() + " pays " + amount + "$ to the bank.");
@@ -415,20 +424,21 @@ public class GameController {
      *
      * @param property the property which is for auction
      */
-    public void auction(Property property) throws GameEndedException {
+    public void auction(Property property) throws GameEndedException, PlayerBrokeException {
         gui.showMessage("Så er der auktion for " + property.getName() + "." + "\n" +
                 "Bud der ikke overgår, det forrige bud medfører udmeldning fra auktionen.");
 
         Player c = game.getCurrentPlayer();
-        List<Player> players = game.getPlayers();
         List<Player> bidders = new ArrayList<>();
 
-        for (Player player : players) {
-            if (player != c || player.isBroke()) {
+        for (Player player : game.getPlayers()) {
+            if (player != c || !player.isBroke()) {
                 bidders.add(player);
             }
         }
-        bidders.add(c);
+        if (!c.isBroke()){
+            bidders.add(c);
+        }
         int lastBid = 0;
         int curBid = 0;
         int i = 0;
@@ -447,10 +457,14 @@ public class GameController {
         }
         gui.showMessage(bidders.get(0).getName() + " vinder auktionen!");
         property.setOwner(bidders.get(0));
-        try {
+
+        if (bidders.get(0).getBalance() < lastBid){
+
+            bidders.get(0).setBroke(true);
+            throw new PlayerBrokeException(bidders.get(0));
+        }
+        else{
             paymentToBank(bidders.get(0), lastBid);
-        } catch (PlayerBrokeException e) {
-            e.printStackTrace();
         }
     }
 
@@ -528,10 +542,8 @@ public class GameController {
     public void offerToBuild(GameController controller, Player player) throws PlayerBrokeException {
         Set<Property> playerProperties = player.getOwnedProperties();
 
-
         if (playerProperties.contains(RealEstate.class) || playerProperties.size() < 1 || player.isBroke()) {
             return;
-
 
         } else {
             String choice = gui.getUserSelection("Vil du bygge hus?", "Ja", "Nej");
