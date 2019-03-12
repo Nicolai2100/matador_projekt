@@ -22,6 +22,7 @@ public class PlayerBrokeException extends Exception {
 	public PlayerBrokeException(Player player) {
 		super("Player went broke");
 		this.player = player;
+		//player.setBroke(true);
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.model;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 
 /**
@@ -40,7 +41,7 @@ public abstract class Card {
 	 * @param player the involved player
 	 * @throws PlayerBrokeException when the player goes bankrupt by the action
 	 */
-	public void doAction(GameController controller, Player player) throws PlayerBrokeException {
+	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
 		// Most cards should return the card to the deck, when the card action
 		// is executed. Subclasses and call the super method to achieve this.
 		controller.returnChanceCardToDeck(this);

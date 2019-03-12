@@ -3,6 +3,7 @@ package dk.dtu.compute.se.pisd.monopoly.mini.model.cards;
 import dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Card;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 
 /**
@@ -15,7 +16,7 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeExceptio
 public class PayTax extends Card {
 
 	@Override
-	public void doAction(GameController controller, Player player) throws PlayerBrokeException {
+	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
 		// TODO note that tax concerns all assets an not just cash
 		//      this is just a simple  way of implementing tax
 		try {

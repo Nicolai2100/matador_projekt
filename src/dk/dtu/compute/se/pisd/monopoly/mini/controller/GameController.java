@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
@@ -96,9 +97,15 @@ public class GameController {
                     this.makeMove(player);
                     //Her  skal han kunne købe hus
                 } catch (PlayerBrokeException e) {
-                    // We could react to the player having gone broke
+                    gui.showMessage(e.getMessage() + " got broke!");
                 }
+                catch (GameEndedException w) {
+                    gui.showMessage("Spillet er slut!");
+                    terminated = true;
+                }
+            // We could react to the player having gone broke
             }
+
 
             // Check whether we have a winner
             Player winner = null;
@@ -153,7 +160,7 @@ public class GameController {
      * @param player the player making the move
      * @throws PlayerBrokeException if the player goes broke during the move
      */
-    public void makeMove(Player player) throws PlayerBrokeException {
+    public void makeMove(Player player) throws PlayerBrokeException, GameEndedException {
 
         boolean castDouble;
         int doublesCount = 0;
@@ -207,7 +214,7 @@ public class GameController {
      * @param space  the space to which the player moves
      * @throws PlayerBrokeException when the player goes broke doing the action on that space
      */
-    public void moveToSpace(Player player, Space space) throws PlayerBrokeException {
+    public void moveToSpace(Player player, Space space) throws PlayerBrokeException, GameEndedException {
         int posOld = player.getCurrentPosition().getIndex();
         player.setCurrentPosition(space);
 
@@ -245,7 +252,7 @@ public class GameController {
      * @param player the player taking a chance card
      * @throws PlayerBrokeException if the player goes broke by this activity
      */
-    public void takeChanceCard(Player player) throws PlayerBrokeException {
+    public void takeChanceCard(Player player) throws PlayerBrokeException, GameEndedException {
         Card card = game.drawCardFromDeck();
         gui.displayChanceCard(card.getText());
         gui.showMessage("Player " + player.getName() + " draws a chance card.");
@@ -293,7 +300,7 @@ public class GameController {
      * @param player   the player the property is offered to
      * @throws PlayerBrokeException when the player chooses to buy but could not afford it
      */
-    public void offerToBuy(Property property, Player player) throws PlayerBrokeException {
+    public void offerToBuy(Property property, Player player) throws PlayerBrokeException, GameEndedException {
         // TODO We might also allow the player to obtainCash before
         // the actual offer, to see whether he can free enough cash
         // for the sale.
@@ -337,12 +344,22 @@ public class GameController {
      * @param receiver the beneficiary of the payment
      * @throws PlayerBrokeException when the payer goes broke by this payment
      */
-    public void payment(Player payer, int amount, Player receiver) throws PlayerBrokeException {
+    public void payment(Player payer, int amount, Player receiver) throws PlayerBrokeException, GameEndedException {
         if (payer.getBalance() < amount) {
             obtainCash(payer, amount);
             if (payer.getBalance() < amount) {
                 playerBrokeTo(payer, receiver);
                 throw new PlayerBrokeException(payer);
+            }
+            int brokeInt = 0;
+            for (Player playerAll: game.getPlayers()
+            ) {
+                if (playerAll.isBroke()){
+                    brokeInt++;
+                }
+            }
+            if (brokeInt >= game.getPlayers().size()){
+                throw new GameEndedException();
             }
         }
         gui.showMessage("Player " + payer.getName() + " pays " + amount + "$ to player " + receiver.getName() + ".");
@@ -371,12 +388,22 @@ public class GameController {
      * @param amount the amount
      * @throws PlayerBrokeException when the player goes broke by the payment
      */
-    public void paymentToBank(Player player, int amount) throws PlayerBrokeException {
+    public void paymentToBank(Player player, int amount) throws PlayerBrokeException, GameEndedException {
         if (amount > player.getBalance()) {
             obtainCash(player, amount);
             if (amount > player.getBalance()) {
                 playerBrokeToBank(player);
                 throw new PlayerBrokeException(player);
+            }
+            int brokeInt = 0;
+            for (Player playerAll: game.getPlayers()
+            ) {
+                if (playerAll.isBroke()){
+                    brokeInt++;
+                }
+            }
+            if (brokeInt >= game.getPlayers().size()){
+                throw new GameEndedException();
             }
         }
         gui.showMessage("Player " + player.getName() + " pays " + amount + "$ to the bank.");
@@ -388,8 +415,7 @@ public class GameController {
      *
      * @param property the property which is for auction
      */
-    public void auction(Property property) {
-        // TODO auction needs to be implemented
+    public void auction(Property property) throws GameEndedException {
         gui.showMessage("Så er der auktion for " + property.getName() + "." + "\n" +
                 "Bud der ikke overgår, det forrige bud medfører udmeldning fra auktionen.");
 
@@ -418,7 +444,6 @@ public class GameController {
             }
             lastBid = curBid > 0 && curBid > lastBid ? curBid : lastBid;
             i++;
-
         }
         gui.showMessage(bidders.get(0).getName() + " vinder auktionen!");
         property.setOwner(bidders.get(0));
@@ -540,7 +565,6 @@ public class GameController {
                     }
                 }
             }
-
         }
     }
 }
