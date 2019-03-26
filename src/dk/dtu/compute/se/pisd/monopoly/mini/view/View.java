@@ -36,7 +36,7 @@ public class View implements Observer {
     private Map<Player, GUI_Player> player2GuiPlayer = new HashMap<Player, GUI_Player>();
     private Map<Player, Integer> player2position = new HashMap<Player, Integer>();
     private Map<Space, GUI_Field> space2GuiField = new HashMap<Space, GUI_Field>();
-
+    private Map<Player, PlayerPanel> player2PlayerPanel = new HashMap<Player, PlayerPanel>();
     private boolean disposed = false;
 
     /**
@@ -49,6 +49,12 @@ public class View implements Observer {
     public View(Game game, GUI gui) {
         this.game = game;
         this.gui = gui;
+
+        for (Player player : game.getPlayers()) {
+            PlayerPanel playerPanel = new PlayerPanel(game, player);
+            player2PlayerPanel.put(player, playerPanel);
+        }
+
         GUI_Field[] guiFields = gui.getFields();
 
         int i = 0;
@@ -150,6 +156,11 @@ public class View implements Observer {
                 guiPlayer.setName(name);
             }
         }
+
+/*
+        player2PlayerPanel.get(player).update();
+*/
+
     }
 
     public void dispose() {

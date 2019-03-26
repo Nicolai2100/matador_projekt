@@ -104,6 +104,7 @@ public class GameController {
                         terminated = true;
                 }
                 finally {
+
                 }
             // We could react to the player having gone broke
             }

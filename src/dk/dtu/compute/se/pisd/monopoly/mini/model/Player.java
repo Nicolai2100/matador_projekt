@@ -25,7 +25,7 @@ public class Player extends Subject {
 	
 	private Space currentPosition;
 	
-	private int balance = 0;
+	private int balance = 5000;
 	
 	private boolean inPrison = false;
 	
@@ -155,7 +155,7 @@ public class Player extends Subject {
 	
 	/**
 	 * Adds a property to the list of currently owned properties.
-	 * 
+	 *
 	 * @param property the added property
 	 */
 	public void addOwnedProperty(Property property) {
