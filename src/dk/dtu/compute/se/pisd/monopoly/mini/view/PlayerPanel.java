@@ -71,11 +71,13 @@ public class PlayerPanel extends JFrame {
         this.repaint();
     }
 
-    /*Tilføj en metode update() til klassen, som først sletter den gamle inhold fra panelet og så kreirer nogle paneler på framet, som viser de forskellige informationer (se skematiske tegninger fra forelæsing 7).
+    /*Tilføj en metode update() til klassen, som først sletter den gamle inhold fra panelet
+    og så kreirer nogle paneler på framet, som viser de forskellige informationer (se skematiske
+    tegninger fra forelæsing 7).
 
-
-
-Når I er lidt længere i opgaven, så kan I prøve at eksperimentere lidt med layoutet, farverne, og randen (border) for at finde ud af hvilken effekt de forskellige indstillinger har (see Java tutorials om layouts og borders).
+Når I er lidt længere i opgaven, så kan I prøve at eksperimentere
+ lidt med layoutet, farverne, og randen (border) for at finde ud af hvilken
+  effekt de forskellige indstillinger har (see Java tutorials om layouts og borders).
 
 */
 
