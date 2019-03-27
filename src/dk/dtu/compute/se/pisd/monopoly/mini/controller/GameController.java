@@ -95,7 +95,6 @@ public class GameController {
             if (!player.isBroke()) {
                 try {
                     this.makeMove(player);
-                    //Her  skal han kunne købe hus
                 } catch (PlayerBrokeException e) {
                 }
                 catch (GameEndedException w) {
@@ -108,8 +107,6 @@ public class GameController {
                 }
             // We could react to the player having gone broke
             }
-
-
 
             // TODO offer all players the options to trade etc.
 
@@ -125,7 +122,6 @@ public class GameController {
                 }
             }
         }
-
         dispose();
     }
     public boolean gameEnds(){

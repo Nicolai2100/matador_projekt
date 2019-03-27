@@ -10,6 +10,9 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @Malte og Nicolai L
+ */
 public class PlayerPanel extends JFrame {
     private Game game;
     private Player player;
