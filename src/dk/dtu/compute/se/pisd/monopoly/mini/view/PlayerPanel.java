@@ -4,6 +4,8 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Space;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +29,8 @@ public class PlayerPanel extends JFrame {
         this.setSize(800, 200);
         this.validate();
         this.setVisible(true);
-update();
+        update();
+
 //Måske noget med en fængselsstatus
 
     }
@@ -46,24 +49,26 @@ update();
         playerPanel.setMaximumSize(dimension);
         playerPanel.setPreferredSize(dimension);
         mainPanel.add(playerPanel);
-/*
 
         JPanel propertyPanel = new JPanel();
-        for (Space space:game.getSpaces()) {
-            if (space instanceof Property){
-                if (((Property) space).getOwner().equals(player.getName())){
+        propertyPanel.setLayout(new BoxLayout(propertyPanel, BoxLayout.Y_AXIS));
+        propertyPanel.setMaximumSize(dimension);
+        propertyPanel.setPreferredSize(dimension);
+        mainPanel.add(propertyPanel);
+
+        JLabel propertyLabel;
+        for (Space space : game.getSpaces()) {
+            if (space instanceof RealEstate || space instanceof Property || space instanceof Utility) {
+                if (((Property) space).getOwner() != null) {
+                    if (((Property) space).getOwner().equals(player)) {
+                        propertyLabel = new JLabel(space.getName());
+                        propertyPanel.add(propertyLabel);
+                    }
                 }
             }
         }
-*/
-
-
-
-
-
         this.revalidate();
         this.repaint();
-
     }
 
     /*Tilføj en metode update() til klassen, som først sletter den gamle inhold fra panelet og så kreirer nogle paneler på framet, som viser de forskellige informationer (se skematiske tegninger fra forelæsing 7).

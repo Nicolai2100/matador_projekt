@@ -14,7 +14,7 @@ public class Property extends Space {
 
     private int cost;
     private int rent;
-
+    private boolean isOwned = false;
     private Player owner;
 
 
@@ -74,6 +74,7 @@ public class Property extends Space {
      */
     public void setOwner(Player player) {
         this.owner = player;
+        isOwned = true;
         notifyChange();
     }
 
