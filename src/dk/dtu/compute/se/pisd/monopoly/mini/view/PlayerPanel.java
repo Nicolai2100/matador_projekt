@@ -46,19 +46,16 @@ update();
         playerPanel.setMaximumSize(dimension);
         playerPanel.setPreferredSize(dimension);
         mainPanel.add(playerPanel);
+/*
 
         JPanel propertyPanel = new JPanel();
         for (Space space:game.getSpaces()) {
-
             if (space instanceof Property){
                 if (((Property) space).getOwner().equals(player.getName())){
-
-
-
-
                 }
             }
         }
+*/
 
 
 

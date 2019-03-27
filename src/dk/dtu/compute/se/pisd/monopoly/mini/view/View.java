@@ -59,15 +59,11 @@ public class View implements Observer {
 
         int i = 0;
         for (Space space : game.getSpaces()) {
-
-
             // TODO, here we assume that the games fields fit to the GUI's fields;
             // the GUI fields should actually be created according to the game's
             // fields
-
             space2GuiField.put(space, guiFields[i++]);
             space.attach(this);
-
         }
 
         // create the players in the GUI
@@ -156,10 +152,8 @@ public class View implements Observer {
                 guiPlayer.setName(name);
             }
         }
-
-/*
         player2PlayerPanel.get(player).update();
-*/
+
 
     }
 
