@@ -27,6 +27,7 @@ public class MiniMonopoly {
 	 *
 	 * @return the initial game board and (not shuffled) deck of chance cards 
 	 */
+
 	public static Game createGame() {
 
 		// Create the initial Game set up (note that, in this simple
@@ -150,6 +151,11 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		b.setAmount(100);
 		cards.add(b);
 		game.setCardDeck(cards);
+
+
+
+
+
 
 		return game;
 	}

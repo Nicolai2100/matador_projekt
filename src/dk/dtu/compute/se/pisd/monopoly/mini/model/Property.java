@@ -5,6 +5,9 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 
+import java.awt.*;
+import java.util.List;
+
 /**
  * A property which is a space that can be owned by a player.
  *
@@ -16,6 +19,8 @@ public class Property extends Space {
     private int rent;
     private boolean isOwned = false;
     private Player owner;
+
+
 
 
     /**
@@ -96,6 +101,8 @@ public class Property extends Space {
 
 
         }
+
+
     }
 
 }
