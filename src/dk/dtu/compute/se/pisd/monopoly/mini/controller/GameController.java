@@ -537,44 +537,8 @@ public class GameController {
     }
 
     public void offerToBuild(GameController controller, Player player) throws PlayerBrokeException {
-        Set<Property> playerProperties = player.getOwnedProperties();
+        //TODO Nicolai
 
-        if (playerProperties.contains(RealEstate.class) || playerProperties.size() < 1 || player.isBroke()) {
-            return;
-
-        } else {
-            String choice = gui.getUserSelection("Vil du bygge hus?", "Ja", "Nej");
-            if (choice.equalsIgnoreCase("nej")) {
-                return;
-            } else {
-                for (Property prop : playerProperties) {
-                    if (prop instanceof RealEstate) {
-
-                        try {
-                        RealEstate realEstate = ((RealEstate) prop);
-
-                            String choice2 = gui.getUserSelection("Vil du bygge hus på " + prop.toString()
-                                    , "Ja", "Nej");
-                            if (choice2.equalsIgnoreCase("nej")) {
-                            } else {
-                                int housePrice = realEstate.getPriceForHouse();
-                                if (player.getBalance() - housePrice < 0) {
-                                    gui.showMessage("Du har ikke råd til at bygge et hus på denne grund!");
-                                } else {
-
-                                    player.payMoney(housePrice);
-                                    realEstate.setHouseCount(realEstate.getHouseCount() + 1);
-                                    realEstate.computeRent();
-                                    controller.paymentToBank(player, housePrice);
-                                }
-                            }
-                        } catch (Exception e) {
-                            System.out.println(prop.toString() + " er ikke en byggegrund");
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 

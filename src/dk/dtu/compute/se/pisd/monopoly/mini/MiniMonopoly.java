@@ -64,7 +64,6 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCost(1200);
 		p.setRent(50);
 		p.setColorGroup(ColorGroup.lightblue);
-
 		((RealEstate) p).setPriceForHouse(50);
 		game.addSpace(p);
 		
@@ -190,14 +189,14 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.YELLOW);
 		game.addPlayer(p);
-
+/*
 		p = new Player();
 		p.setName("Player 3");
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.GREEN);
 		game.addPlayer(p);
 
-	/*	p = new Player();
+		p = new Player();
 		p.setName("Player 4");
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.BLACK);
