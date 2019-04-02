@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.database;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
+import java.sql.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
