@@ -419,6 +419,7 @@ public class GameController {
      * This method implements the activity of auctioning a property.
      *
      * @param property the property which is for auction
+     * @author Jeppe s170196, Mads s170185
      */
     public void auction(Property property) throws GameEndedException {
         List<Player> bidders = new ArrayList<>();
