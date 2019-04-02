@@ -1,6 +1,7 @@
-package dk.dtu.compute.se.pisd.monopoly.mini.view;
+package dk.dtu.compute.se.pisd.monopoly.mini.Test;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
+import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_main.GUI;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,5 @@ public class ViewTest {
     @Test
     public void colorsFromStreets() {
 
-        view.colorsFromStreets();
          }
 }

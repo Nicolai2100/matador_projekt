@@ -76,7 +76,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		s.setName("Øresund");
 		s.setCost(4000);
 		s.setRent(500);
-		p.setColorGroup(ColorGroup.ferry);
+		p.setColorGroup(ColorGroup.navy);
 		game.addSpace(s);
 
 		p = new RealEstate();
@@ -97,6 +97,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCost(2000);
 		p.setRent(100);
 		((RealEstate) p).setPriceForHouse(50);
+		p.setColorGroup(ColorGroup.pink);
 		game.addSpace(p);
 		
 		p = new RealEstate();
@@ -104,7 +105,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCost(2400);
 		p.setRent(150);
 		((RealEstate) p).setPriceForHouse(50);
-
+		p.setColorGroup(ColorGroup.pink);
 		game.addSpace(p);
 		
 		Space prison = new Space();
@@ -116,6 +117,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCost(2800);
 		p.setRent(200);
 		((RealEstate) p).setPriceForHouse(50);
+		p.setColorGroup(ColorGroup.green);
 
 		game.addSpace(p);
 		
@@ -123,12 +125,15 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setName("Coca-Cola Tapperi");
 		p.setCost(3000);
 		p.setRent(300);
+		p.setColorGroup(ColorGroup.darkgreen);
 		game.addSpace(p);
 		
 		p = new RealEstate();
 		p.setName("Bülowsvej");
 		p.setCost(2800);
 		p.setRent(200);
+		p.setColorGroup(ColorGroup.green);
+
 		((RealEstate) p).setPriceForHouse(50);
 
 		game.addSpace(p);
@@ -138,6 +143,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCost(3200);
 		p.setRent(250);
 		((RealEstate) p).setPriceForHouse(50);
+		p.setColorGroup(ColorGroup.green);
 
 		game.addSpace(p);
 		

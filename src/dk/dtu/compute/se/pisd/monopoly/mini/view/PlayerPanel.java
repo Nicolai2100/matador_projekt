@@ -1,9 +1,6 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.view;
 
-import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.Space;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 
@@ -44,7 +41,6 @@ public class PlayerPanel extends JFrame {
         JPanel playerPanel = new JPanel();
         playerPanel.setBackground(player.getColor());
         playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
-
         JLabel nameLabel = new JLabel(player.getName());
         playerPanel.add(nameLabel);
         JLabel balanceLabel = new JLabel("" + player.getBalance());
@@ -53,25 +49,14 @@ public class PlayerPanel extends JFrame {
         playerPanel.setPreferredSize(dimension);
         mainPanel.add(playerPanel);
 
-        JPanel propertyPanel = new JPanel();
-        propertyPanel.setLayout(new BoxLayout(propertyPanel, BoxLayout.Y_AXIS));
-        propertyPanel.setMaximumSize(dimension);
-        propertyPanel.setPreferredSize(dimension);
-        mainPanel.add(propertyPanel);
+        JPanel
 
-        JLabel propertyLabel;
-        for (Space space : game.getSpaces()) {
-            if (space instanceof RealEstate || space instanceof Property || space instanceof Utility) {
-                if (((Property) space).getOwner() != null) {
-                    if (((Property) space).getOwner().equals(player)) {
-                        propertyLabel = new JLabel(space.getName());
-                        propertyPanel.add(propertyLabel);
-                    }
-                }
-            }
-        }
+
+
         this.revalidate();
         this.repaint();
+
+
     }
 
     /*Tilføj en metode update() til klassen, som først sletter den gamle inhold fra panelet
