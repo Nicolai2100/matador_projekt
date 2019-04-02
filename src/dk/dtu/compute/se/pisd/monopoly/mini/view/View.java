@@ -42,35 +42,6 @@ public class View implements Observer {
     private boolean disposed = false;
 
 
-
-
-
-    public List<Color> colorsFromStreets(){
-        List<Color> colors = new ArrayList<>();
-        List<String> colorS = new ArrayList<>();
-
-        for (GUI_Field field: gui.getFields()) {
-            if (field instanceof GUI_Street){
-                GUI_Street street = (GUI_Street)field;
-                colorS.add(street.toString());
-
-                for (String streng: colorS) {
-                    String [] opdelt = streng.split("[ " +"]") ;
-                    System.out.println(opdelt[2].trim());
-                    System.out.println(opdelt[2].trim());
-
-                    Color col = Color.getColor(opdelt[1].trim())           ;
-                    System.out.println(col);
-                }
-            }
-        }
-        return colors;
-    }
-    enum ColorGroup {
-
-
-
-    }
     /**
      * Constructor for the view of a game based on a game and an already
      * running Matador GUI.
