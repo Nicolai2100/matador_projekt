@@ -67,11 +67,23 @@ public class PlayerPanel extends JFrame {
         playerPanel.setPreferredSize(dimension);
         mainPanel.add(playerPanel);
 
+        for (Space space: game.getSpaces()) {
+            if (space instanceof Property){
+                Property property = (Property)space;
+                if (property.getOwner() != null){
+                    if (property.getOwner() == player){
+                        ColorGroup colorGroup = property.getColorGroup();
+                        JPanel jPanel = panelMaker(colorGroup);
+                        labelMaker(jPanel, property.getName());
+                    }
+                }
+            }
+        }
         //Således er der oprettet netop et panel for hver farvegruppe
-        for (ColorGroup colorGroup : ColorGroup.values()) {
+      /*  for (ColorGroup colorGroup : ColorGroup.values()) {
             JPanel jPanel = panelMaker(colorGroup);
             hasherMalte.put(colorGroup, jPanel);
-        }
+        }*/
 
         this.revalidate();
         this.repaint();
@@ -85,7 +97,7 @@ public class PlayerPanel extends JFrame {
         colorGroupPanel.setBorder(new EtchedBorder());
         colorGroupPanel.setMaximumSize(dimension);
         colorGroupPanel.setPreferredSize(dimension);
-        colorGroupPanel.setVisible(false);
+        colorGroupPanel.setVisible(true);
         mainPanel.add(colorGroupPanel);
 
         return colorGroupPanel;

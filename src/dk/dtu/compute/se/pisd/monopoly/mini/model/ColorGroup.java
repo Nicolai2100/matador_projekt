@@ -35,9 +35,9 @@ public enum ColorGroup {
                 return new Color(255, 255, 50);
             case purple:
                 return new Color(150, 60, 150);
-            case darkgreen:
+            case darkgreen: //Brewery
                 return new Color(0, 100, 0);
-            case navy:
+            case navy: //Ferry
                 return new Color(0, 0, 128);
         }
         return Color.black;
