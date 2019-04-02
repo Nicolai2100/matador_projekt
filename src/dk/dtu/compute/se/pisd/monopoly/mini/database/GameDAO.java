@@ -15,11 +15,11 @@ import java.util.List;
  */
 public class GameDAO implements IGameDAO {
 
-    private Connection createConnection(){
-        return null;
-    }
+    private Connection connection;
 
-    //blablabla
+    private void createConnection() throws SQLException {
+        connection = DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020", "s185020", "iEFSqK2BFP60YWMPlw77I");
+    }
 
     @Override
     public void saveGame(Game game) {
