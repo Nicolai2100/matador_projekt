@@ -57,7 +57,8 @@ public class GameDAO implements IGameDAO {
     @Override
     public List<Game> getGamesList() {
         List gameList = new ArrayList<Game>();
-        try (Connection c = createConnection()) {
+        checkConnection();
+        try {
 
             PreparedStatement gameStm = c.prepareStatement("SELECT * FROM Game");
 
