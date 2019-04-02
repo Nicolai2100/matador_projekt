@@ -45,6 +45,7 @@ public class MiniMonopoly {
 		p.setName("Rødovrevej");
 		p.setCost(1200);
 		p.setRent(50);
+		p.setColorGroup(ColorGroup.lightblue);
 		((RealEstate) p).setPriceForHouse(50);
 		game.addSpace(p);
 
@@ -62,6 +63,8 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setName("Hvidovrevej");
 		p.setCost(1200);
 		p.setRent(50);
+		p.setColorGroup(ColorGroup.lightblue);
+
 		((RealEstate) p).setPriceForHouse(50);
 		game.addSpace(p);
 		
@@ -73,12 +76,15 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		s.setName("Øresund");
 		s.setCost(4000);
 		s.setRent(500);
+		p.setColorGroup(ColorGroup.ferry);
 		game.addSpace(s);
 
 		p = new RealEstate();
 		p.setName("Roskildevej");
 		p.setCost(2000);
 		p.setRent(100);
+		p.setColorGroup(ColorGroup.pink);
+
 		((RealEstate) p).setPriceForHouse(50);
 		game.addSpace(p);
 		
@@ -183,6 +189,24 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setName("Player 3");
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.GREEN);
+		game.addPlayer(p);
+
+		p = new Player();
+		p.setName("Player 4");
+		p.setCurrentPosition(game.getSpaces().get(0));
+		p.setColor(Color.BLACK);
+		game.addPlayer(p);
+
+		p = new Player();
+		p.setName("Player 5");
+		p.setCurrentPosition(game.getSpaces().get(0));
+		p.setColor(Color.BLUE);
+		game.addPlayer(p);
+
+		p = new Player();
+		p.setName("Player 6");
+		p.setCurrentPosition(game.getSpaces().get(0));
+		p.setColor(Color.cyan);
 		game.addPlayer(p);
 	}
 

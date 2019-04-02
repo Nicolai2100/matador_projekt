@@ -19,9 +19,16 @@ public class Property extends Space {
     private int rent;
     private boolean isOwned = false;
     private Player owner;
+    private ColorGroup colorGroup;
 
 
+    public void setColorGroup(ColorGroup colorGroup) {
+        this.colorGroup = colorGroup;
+    }
 
+    public ColorGroup getColorGroup() {
+        return colorGroup;
+    }
 
     /**
      * Returns the cost of this property.

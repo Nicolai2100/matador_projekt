@@ -1,8 +1,18 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.model;
 
 
-enum ColorGroup {
+public enum ColorGroup {
 
+    lightblue,
+    pink,
+    green,
+    darkgrey,
+    red,
+    white,
+    yellow,
+    purple,
+    ferry,
+    brewery
 
 
 }

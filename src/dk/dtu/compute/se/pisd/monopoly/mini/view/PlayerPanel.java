@@ -22,14 +22,14 @@ public class PlayerPanel extends JFrame {
     public PlayerPanel(Game game, Player player) {
         this.game = game;
         this.player = player;
-        dimension = new Dimension(100, 200);
+        dimension = new Dimension(72, 100);
 
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         this.setContentPane(mainPanel);
-        this.setLocation(710, game.getPlayers().indexOf(player) * 220);
-        this.setSize(800, 200);
+        this.setLocation(710, game.getPlayers().indexOf(player) * 120);
+        this.setSize(800, 120);
         this.validate();
         this.setVisible(true);
         update();
