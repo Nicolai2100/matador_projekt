@@ -5,7 +5,11 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.util.Map;
+
+import static dk.dtu.compute.se.pisd.monopoly.mini.model.ColorGroup.lightblue;
 
 /**
  * @Malte og Nicolai L
@@ -15,6 +19,7 @@ public class PlayerPanel extends JFrame {
     private Player player;
     private JPanel mainPanel;
     private Dimension dimension;
+    private Map<ColorGroup, JPanel> hasherMalte; //TODO lol
 
     public PlayerPanel(Game game, Player player) {
         this.game = game;
@@ -41,6 +46,7 @@ public class PlayerPanel extends JFrame {
         JPanel playerPanel = new JPanel();
         playerPanel.setBackground(player.getColor());
         playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
+        playerPanel.setBorder(new EtchedBorder());
         JLabel nameLabel = new JLabel(player.getName());
         playerPanel.add(nameLabel);
         JLabel balanceLabel = new JLabel("" + player.getBalance());
@@ -49,16 +55,36 @@ public class PlayerPanel extends JFrame {
         playerPanel.setPreferredSize(dimension);
         mainPanel.add(playerPanel);
 
-        JPanel
+        for (ColorGroup color : ColorGroup.values()) {
+            JPanel jPanel = panelMaker(color);
+        }
 
+        for (Property property : player.getOwnedProperties()) {
 
+        }
 
         this.revalidate();
         this.repaint();
-
-
     }
 
+    public JPanel panelMaker(ColorGroup color) {
+
+        JPanel colorGroupPanel = new JPanel();
+        colorGroupPanel.setBackground(ColorGroup.colorGroupTransformer(color));
+        colorGroupPanel.setLayout(new BoxLayout(colorGroupPanel, BoxLayout.Y_AXIS));
+        colorGroupPanel.setBorder(new EtchedBorder());
+        colorGroupPanel.setMaximumSize(dimension);
+        colorGroupPanel.setPreferredSize(dimension);
+        colorGroupPanel.setVisible(true);
+        mainPanel.add(colorGroupPanel);
+
+        return colorGroupPanel;
+    }
+
+    public void labelMaker(JPanel jPanel, String name) {
+        JLabel jLabel = new JLabel(name);
+        jPanel.add(jLabel);
+    }
     /*Tilføj en metode update() til klassen, som først sletter den gamle inhold fra panelet
     og så kreirer nogle paneler på framet, som viser de forskellige informationer (se skematiske
     tegninger fra forelæsing 7).
