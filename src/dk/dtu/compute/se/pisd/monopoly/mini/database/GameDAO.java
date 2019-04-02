@@ -7,9 +7,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class GameDao implements IGameDAO {
+/**
+ * @author Jeppe s170196, Nicolai s185036
+ */
+public class GameDAO implements IGameDAO {
 
     private Connection createConnection(){
         return null;
@@ -37,7 +41,7 @@ public class GameDao implements IGameDAO {
             ResultSet gameRS = gameStm.executeQuery();
 
 
-            while (gameRS.next()) {
+            if (gameRS.next()) {
                 //TODO: Make resultset
             }
 
@@ -50,7 +54,23 @@ public class GameDao implements IGameDAO {
 
     @Override
     public List<Game> getGamesList() {
-        return null;
+        List gameList = new ArrayList<Game>();
+        try (Connection c = createConnection()) {
+
+            PreparedStatement gameStm = c.prepareStatement("SELECT * FROM Game");
+
+            ResultSet gameRS = gameStm.executeQuery();
+
+
+            while (gameRS.next()) {
+                //TODO: Make resultset
+            }
+
+
+        } catch (SQLException e) {
+            //TODO: Handle exception?
+        }
+        return gameList;
     }
 
     @Override
