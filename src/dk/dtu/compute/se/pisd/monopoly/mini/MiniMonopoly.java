@@ -58,7 +58,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		Chance chance = new Chance();
 		chance.setName("Chance");
 		game.addSpace(chance);
-		
+
 		p = new RealEstate();
 		p.setName("Hvidovrevej");
 		p.setCost(1200);

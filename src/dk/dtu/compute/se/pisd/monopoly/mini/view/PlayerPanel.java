@@ -7,8 +7,10 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Map;
 
+import static dk.dtu.compute.se.pisd.monopoly.mini.model.ColorGroup.darkgreen;
 import static dk.dtu.compute.se.pisd.monopoly.mini.model.ColorGroup.lightblue;
 
 /**
@@ -20,9 +22,11 @@ public class PlayerPanel extends JFrame {
     private JPanel mainPanel;
     private Dimension dimension;
     private Map<ColorGroup, JPanel> hasherMalte; //TODO lol
+    private Map<ColorGroup, Integer> intGroups; //TODO lol
+    private Map<Property, JPanel> panelPropertyMap; //TODO lol
 
     public PlayerPanel(Game game, Player player) {
-        this.game = game;
+               this.game = game;
         this.player = player;
         dimension = new Dimension(72, 100);
 
@@ -34,7 +38,15 @@ public class PlayerPanel extends JFrame {
         this.setSize(800, 120);
         this.validate();
         this.setVisible(true);
+
+        intGroups = new HashMap<>();
+        panelPropertyMap = new HashMap<>();
+        hasherMalte = new HashMap<>();
+
         update();
+
+
+
 
 //Måske noget med en fængselsstatus
 
@@ -55,12 +67,10 @@ public class PlayerPanel extends JFrame {
         playerPanel.setPreferredSize(dimension);
         mainPanel.add(playerPanel);
 
-        for (ColorGroup color : ColorGroup.values()) {
-            JPanel jPanel = panelMaker(color);
-        }
-
-        for (Property property : player.getOwnedProperties()) {
-
+        //Således er der oprettet netop et panel for hver farvegruppe
+        for (ColorGroup colorGroup : ColorGroup.values()) {
+            JPanel jPanel = panelMaker(colorGroup);
+            hasherMalte.put(colorGroup, jPanel);
         }
 
         this.revalidate();
@@ -75,7 +85,7 @@ public class PlayerPanel extends JFrame {
         colorGroupPanel.setBorder(new EtchedBorder());
         colorGroupPanel.setMaximumSize(dimension);
         colorGroupPanel.setPreferredSize(dimension);
-        colorGroupPanel.setVisible(true);
+        colorGroupPanel.setVisible(false);
         mainPanel.add(colorGroupPanel);
 
         return colorGroupPanel;
