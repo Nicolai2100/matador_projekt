@@ -219,7 +219,7 @@ public class GameController {
                 if (castDouble) {
                     gui.showMessage("Player " + player.getName() + " cast a double and makes another move.");
                 }
-                offerToBuild(this, player);
+                offerToBuyHouse(player);
             }
         } while (castDouble);
     }
@@ -529,45 +529,63 @@ public class GameController {
         }
     }
 
-    public void offerToBuild(GameController controller, Player player) throws PlayerBrokeException {
-        Set<Property> playerProperties = player.getOwnedProperties();
-
-        if (playerProperties.contains(RealEstate.class) || playerProperties.size() < 1 || player.isBroke()) {
-            return;
-
+    public void buyHouse(Player player, RealEstate re) {
+        if(re.getHouseCount() == 4) {
+            gui.showMessage("You can't build more than four houses on a property!");
         } else {
-            String choice = gui.getUserSelection("Vil du bygge hus?", "Ja", "Nej");
-            if (choice.equalsIgnoreCase("nej")) {
-                return;
-            } else {
-                for (Property prop : playerProperties) {
-                    if (prop instanceof RealEstate) {
-
-                        try {
-                            RealEstate realEstate = ((RealEstate) prop);
-
-                            String choice2 = gui.getUserSelection("Vil du bygge hus på " + prop.toString()
-                                    , "Ja", "Nej");
-                            if (choice2.equalsIgnoreCase("nej")) {
-                            } else {
-                                int housePrice = realEstate.getPriceForHouse();
-                                if (player.getBalance() - housePrice < 0) {
-                                    gui.showMessage("Du har ikke råd til at bygge et hus på denne grund!");
-                                } else {
-
-                                    player.payMoney(housePrice);
-                                    realEstate.setHouseCount(realEstate.getHouseCount() + 1);
-                                    realEstate.computeRent();
-                                    controller.paymentToBank(player, housePrice);
-                                }
-                            }
-                        } catch (Exception e) {
-                            System.out.println(prop.toString() + " er ikke en byggegrund");
-                        }
-                    }
-                }
+            try {
+                paymentToBank(player, re.getPriceForHouse());
+                re.setHouseCount(re.getHouseCount() + 1);
+            } catch (PlayerBrokeException e){
+                gui.showMessage("Player " + player.getName() + " can't afford a new house!");
+            } catch (GameEndedException e) {
+                e.printStackTrace();
             }
         }
+    }
+
+    public void offerToBuyHouse(Player player) {
+        ArrayList<RealEstate> potentialProperties = new ArrayList<>();
+        for (Property property : player.getOwnedProperties()) {
+            if (property instanceof RealEstate) {
+                potentialProperties.add((RealEstate) property);
+            }
+        }
+        if (potentialProperties.size() > 0) {
+            String answer = gui.getUserButtonPressed("Do you wish to buy houses for your properties?", "yes", "no");
+            if (answer.equals("yes")) {
+
+                boolean continueBuying = true;
+                do {
+                    String[] propertyNames = new String[potentialProperties.size()];
+                    for (int i = 0; i < propertyNames.length; i++) {
+                        propertyNames[i] = potentialProperties.get(i).getName();
+                    }
+                    String propertyString = gui.getUserSelection("On which property, do you wish to build houses?", propertyNames);
+
+                    RealEstate chosenProperty = potentialProperties.get(0);
+                    for (int i = 0; i < propertyNames.length; i++) {
+                        if (propertyNames[i].equals(propertyString)) chosenProperty = potentialProperties.get(i);
+                    }
+
+                    int housesOnProperty = chosenProperty.getHouseCount();
+                    String[][] initOptions = {{"1"}, {"1", "2"}, {"1", "2", "3"}, {"1", "2", "3", "4"}};
+                    String[] currentOptions = initOptions[3 - housesOnProperty];
+
+                    int numberOfhouses = Integer.parseInt(gui.getUserSelection("How many houses?", currentOptions));
+
+                    for (int i = 0; i < numberOfhouses; i++) {
+                        buyHouse(player, chosenProperty);
+                    }
+
+                    String s = gui.getUserButtonPressed("Do you wish to build more houses?", "yes", "no");
+                    if (s.equals("no")) continueBuying = false;
+                } while (continueBuying);
+
+
+            }
+        }
+
     }
 }
 
