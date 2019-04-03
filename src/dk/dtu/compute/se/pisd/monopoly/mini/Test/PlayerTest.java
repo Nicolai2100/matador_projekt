@@ -15,6 +15,10 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
+/**
+ * authors: Nicolai L
+ */
+
 public class PlayerTest {
     Player player;
     Game game;
@@ -57,8 +61,6 @@ public class PlayerTest {
         utility1.setRent(500);
         utility1.setColorGroup(ColorGroup.navy);
         game.addSpace(utility1);
-
-
     }
 
     @Test
@@ -67,7 +69,7 @@ public class PlayerTest {
         //Virker metoden for almindelige RealEstate objekter?
 
         player.setOwnedProperties(properties);
-        System.out.println( player.getOwnedProperties().size());
+        System.out.println(player.getOwnedProperties().size());
         for (Property prop : player.getOwnedProperties()) {
             assertTrue(!prop.getSuperOwned());
         }
@@ -80,19 +82,9 @@ public class PlayerTest {
 
         player.addOwnedProperty(utility1);
         assertTrue(!utility1.getSuperOwned());
-
     }
 
     @Test
     public void setAllPropertiesSuperOwnedFalse() {
-
-        Property utility1 = new Utility();
-        utility1.setName("Øresund");
-        utility1.setCost(4000);
-        utility1.setRent(500);
-        utility1.setColorGroup(ColorGroup.navy);
-        game.addSpace(utility1);
-
-        System.out.println(       utility1.getSuperOwned());
     }
 }

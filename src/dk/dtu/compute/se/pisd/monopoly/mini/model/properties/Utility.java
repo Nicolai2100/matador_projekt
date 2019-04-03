@@ -23,28 +23,9 @@ public class Utility extends Property {
         notifyChange();
     }
 
-
     public void setHouseCount(int houseCount) {
         computeRent();
         notifyChange();
     }
-
-    /*Udvid klassen for grund (RealEstate) med private attributer
-    og getter- og setter-metoder som tilgår og ændrer antal byggede huse
-    på en grund. Sørg for at metoden notifyChange() bliver kaldt, så snart der
-    er en relevant ændring i grundens attributer.
-
-    Udvid ejendom (Property) og grund (RealEstate) med private
-    attributer og getter- og setter-metoder som tilgår og ændrer
-
-     pris for
-    at bygge et hus, basisleje og husleje; og implementer en metode som bereggner
-     den aktuelle leje ud fra basis og husleje og den aktuelle situation (antal huse).
-     Metoden til at beregne lejen kunne navngives computeRent().
-
-*/
-
-
-
 
 }

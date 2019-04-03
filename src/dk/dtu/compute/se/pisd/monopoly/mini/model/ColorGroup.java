@@ -1,5 +1,8 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.model;
 
+/**
+ * authors: Malte og Nicolai L
+ */
 
 import java.awt.*;
 
