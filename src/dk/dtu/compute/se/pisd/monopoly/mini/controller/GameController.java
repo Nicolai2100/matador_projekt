@@ -8,10 +8,7 @@ import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_fields.GUI_Street;
 import gui_main.GUI;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The overall controller of a Monopoly game. It provides access
@@ -95,18 +92,18 @@ public class GameController {
             if (!player.isBroke()) {
                 try {
                     this.makeMove(player);
+                    //Her  skal han kunne købe hus
                 } catch (PlayerBrokeException e) {
-                }
-                catch (GameEndedException w) {
+                } catch (GameEndedException w) {
                     gui.showMessage(w.getMessage());
                     if (winner())
                         terminated = true;
-                }
-                finally {
+                } finally {
 
                 }
-            // We could react to the player having gone broke
+                // We could react to the player having gone broke
             }
+
 
             // TODO offer all players the options to trade etc.
 
@@ -122,9 +119,11 @@ public class GameController {
                 }
             }
         }
+
         dispose();
     }
-    public boolean gameEnds(){
+
+    public boolean gameEnds() {
         boolean returnBool = false;
 
             int countBroke = 0;
@@ -420,48 +419,42 @@ public class GameController {
      * This method implements the activity of auctioning a property.
      *
      * @param property the property which is for auction
+     * @author Jeppe s170196, Mads s170185
      */
-    public void auction(Property property) throws GameEndedException, PlayerBrokeException {
-        gui.showMessage("Så er der auktion for " + property.getName() + "." + "\n" +
-                "Bud der ikke overgår, det forrige bud medfører udmeldning fra auktionen.");
-
-        Player c = game.getCurrentPlayer();
+    public void auction(Property property) throws GameEndedException {
         List<Player> bidders = new ArrayList<>();
+        int currentBid;
+        int highBid = 0;
+        Player highBidder = new Player();
 
-        for (Player player : game.getPlayers()) {
-            if (player != c || !player.isBroke()) {
-                bidders.add(player);
+        bidders.addAll(game.getPlayers());
+        Collections.shuffle(bidders);
+
+        while (bidders.size() != 1) {
+            for (int i = 0; i < bidders.size(); i++) {
+                Player p = bidders.get(i);
+                if (!p.equals(highBidder)) {
+
+                    currentBid = highBid == 0 ? gui.getUserInteger(p.getName() + ":\nPlace bid", 0, p.getBalance())
+                            : gui.getUserInteger(p.getName() + ":\nPlace bid. Current high bid: " + highBid + " by " + highBidder.getName(), 0, p.getBalance());
+
+                    if (currentBid > highBid) {
+                        highBid = currentBid;
+                        highBidder = p;
+                    } else {
+                        bidders.remove(p);
+                    }
+                }
             }
         }
-        if (!c.isBroke()){
-            bidders.add(c);
-        }
-        int lastBid = 0;
-        int curBid = 0;
-        int i = 0;
 
-        while (bidders.size() > 1) {
-            Player curBidder = bidders.get(i % bidders.size());
-            curBid = gui.getUserInteger(curBidder.getName() +
-                    "'s tur til at byde:", 0, curBidder.getBalance());
+        property.setCost(highBid);
 
-            if (curBid <= lastBid) {
-                bidders.remove(curBidder);
-                gui.showMessage(curBidder.getName() + " har meldt pas.");
-            }
-            lastBid = curBid > 0 && curBid > lastBid ? curBid : lastBid;
-            i++;
-        }
-        gui.showMessage(bidders.get(0).getName() + " vinder auktionen!");
-        property.setOwner(bidders.get(0));
-
-        if (bidders.get(0).getBalance() < lastBid){
-
-            bidders.get(0).setBroke(true);
-            throw new PlayerBrokeException(bidders.get(0));
-        }
-        else{
-            paymentToBank(bidders.get(0), lastBid);
+        try {
+            offerToBuy(property, bidders.get(0));
+            bidders.clear();
+        } catch (PlayerBrokeException e) {
+            e.printStackTrace();
         }
     }
 
