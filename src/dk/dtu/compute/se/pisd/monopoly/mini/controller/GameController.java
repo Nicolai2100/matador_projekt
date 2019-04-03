@@ -529,6 +529,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Buys a house, if the player can afford it.
+     * @param player
+     * @param re
+     * @Author Nicolai Wulff s185036
+     */
     public void buyHouse(Player player, RealEstate re) {
         if(re.getHouseCount() == 4) {
             gui.showMessage("You can't build more than four houses on a property!");
@@ -544,13 +550,22 @@ public class GameController {
         }
     }
 
+    /** Asks the player, if he/she wants to build houses, if the player owns any real estate.
+     * @param player
+     * @Author Nicolai Wulff s185036
+     */
     public void offerToBuyHouse(Player player) {
+
+        //Makes a list of all real estate owned by the player, if any.
         ArrayList<RealEstate> potentialProperties = new ArrayList<>();
         for (Property property : player.getOwnedProperties()) {
             if (property instanceof RealEstate) {
                 potentialProperties.add((RealEstate) property);
             }
         }
+
+        //TODO: Check if any of the owned real estate is "superowned". Only offer to build on these.
+        //If the player owns real estate, ask if he/she wants to build houses.
         if (potentialProperties.size() > 0) {
             String answer = gui.getUserButtonPressed("Do you wish to buy houses for your properties?", "yes", "no");
             if (answer.equals("yes")) {
@@ -568,6 +583,8 @@ public class GameController {
                         if (propertyNames[i].equals(propertyString)) chosenProperty = potentialProperties.get(i);
                     }
 
+                    //Calculates how many houses, the player potentially can buy on the real estate
+                    //TODO: Change this, so that the player has to build evenly on the related color group.
                     int housesOnProperty = chosenProperty.getHouseCount();
                     String[][] initOptions = {{"1"}, {"1", "2"}, {"1", "2", "3"}, {"1", "2", "3", "4"}};
                     String[] currentOptions = initOptions[3 - housesOnProperty];
