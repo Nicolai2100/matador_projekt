@@ -202,7 +202,7 @@ public class Player extends Subject {
         if (ownedNum == property.getColorGroup().getNumOfGroup()) {
             for (Property prop : ownedProperties) {
                 if (prop.getColorGroup() == property.getColorGroup()) {
-                    property.setSuperOwned(true);
+                    prop.setSuperOwned(true);
                 }
             }
             //todo meddelelse til bruger om at han nu kan bygge huse!!!
