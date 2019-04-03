@@ -36,7 +36,7 @@ public class MiniMonopoly {
 		// of creating it programmatically. This will be discussed
 		// later in this course.
 		Game game = new Game();
-		
+
 		Space go = new Space();
 		go.setName("Go");
 		game.addSpace(go);
@@ -64,7 +64,6 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCost(1200);
 		p.setRent(50);
 		p.setColorGroup(ColorGroup.lightblue);
-
 		((RealEstate) p).setPriceForHouse(50);
 		game.addSpace(p);
 		
@@ -72,11 +71,11 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		t.setName("Pay tax (10% on Cash)");
 		game.addSpace(t);
 
-		Utility s = new Utility();
+		Property s = new Utility();
 		s.setName("Øresund");
 		s.setCost(4000);
 		s.setRent(500);
-		p.setColorGroup(ColorGroup.navy);
+		s.setColorGroup(ColorGroup.navy);
 		game.addSpace(s);
 
 		p = new RealEstate();
@@ -164,11 +163,6 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		cards.add(b);
 		game.setCardDeck(cards);
 
-
-
-
-
-
 		return game;
 	}
 
@@ -190,14 +184,14 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.YELLOW);
 		game.addPlayer(p);
-
+/*
 		p = new Player();
 		p.setName("Player 3");
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.GREEN);
 		game.addPlayer(p);
 
-	/*	p = new Player();
+		p = new Player();
 		p.setName("Player 4");
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.BLACK);

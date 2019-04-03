@@ -5,16 +5,26 @@ import java.awt.*;
 
 public enum ColorGroup {
 
-    lightblue,
-    pink,
-    green,
-    darkgrey,
-    red,
-    white,
-    yellow,
-    purple,
-    darkgreen,
-    navy;
+    lightblue(2),
+    pink(3),
+    green(3),
+    darkgrey(3),
+    red(3),
+    white(3),
+    yellow(3),
+    purple(2),
+    darkgreen(2),
+    navy(4);
+
+    private int numOfGroup;
+
+    ColorGroup(int numOfGroup){
+        this.numOfGroup = numOfGroup;
+    }
+
+    public int getNumOfGroup(){
+        return this.numOfGroup;
+    }
 
     public static Color colorGroupTransformer(ColorGroup e) {
 

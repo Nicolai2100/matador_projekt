@@ -1,17 +1,12 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.view;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-
-import static dk.dtu.compute.se.pisd.monopoly.mini.model.ColorGroup.darkgreen;
-import static dk.dtu.compute.se.pisd.monopoly.mini.model.ColorGroup.lightblue;
 
 /**
  * @Malte og Nicolai L
@@ -21,12 +16,10 @@ public class PlayerPanel extends JFrame {
     private Player player;
     private JPanel mainPanel;
     private Dimension dimension;
-    private Map<ColorGroup, JPanel> hasherMalte; //TODO lol
-    private Map<ColorGroup, Integer> intGroups; //TODO lol
-    private Map<Property, JPanel> panelPropertyMap; //TODO lol
+    private Map<ColorGroup, JPanel> maltesMap;
 
     public PlayerPanel(Game game, Player player) {
-               this.game = game;
+        this.game = game;
         this.player = player;
         dimension = new Dimension(72, 100);
 
@@ -39,13 +32,7 @@ public class PlayerPanel extends JFrame {
         this.validate();
         this.setVisible(true);
 
-        intGroups = new HashMap<>();
-        panelPropertyMap = new HashMap<>();
-        hasherMalte = new HashMap<>();
-
         update();
-
-
 
 
 //Måske noget med en fængselsstatus
@@ -54,6 +41,7 @@ public class PlayerPanel extends JFrame {
 
     public void update() {
         mainPanel.removeAll();
+        maltesMap = new HashMap<>();
 
         JPanel playerPanel = new JPanel();
         playerPanel.setBackground(player.getColor());
@@ -67,14 +55,25 @@ public class PlayerPanel extends JFrame {
         playerPanel.setPreferredSize(dimension);
         mainPanel.add(playerPanel);
 
-        for (Space space: game.getSpaces()) {
-            if (space instanceof Property){
-                Property property = (Property)space;
-                if (property.getOwner() != null){
-                    if (property.getOwner() == player){
+        for (Space space : game.getSpaces()) {
+            if (space instanceof Property) {
+                Property property = (Property) space;
+                if (property.getOwner() != null) {
+                    if (property.getOwner() == player) {
                         ColorGroup colorGroup = property.getColorGroup();
-                        JPanel jPanel = panelMaker(colorGroup);
-                        labelMaker(jPanel, property.getName());
+                        if (!maltesMap.containsKey(colorGroup))
+                            try {
+                                JPanel jPanel = panelMaker(colorGroup);
+                                maltesMap.put(colorGroup, jPanel);
+                                labelMaker(jPanel, property.getName());
+                            } catch (NullPointerException e) {
+                                e.getMessage();
+                            }
+                        else {
+                            //Hvis mappet indeholder en værdi med denne farve skal den kun oprette et label
+                            JPanel jPanel = maltesMap.get(colorGroup);
+                            labelMaker(jPanel, property.getName());
+                        }
                     }
                 }
             }
@@ -82,7 +81,7 @@ public class PlayerPanel extends JFrame {
         //Således er der oprettet netop et panel for hver farvegruppe
       /*  for (ColorGroup colorGroup : ColorGroup.values()) {
             JPanel jPanel = panelMaker(colorGroup);
-            hasherMalte.put(colorGroup, jPanel);
+            maltesMap.put(colorGroup, jPanel);
         }*/
 
         this.revalidate();
