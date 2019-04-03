@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.database;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
+
 import java.sql.*;
 
 import java.sql.Connection;
@@ -27,7 +28,6 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     *
      * @param gameId
      * @return a game
      * @author Jeppe s170196
@@ -35,7 +35,7 @@ public class GameDAO implements IGameDAO {
     @Override
     public Game loadGame(int gameId) {
         Game game = new Game();
-        checkConnection();
+        //checkConnection();
         try {
             PreparedStatement gameStm = c.prepareStatement("SELECT * FROM Game WHERE GameID=?");
             gameStm.setInt(1, gameId);
@@ -54,34 +54,36 @@ public class GameDAO implements IGameDAO {
         return game;
     }
 
-    @Override
-    public List<Game> getGamesList() {
-        List gameList = new ArrayList<Game>();
-        try (Connection c = createConnection()) {
+        @Override
+        public List<Game> getGamesList() {
 
-            PreparedStatement gameStm = c.prepareStatement("SELECT * FROM Game");
+            List gameList = new ArrayList<Game>();
+    /*
+            try (Connection c = createConnection()) {
 
-            ResultSet gameRS = gameStm.executeQuery();
+                PreparedStatement gameStm = c.prepareStatement("SELECT * FROM Game");
 
-
-            while (gameRS.next()) {
-                //TODO: Make resultset
+                ResultSet gameRS = gameStm.executeQuery();
+                while (gameRS.next()) {
+                    //TODO: Make resultset
+                }
+            } catch (SQLException e) {
+                //TODO: Handle exception?
             }
+            */
+            return gameList;
 
 
-        } catch (SQLException e) {
-            //TODO: Handle exception?
         }
-        return gameList;
-    }
 
-    @Override
-    public void updateGame(Game game) {
+        @Override
+        public void updateGame (Game game){
 
-    }
+        }
 
-    @Override
-    public void deleteGame(Game game) {
+        @Override
+        public void deleteGame (Game game){
 
-    }
+        }
+
 }
