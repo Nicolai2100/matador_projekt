@@ -92,7 +92,7 @@ public class GameController {
             if (!player.isBroke()) {
                 try {
                     this.makeMove(player);
-                    //Her  skal han kunne købe hus
+                    //Her skal han kunne købe hus
                 } catch (PlayerBrokeException e) {
                 } catch (GameEndedException w) {
                     gui.showMessage(w.getMessage());
@@ -451,6 +451,7 @@ public class GameController {
             i++;
         }
         gui.showMessage(bidders.get(0).getName() + " vinder auktionen!");
+        bidders.get(0).addOwnedProperty(property);
         property.setOwner(bidders.get(0));
 
         if (bidders.get(0).getBalance() < lastBid){
@@ -541,8 +542,17 @@ public class GameController {
      * @Author Nicolai Wulff s185036
      */
     public void buyHouse(Player player, RealEstate re) {
+        int lowestHouseCount = 5;
+        for (Property property : player.getOwnedProperties()) {
+            if (property.getColorGroup() == ((Property) re).getColorGroup() && ((RealEstate) property).getHouseCount() < lowestHouseCount) {
+                lowestHouseCount = ((RealEstate) property).getHouseCount();
+            }
+        }
+
         if(re.getHouseCount() == 4) {
             gui.showMessage("You can't build more than four houses on a property!");
+        } else if (re.getHouseCount() > lowestHouseCount){
+            gui.showMessage("You have to build evenly!");
         } else {
             try {
                 paymentToBank(player, re.getPriceForHouse());
@@ -576,31 +586,23 @@ public class GameController {
 
                 boolean continueBuying = true;
                 do {
-                    String[] propertyNames = new String[potentialProperties.size()];
-                    for (int i = 0; i < propertyNames.length; i++) {
+                    String[] propertyNames = new String[potentialProperties.size() + 1];
+                    for (int i = 0; i < propertyNames.length - 1; i++) {
                         propertyNames[i] = potentialProperties.get(i).getName();
                     }
+                    propertyNames[propertyNames.length - 1] = "Stop med at bygge";
                     String propertyString = gui.getUserSelection("On which property, do you wish to build houses?", propertyNames);
 
-                    RealEstate chosenProperty = potentialProperties.get(0);
-                    for (int i = 0; i < propertyNames.length; i++) {
-                        if (propertyNames[i].equals(propertyString)) chosenProperty = potentialProperties.get(i);
-                    }
+                    if (!propertyString.equals("Stop med at bygge")) {
+                        RealEstate chosenProperty = potentialProperties.get(0);
+                        for (int i = 0; i < propertyNames.length - 1; i++) {
+                            if (propertyNames[i].equals(propertyString)) chosenProperty = potentialProperties.get(i);
+                        }
 
-                    //Calculates how many houses, the player potentially can buy on the real estate
-                    //TODO: Change this, so that the player has to build evenly on the related color group.
-                    int housesOnProperty = chosenProperty.getHouseCount();
-                    String[][] initOptions = {{"1"}, {"1", "2"}, {"1", "2", "3"}, {"1", "2", "3", "4"}};
-                    String[] currentOptions = initOptions[3 - housesOnProperty];
-
-                    int numberOfhouses = Integer.parseInt(gui.getUserSelection("How many houses?", currentOptions));
-
-                    for (int i = 0; i < numberOfhouses; i++) {
                         buyHouse(player, chosenProperty);
+                    } else {
+                        continueBuying = false;
                     }
-
-                    String s = gui.getUserButtonPressed("Do you wish to build more houses?", "yes", "no");
-                    if (s.equals("no")) continueBuying = false;
                 } while (continueBuying);
 
 
