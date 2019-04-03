@@ -15,7 +15,6 @@ public class RealEstate extends Property{
 	private int priceForHouse = 0;
 
 	public RealEstate(){
-
     }
 
     public void computeRent(){

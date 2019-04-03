@@ -120,4 +120,6 @@ public class Property extends Space {
 
     }
 
+    //todo opret abstrakt metode til at beregne lejen
+
 }

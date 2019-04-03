@@ -538,7 +538,7 @@ public class GameController {
 
     public void offerToBuild(GameController controller, Player player) throws PlayerBrokeException {
         //TODO Nicolai
-
+        //Han skal kun kunne bygge hvis property er super owned!
     }
 
 
