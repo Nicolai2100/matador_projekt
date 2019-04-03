@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.monopoly.mini.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.Subject;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,12 @@ public class Game extends Subject {
 	private List<Player> players = new ArrayList<Player>();
 	
 	private Player current;
+
+
+
+
+
+
 
 	/**
 	 * Returns a list of all the games spaces.

@@ -13,7 +13,9 @@ import gui_fields.GUI_Car.Type;
 import gui_main.GUI;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +40,7 @@ public class View implements Observer {
     private Map<Space, GUI_Field> space2GuiField = new HashMap<Space, GUI_Field>();
     private Map<Player, PlayerPanel> player2PlayerPanel = new HashMap<Player, PlayerPanel>();
     private boolean disposed = false;
+
 
     /**
      * Constructor for the view of a game based on a game and an already

@@ -27,6 +27,7 @@ public class MiniMonopoly {
 	 *
 	 * @return the initial game board and (not shuffled) deck of chance cards 
 	 */
+
 	public static Game createGame() {
 
 		// Create the initial Game set up (note that, in this simple
@@ -44,6 +45,7 @@ public class MiniMonopoly {
 		p.setName("Rødovrevej");
 		p.setCost(1200);
 		p.setRent(50);
+		p.setColorGroup(ColorGroup.lightblue);
 		((RealEstate) p).setPriceForHouse(50);
 		game.addSpace(p);
 
@@ -56,11 +58,13 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		Chance chance = new Chance();
 		chance.setName("Chance");
 		game.addSpace(chance);
-		
+
 		p = new RealEstate();
 		p.setName("Hvidovrevej");
 		p.setCost(1200);
 		p.setRent(50);
+		p.setColorGroup(ColorGroup.lightblue);
+
 		((RealEstate) p).setPriceForHouse(50);
 		game.addSpace(p);
 		
@@ -72,12 +76,15 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		s.setName("Øresund");
 		s.setCost(4000);
 		s.setRent(500);
+		p.setColorGroup(ColorGroup.navy);
 		game.addSpace(s);
 
 		p = new RealEstate();
 		p.setName("Roskildevej");
 		p.setCost(2000);
 		p.setRent(100);
+		p.setColorGroup(ColorGroup.pink);
+
 		((RealEstate) p).setPriceForHouse(50);
 		game.addSpace(p);
 		
@@ -90,6 +97,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCost(2000);
 		p.setRent(100);
 		((RealEstate) p).setPriceForHouse(50);
+		p.setColorGroup(ColorGroup.pink);
 		game.addSpace(p);
 		
 		p = new RealEstate();
@@ -97,7 +105,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCost(2400);
 		p.setRent(150);
 		((RealEstate) p).setPriceForHouse(50);
-
+		p.setColorGroup(ColorGroup.pink);
 		game.addSpace(p);
 		
 		Space prison = new Space();
@@ -109,6 +117,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCost(2800);
 		p.setRent(200);
 		((RealEstate) p).setPriceForHouse(50);
+		p.setColorGroup(ColorGroup.green);
 
 		game.addSpace(p);
 		
@@ -116,12 +125,15 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setName("Coca-Cola Tapperi");
 		p.setCost(3000);
 		p.setRent(300);
+		p.setColorGroup(ColorGroup.darkgreen);
 		game.addSpace(p);
 		
 		p = new RealEstate();
 		p.setName("Bülowsvej");
 		p.setCost(2800);
 		p.setRent(200);
+		p.setColorGroup(ColorGroup.green);
+
 		((RealEstate) p).setPriceForHouse(50);
 
 		game.addSpace(p);
@@ -131,6 +143,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCost(3200);
 		p.setRent(250);
 		((RealEstate) p).setPriceForHouse(50);
+		p.setColorGroup(ColorGroup.green);
 
 		game.addSpace(p);
 		
@@ -150,6 +163,11 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		b.setAmount(100);
 		cards.add(b);
 		game.setCardDeck(cards);
+
+
+
+
+
 
 		return game;
 	}
@@ -178,6 +196,24 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.GREEN);
 		game.addPlayer(p);
+
+	/*	p = new Player();
+		p.setName("Player 4");
+		p.setCurrentPosition(game.getSpaces().get(0));
+		p.setColor(Color.BLACK);
+		game.addPlayer(p);
+
+		p = new Player();
+		p.setName("Player 5");
+		p.setCurrentPosition(game.getSpaces().get(0));
+		p.setColor(Color.BLUE);
+		game.addPlayer(p);
+
+		p = new Player();
+		p.setName("Player 6");
+		p.setCurrentPosition(game.getSpaces().get(0));
+		p.setColor(Color.cyan);
+		game.addPlayer(p);*/
 	}
 
 	/**
