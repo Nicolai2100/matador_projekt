@@ -18,9 +18,9 @@ public class Property extends Space {
     private int cost;
     private int rent;
     private boolean isOwned = false;
+    private boolean superOwned = false;
     private Player owner;
     private ColorGroup colorGroup;
-
 
     public void setColorGroup(ColorGroup colorGroup) {
         this.colorGroup = colorGroup;
@@ -28,6 +28,14 @@ public class Property extends Space {
 
     public ColorGroup getColorGroup() {
         return colorGroup;
+    }
+
+    public boolean getSuperOwned() {
+        return this.superOwned;
+    }
+
+    public void setSuperOwned(boolean bool) {
+        this.superOwned = bool;
     }
 
     /**
