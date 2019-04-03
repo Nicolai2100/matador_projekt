@@ -18,7 +18,7 @@ public enum ColorGroup {
 
     private int numOfGroup;
 
-    private ColorGroup(int numOfGroup){
+    ColorGroup(int numOfGroup){
         this.numOfGroup = numOfGroup;
     }
 
