@@ -561,16 +561,15 @@ public class GameController {
      */
     public void offerToBuyHouse(Player player) {
 
-        //Makes a list of all real estate owned by the player, if any.
+        //Makes a list of all superowned real estate owned by the player, if any.
         ArrayList<RealEstate> potentialProperties = new ArrayList<>();
         for (Property property : player.getOwnedProperties()) {
-            if (property instanceof RealEstate) {
+            if (property instanceof RealEstate && property.getSuperOwned()) {
                 potentialProperties.add((RealEstate) property);
             }
         }
 
-        //TODO: Check if any of the owned real estate is "superowned". Only offer to build on these.
-        //If the player owns real estate, ask if he/she wants to build houses.
+        //If the player owns superowned real estate, ask if he/she wants to build houses.
         if (potentialProperties.size() > 0) {
             String answer = gui.getUserButtonPressed("Do you wish to buy houses for your properties?", "yes", "no");
             if (answer.equals("yes")) {

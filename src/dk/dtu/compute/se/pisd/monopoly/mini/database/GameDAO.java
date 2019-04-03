@@ -35,7 +35,7 @@ public class GameDAO implements IGameDAO {
     @Override
     public Game loadGame(int gameId) {
         Game game = new Game();
-        checkConnection();
+        //checkConnection();
         try {
             PreparedStatement gameStm = c.prepareStatement("SELECT * FROM Game WHERE GameID=?");
             gameStm.setInt(1, gameId);
@@ -57,7 +57,7 @@ public class GameDAO implements IGameDAO {
     @Override
     public List<Game> getGamesList() {
         List gameList = new ArrayList<Game>();
-        checkConnection();
+        //checkConnection();
         try {
 
             PreparedStatement gameStm = c.prepareStatement("SELECT * FROM Game");
