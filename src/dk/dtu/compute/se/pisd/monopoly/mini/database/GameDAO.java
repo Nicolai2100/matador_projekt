@@ -18,9 +18,17 @@ public class GameDAO implements IGameDAO {
 
     private Connection c;
 
-    private void createConnection() throws SQLException {
-        c = DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020", "s185020", "iEFSqK2BFP60YWMPlw77I");
+    public GameDAO(){
+        try {
+            c = createConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+    public Connection createConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020",
+                "s185020", "iEFSqK2BFP60YWMPlw77I");    }
 
     @Override
     public void saveGame(Game game) {
@@ -35,7 +43,10 @@ public class GameDAO implements IGameDAO {
     @Override
     public Game loadGame(int gameId) {
         Game game = new Game();
-        //checkConnection();
+
+/*
+    checkConnection();
+*/
         try {
             PreparedStatement gameStm = c.prepareStatement("SELECT * FROM Game WHERE GameID=?");
             gameStm.setInt(1, gameId);
