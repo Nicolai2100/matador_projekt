@@ -1,6 +1,8 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.database;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.Space;
 
 import java.sql.*;
 
@@ -18,28 +20,51 @@ public class GameDAO implements IGameDAO {
 
     private Connection c;
 
-    //Jeg har lavet den public så vi kan bruge den i tests - Nicolai L
-    public GameDAO(){
+    public GameDAO() {
+
         try {
             c = createConnection();
+            initializeDataBase();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
+    //Jeg har lavet den public så vi kan bruge den i tests - Nicolai L
     public Connection createConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020",
-                "s185020", "iEFSqK2BFP60YWMPlw77I");    }
+                "s185020", "iEFSqK2BFP60YWMPlw77I");
+    }
 
     @Override
     public void saveGame(Game game) {
-            try {
-                PreparedStatement prepStatement = c.prepareStatement(
-                        "INSERT INTO game");
-                                //blahblah
-            } catch (SQLException e) {
-                e.printStackTrace();
+
+        try {
+            c.setAutoCommit(false);
+
+            PreparedStatement insertGame = c.prepareStatement(
+                    "INSERT INTO game");
+            //blahblah
+
+            PreparedStatement insertPLayers = c.prepareStatement(
+                    "INSERT INTO player"
+            );
+
+            PreparedStatement insertProperties = c.prepareStatement(
+                    "INSERT INTO propery"
+            );
+
+
+            for (Player player : game.getPlayers()) {
+
             }
+            for (Space space : game.getSpaces()) {
+
+            }
+            c.commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -74,10 +99,10 @@ public class GameDAO implements IGameDAO {
         return game;
     }
 
-        @Override
-        public List<Game> getGamesList() {
+    @Override
+    public List<Game> getGamesList() {
 
-            List gameList = new ArrayList<Game>();
+        List gameList = new ArrayList<Game>();
     /*
             try (Connection c = createConnection()) {
 
@@ -91,22 +116,94 @@ public class GameDAO implements IGameDAO {
                 //TODO: Handle exception?
             }
             */
-            return gameList;
+        return gameList;
 
 
+    }
+
+    @Override
+    public void updateGame(Game game) {
+
+    }
+
+    @Override
+    public void deleteGame(Game game) {
+
+    }
+
+    public void initializeDataBase() {
+        try {
+            c.setAutoCommit(false);
+            PreparedStatement createTableGame = c.prepareStatement(
+                    "CREATE TABLE if NOT EXISTS game " +
+                            "(gameid int, " +
+                            "name varchar(20), " +
+                            "timestamp varchar(20), " +
+                            "primary key (gameid));");
+
+            PreparedStatement createTablePlayer = c.prepareStatement(
+                    "CREATE TABLE if NOT EXISTS player " +
+                            "(playerid int, " +
+                            "name varchar(20), " +
+                            "balance int, " +
+                            "position int, " +
+                            "injain bit, " +
+                            "isbroke bit, " +
+                            "gameid int, " +
+                            "primary key (playerid), " +
+                            "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
+                            "ON DELETE CASCADE);");
+
+            PreparedStatement createTableProperty = c.prepareStatement(
+                    "CREATE TABLE if NOT EXISTS property " +
+                            "(posonboard int, " +
+                            "numofhouses int, " +
+                            "superowned bit, " +
+                            "playerid int, " +
+                            "primary key (posonboard), " +
+                            "FOREIGN KEY (playerid) REFERENCES player (playerid) " +
+                            "ON DELETE CASCADE " +
+                            "ON UPDATE CASCADE);");
+
+            createTableGame.execute();
+            createTablePlayer.execute();
+            createTableProperty.execute();
+            c.commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+    }
 
-        @Override
-        public void updateGame (Game game){
+    public void dropAllTables(int deleteTable){
+        try {
 
+            PreparedStatement dropTableGame = c.prepareStatement(
+                    "drop table game;"
+            );
+            PreparedStatement dropTablePlayer = c.prepareStatement(
+                    "drop table player;"
+            );
+            PreparedStatement dropTableProperty = c.prepareStatement(
+                    "DROP TABLE property;"
+            );
+            if (deleteTable == 1){
+                dropTableGame.execute();
+            }
+            else if (deleteTable == 2){
+                dropTablePlayer.execute();
+            }
+            else if (deleteTable == 3){
+                dropTableProperty.execute();
+            }
+            else if (deleteTable == 0){
+                dropTableGame.execute();
+                dropTablePlayer.execute();
+                dropTableProperty.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        @Override
-        public void deleteGame (Game game){
-
-        }
-
-
-
+    }
 
 }

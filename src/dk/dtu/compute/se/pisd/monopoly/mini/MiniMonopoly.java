@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController;
+import dk.dtu.compute.se.pisd.monopoly.mini.database.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.cards.CardMove;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.cards.CardReceiveMoneyFromBank;
@@ -220,7 +221,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 	public static void main(String[] args) {
 		Game game = createGame();
 		game.shuffleCardDeck();
-
+		GameDAO gameDAO = new GameDAO();
 		createPlayers(game);
 
 		GameController controller = new GameController(game);

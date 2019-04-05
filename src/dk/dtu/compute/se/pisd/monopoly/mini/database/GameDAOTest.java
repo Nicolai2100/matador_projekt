@@ -28,6 +28,17 @@ public class GameDAOTest {
 
 
     @Test
+    public void initializeDataBase() {
+        gameDAO.initializeDataBase();
+
+    }
+
+    @Test
+    public void dropTables() {
+        gameDAO.dropAllTables(0);
+    }
+
+    @Test
     public void saveGame() {
     }
 
