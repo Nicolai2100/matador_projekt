@@ -18,6 +18,7 @@ public class GameDAO implements IGameDAO {
 
     private Connection c;
 
+    //Jeg har lavet den public så vi kan bruge den i tests - Nicolai L
     public GameDAO(){
         try {
             c = createConnection();
@@ -32,6 +33,14 @@ public class GameDAO implements IGameDAO {
 
     @Override
     public void saveGame(Game game) {
+            try {
+                PreparedStatement prepStatement = c.prepareStatement(
+                        "INSERT INTO game");
+                                //blahblah
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
 
     }
 
@@ -96,5 +105,8 @@ public class GameDAO implements IGameDAO {
         public void deleteGame (Game game){
 
         }
+
+
+
 
 }
