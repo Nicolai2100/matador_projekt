@@ -29,6 +29,7 @@ public class GameDAO implements IGameDAO {
             e.printStackTrace();
         }
     }
+
     //Jeg har lavet den public så vi kan bruge den i tests - Nicolai L
     public Connection createConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020",
@@ -147,7 +148,7 @@ public class GameDAO implements IGameDAO {
                             "name varchar(20), " +
                             "balance int, " +
                             "position int, " +
-                            "injain bit, " +
+                            "injail bit, " +
                             "isbroke bit, " +
                             "gameid int, " +
                             "primary key (playerid), " +
@@ -160,8 +161,10 @@ public class GameDAO implements IGameDAO {
                             "numofhouses int, " +
                             "superowned bit, " +
                             "playerid int, " +
+                            "gameid int, " +
                             "primary key (posonboard), " +
-                            "FOREIGN KEY (playerid) REFERENCES player (playerid) " +
+                            "FOREIGN KEY (playerid) REFERENCES player (playerid), " +
+                            "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
                             "ON DELETE CASCADE " +
                             "ON UPDATE CASCADE);");
 
@@ -175,7 +178,7 @@ public class GameDAO implements IGameDAO {
         }
     }
 
-    public void dropAllTables(int deleteTable){
+    public void dropAllTables(int deleteTable) {
         try {
 
             PreparedStatement dropTableGame = c.prepareStatement(
@@ -187,16 +190,13 @@ public class GameDAO implements IGameDAO {
             PreparedStatement dropTableProperty = c.prepareStatement(
                     "DROP TABLE property;"
             );
-            if (deleteTable == 1){
+            if (deleteTable == 1) {
                 dropTableGame.execute();
-            }
-            else if (deleteTable == 2){
+            } else if (deleteTable == 2) {
                 dropTablePlayer.execute();
-            }
-            else if (deleteTable == 3){
+            } else if (deleteTable == 3) {
                 dropTableProperty.execute();
-            }
-            else if (deleteTable == 0){
+            } else if (deleteTable == 0) {
                 dropTableGame.execute();
                 dropTablePlayer.execute();
                 dropTableProperty.execute();
