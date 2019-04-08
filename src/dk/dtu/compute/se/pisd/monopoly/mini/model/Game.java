@@ -26,11 +26,16 @@ public class Game extends Subject {
 	
 	private Player current;
 
+	private int gameId = -1;
 
 
+	public int getGameId() {
+		return gameId;
+	}
 
-
-
+	public void setGameId(int gameId) {
+		this.gameId = gameId;
+	}
 
 	/**
 	 * Returns a list of all the games spaces.
@@ -52,7 +57,7 @@ public class Game extends Subject {
 		this.spaces = new ArrayList<Space>(spaces);
 		notifyChange();
 	}
-	
+
 	/**
 	 * Adds a space to the game at the end.
 	 * 

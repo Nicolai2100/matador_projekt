@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.database;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +18,10 @@ public class GameDAOTest {
         gameDAO = new GameDAO();
         conn = gameDAO.createConnection();
     }
-
+    @After
+    public void closecon() throws SQLException {
+        conn.close();
+    }
     @Test
     public void connection() throws SQLException {
         assertTrue(!conn.isClosed());
@@ -26,6 +30,10 @@ public class GameDAOTest {
 */
         }
 
+    @Test
+    public void dropTables() {
+        gameDAO.dropAllTables(0);
+    }
 
     @Test
     public void initializeDataBase() {
@@ -33,10 +41,6 @@ public class GameDAOTest {
 
     }
 
-    @Test
-    public void dropTables() {
-        gameDAO.dropAllTables(0);
-    }
 
     @Test
     public void saveGame() {

@@ -54,7 +54,7 @@ public class GameDAO implements IGameDAO {
 
             PreparedStatement insertProperties = c.prepareStatement(
                     "INSERT INTO property " +
-                            "VALUES(?,?,?,?);");
+                            "VALUES(?,?,?,?,?);");
 
             int curPlayer = game.getPlayers().indexOf(game.getCurrentPlayer());
             insertGame.setInt(1, curPlayer);
@@ -63,6 +63,7 @@ public class GameDAO implements IGameDAO {
             int gameid = 0;
             if (gen.next()) {
                 gameid = gen.getInt(1);
+                game.setGameId(gameid);
                 System.out.println(gameid);
             }
 
@@ -96,6 +97,7 @@ public class GameDAO implements IGameDAO {
                             }
                         }
                         insertProperties.setInt(4, playerId);
+                        insertProperties.setInt(5, gameid);
                         insertProperties.execute();
                     }
                 }
@@ -107,6 +109,24 @@ public class GameDAO implements IGameDAO {
         }
 
 
+    }
+
+    @Override
+    public void updateGame(Game game) {
+        deleteGame(game);
+        saveGame(game);
+    }
+
+    @Override
+    public void deleteGame(Game game) {
+        try {
+            PreparedStatement gameStm = c.prepareStatement("DELETE FROM game WHERE gameid = ?");
+            gameStm.setInt(1, game.getGameId());
+            gameStm.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -161,15 +181,6 @@ public class GameDAO implements IGameDAO {
 
     }
 
-    @Override
-    public void updateGame(Game game) {
-
-    }
-
-    @Override
-    public void deleteGame(Game game) {
-
-    }
 
     public void initializeDataBase() {
         try {
@@ -187,7 +198,7 @@ public class GameDAO implements IGameDAO {
                             "name varchar(20), " +
                             "balance int, " +
                             "position int, " +
-                            "injain bit, " +
+                            "injail bit, " +
                             "isbroke bit, " +
                             "gameid int, " +
                             "primary key (playerid), " +
@@ -200,11 +211,10 @@ public class GameDAO implements IGameDAO {
                             "numofhouses int, " +
                             "superowned bit, " +
                             "playerid int, " +
-                            "primary key (posonboard));"
-//                            + "FOREIGN KEY (playerid) REFERENCES player (playerid) " +
-//                            "ON DELETE CASCADE " +
-//                            "ON UPDATE CASCADE);"
-            );
+                            "gameid int, " +
+                            "primary key (posonboard), " +
+                            "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
+                            "ON DELETE CASCADE);");
 
             createTableGame.execute();
             createTablePlayer.execute();

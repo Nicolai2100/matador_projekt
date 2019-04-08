@@ -223,8 +223,17 @@ public class GameController {
                 offerToBuild(this, player);
             }
         } while (castDouble);
+
         GameDAO gameDb = new GameDAO();
-        gameDb.saveGame(game);
+
+        if (game.getGameId()<0){
+            gameDb.saveGame(game);
+        } else {
+            gameDb.updateGame(game);
+        }
+
+
+
     }
 
     /**
