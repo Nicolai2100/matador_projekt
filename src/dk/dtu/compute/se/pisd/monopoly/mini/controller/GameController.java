@@ -137,11 +137,8 @@ public class GameController {
             current = (current + 1) % players.size();
             game.setCurrentPlayer(players.get(current));
             if (current == 0) {
-                String selection = gui.getUserSelection(
-                        "A round is finished. Do you want to continue the game?",
-                        "yes",
-                        "no");
-                if (selection.equals("no")) {
+                String selection = gui.getUserButtonPressed("En runde er slut. Vil I fortsætte spillet?", "Ja", "Nej");
+                if (selection.equals("Nej")) {
                     terminated = true;
                 }
             }
