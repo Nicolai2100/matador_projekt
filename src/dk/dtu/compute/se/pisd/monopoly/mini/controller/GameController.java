@@ -619,7 +619,7 @@ public class GameController {
      */
     public void offerToBuyHouse() {
 
-        String[] players = new String[game.getPlayers().size()];
+        String[] players = new String[game.getActivePlayers(false).size()];
         for (int i = 0; i < players.length; i++) {
             players[i] = game.getPlayers().get(i).getName();
         }
@@ -677,13 +677,31 @@ public class GameController {
      */
     public void trade() {
 
-        String[] playerOptions = new String[game.getPlayers().size()];
+        String[] playerOptions = new String[game.getActivePlayers(true).size()];
         int i = 0;
         for (Player player : game.getPlayers()) {
             playerOptions[i] = player.getName();
             i++;
         }
-        String player1name = gui.getUserSelection("Hvem er den ene part i handlen?", playerOptions);
+
+        Boolean choosing = true;
+        String player1name = null;
+        String player2name = null;
+        Player player1 = null;
+        Player player2 = null;
+
+        while (choosing) {
+            player1name = gui.getUserSelection("Hvem er den ene part i handlen?", playerOptions);
+            for (Player player : game.getPlayers()) {
+                if (player.getName().equals(player1name) && !player.isInPrison()) {
+                    player1 = player;
+                    choosing = false;
+                } else {
+                    gui.showMessage(player + " er i fængsel, og må derfor ikke handle!");
+                }
+            }
+        }
+
         playerOptions = new String[game.getPlayers().size() - 1];
         i = 0;
         for (Player player : game.getPlayers()) {
@@ -692,10 +710,19 @@ public class GameController {
                 i++;
             }
         }
-        String player2name = gui.getUserSelection("Hvem er den anden part i handlen?", playerOptions);
+        choosing = true;
+        while(choosing) {
+            player2name = gui.getUserSelection("Hvem er den ene part i handlen?", playerOptions);
+            for (Player player : game.getPlayers()) {
+                if (player.getName().equals(player2name) && !player.isInPrison()) {
+                    player2 = player;
+                    choosing = false;
+                } else {
+                    gui.showMessage(player2 + " er i fængsel, og må derfor ikke handle!");
+                }
+            }
+        }
 
-        Player player1 = null;
-        Player player2 = null;
         for (Player player : game.getPlayers()) {
             if (player.getName().equals(player1name)) player1 = player;
             if (player.getName().equals(player2name)) player2 = player;
