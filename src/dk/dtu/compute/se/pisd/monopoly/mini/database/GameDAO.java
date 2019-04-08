@@ -5,6 +5,7 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Space;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 
 import java.awt.*;
 import java.sql.*;
@@ -55,7 +56,7 @@ public class GameDAO implements IGameDAO {
 
             PreparedStatement insertProperties = c.prepareStatement(
                     "INSERT INTO property " +
-                            "VALUES(?,?,?,?,?);");
+                            "VALUES(?,?,?,?,?,?);");
 
             int curPlayer = game.getPlayers().indexOf(game.getCurrentPlayer());
             insertGame.setInt(1, curPlayer);
@@ -85,22 +86,31 @@ public class GameDAO implements IGameDAO {
             for (Space space : game.getSpaces()) {
                 if (space instanceof Property) {
 
+                    insertProperties.setInt(1, space.getIndex());
+
                     if (space instanceof RealEstate) {
                         RealEstate realEstate = (RealEstate) space;
-                        insertProperties.setInt(1, space.getIndex());
                         insertProperties.setInt(2, realEstate.getHouseCount());
                         insertProperties.setBoolean(3, realEstate.getSuperOwned());
+                        insertProperties.setString(6, "realestate");
 
-                        int playerId = -1;
-                        for (Player player : game.getPlayers()) {
-                            if (player.getOwnedProperties().contains(realEstate)) {
-                                playerId = game.getPlayers().indexOf(player);
-                            }
-                        }
-                        insertProperties.setInt(4, playerId);
-                        insertProperties.setInt(5, gameid);
-                        insertProperties.execute();
                     }
+                    if (space instanceof Utility) {
+                        Utility utility = (Utility) space;
+                        insertProperties.setBoolean(3, utility.getSuperOwned());
+                        insertProperties.setString(6, "utility");
+
+                    }
+
+                    int playerId = -1;
+                    for (Player player : game.getPlayers()) {
+                        if (player.getOwnedProperties().contains(space)) {
+                            playerId = game.getPlayers().indexOf(player);
+                        }
+                    }
+                    insertProperties.setInt(4, playerId);
+                    insertProperties.setInt(5, gameid);
+                    insertProperties.execute();
                 }
             }
             c.commit();
@@ -136,23 +146,30 @@ public class GameDAO implements IGameDAO {
      * @author Jeppe s170196
      */
     @Override
-    public Game loadGame(Game game) {
+    public Game loadGame(Game game, String dateOfGameToLoad) {
         int gameId = game.getGameId();
 
 /*
     checkConnection();
 */
         try {
-            PreparedStatement gameStm = c.prepareStatement("SELECT * FROM game WHERE gameid=?");
+            PreparedStatement gameStm = c.prepareStatement("SELECT * FROM game WHERE date=?");
+            gameStm.setString(1, dateOfGameToLoad);
+
+            ResultSet gameRS = gameStm.executeQuery();
+
+            if (gameRS.next()) {
+                gameId = gameRS.getInt("gameid");
+            }
+
             PreparedStatement playerStm = c.prepareStatement("SELECT * FROM player WHERE gameid=?");
             PreparedStatement propertyStm = c.prepareStatement("SELECT * FROM property WHERE gameid=?");
-            gameStm.setInt(1, gameId);
+
             playerStm.setInt(1, gameId);
             propertyStm.setInt(1, gameId);
 
-            ResultSet gameRS = gameStm.executeQuery();
-            ResultSet playerRS = gameStm.executeQuery();
-            ResultSet propertyRS = gameStm.executeQuery();
+            ResultSet playerRS = playerStm.executeQuery();
+            ResultSet propertyRS = propertyStm.executeQuery();
 
             game.setGameId(gameId);
 
@@ -169,13 +186,40 @@ public class GameDAO implements IGameDAO {
             }
             game.setPlayers(listOfPlayers);
 
-            while (propertyRS.next()) {
-             //   game.
-            }
-
             if (gameRS.next()) {
                 game.setCurrentPlayer(game.getPlayers().get(gameRS.getInt("curplayerid")));
             }
+
+            List<Space> listOfSpaces = new ArrayList<Space>();
+            listOfSpaces.addAll(game.getSpaces());
+            while (propertyRS.next()) {
+
+                if (propertyRS.getString("type").equals("utility")) {
+                    Utility utility = (Utility) listOfSpaces.get(propertyRS.getInt("posonboard"));
+
+                    utility.setHouseCount(propertyRS.getInt("numofhouses"));
+                    utility.setSuperOwned(propertyRS.getBoolean("superowned"));
+
+                    if (propertyRS.getInt("playerid") != -1) {
+                        utility.setOwner(game.getPlayers().get(propertyRS.getInt("playerid")));
+                    }
+
+                    listOfSpaces.set(propertyRS.getInt("posonboard"), utility);
+
+                } else if (propertyRS.getString("type").equals("realestate")) {
+                    RealEstate realEstate = (RealEstate) listOfSpaces.get(propertyRS.getInt("posonboard"));
+
+                    realEstate.setSuperOwned(propertyRS.getBoolean("superowned"));
+
+                    if (propertyRS.getInt("playerid") != -1) {
+                        realEstate.setOwner(game.getPlayers().get(propertyRS.getInt("playerid")));
+                    }
+
+                    listOfSpaces.set(propertyRS.getInt("posonboard"), realEstate);
+                }
+
+            }
+            game.setSpaces(listOfSpaces);
 
 
         } catch (SQLException e) {
@@ -189,17 +233,17 @@ public class GameDAO implements IGameDAO {
 
         List gameList = new ArrayList<String>();
 
-            try (Connection c = createConnection()) {
+        try (Connection c = createConnection()) {
 
-                PreparedStatement gameStm = c.prepareStatement("SELECT * FROM game");
+            PreparedStatement gameStm = c.prepareStatement("SELECT * FROM game");
 
-                ResultSet gameRS = gameStm.executeQuery();
-                while (gameRS.next()) {
-                    gameList.add(gameRS.getString("date"));
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            ResultSet gameRS = gameStm.executeQuery();
+            while (gameRS.next()) {
+                gameList.add(gameRS.getString("date"));
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return gameList;
 
@@ -237,6 +281,7 @@ public class GameDAO implements IGameDAO {
                             "superowned bit, " +
                             "playerid int, " +
                             "gameid int, " +
+                            "type varchar(20), " +
                             "primary key (posonboard), " +
                             "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
                             "ON DELETE CASCADE);");

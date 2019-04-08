@@ -290,7 +290,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 
 		game.addSpace(p);
 
-		p = new Property();
+		p = new Utility();
 		p.setName("Coca-Cola Tapperi");
 		p.setCost(3000);
 		p.setRent(300);
