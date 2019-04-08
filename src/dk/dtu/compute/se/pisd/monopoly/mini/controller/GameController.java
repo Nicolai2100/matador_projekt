@@ -75,23 +75,23 @@ public class GameController {
     /**
      * Nicolai L
      */
-    public void playOrLoadGame(){
-        String userSelection = gui.getUserButtonPressed("","Start nyt spil","Hent spil");
-        if (userSelection.substring(0,5).equalsIgnoreCase("start")){
+    public void playOrLoadGame() {
+        String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil");
+        if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             game.shuffleCardDeck();
             game.createPlayers(game);
             initializeGUI();
             play();
-        }
-        else{
+        } else {
             List<String> games = gameDb.getGamesList();
-            String [] gamesArray = games.toArray(new String[games.size()]);
+            String[] gamesArray = games.toArray(new String[games.size()]);
             String userGameSelection = gui.getUserSelection("Vælg spil:", gamesArray);
-            System.out.println(userGameSelection);
-/*
-            game = gameDb.loadGame(game);
-*/
+
+            game = gameDb.loadGame(game, userGameSelection);
+
             game.shuffleCardDeck();
+
+            initializeGUI();
             play();
         }
     }
@@ -152,21 +152,21 @@ public class GameController {
     public boolean gameEnds() {
         boolean returnBool = false;
 
-            int countBroke = 0;
-            for (Player p : game.getPlayers()) {
-                if (p.isBroke()) {
-                    countBroke++;
-                }
+        int countBroke = 0;
+        for (Player p : game.getPlayers()) {
+            if (p.isBroke()) {
+                countBroke++;
             }
-            if (countBroke >= game.getPlayers().size()-1){
-                returnBool = true;
+        }
+        if (countBroke >= game.getPlayers().size() - 1) {
+            returnBool = true;
 
-            }
+        }
         return returnBool;
     }
 
 
-    public boolean winner(){
+    public boolean winner() {
         // Check whether we have a winner
         boolean returnBool = false;
         Player winner = null;
@@ -250,12 +250,11 @@ public class GameController {
             }
         } while (castDouble);
 
-        if (game.getGameId()<0){
+        if (game.getGameId() < 0) {
             gameDb.saveGame(game);
         } else {
             gameDb.updateGame(game);
         }
-
 
 
     }
