@@ -219,6 +219,7 @@ public class GameController {
                     gui.showMessage("Player " + player.getName() + " cast a double and makes another move.");
                 }
                 offerToBuyHouse(player);
+                trade();
             }
         } while (castDouble);
     }
@@ -572,6 +573,7 @@ public class GameController {
     public void offerToBuyHouse(Player player) {
 
         //Makes a list of all superowned real estate owned by the player, if any.
+
         ArrayList<RealEstate> potentialProperties = new ArrayList<>();
         for (Property property : player.getOwnedProperties()) {
             if (property instanceof RealEstate && property.getSuperOwned()) {
@@ -598,17 +600,101 @@ public class GameController {
                         for (int i = 0; i < propertyNames.length - 1; i++) {
                             if (propertyNames[i].equals(propertyString)) chosenProperty = potentialProperties.get(i);
                         }
-
                         buyHouse(player, chosenProperty);
                     } else {
                         continueBuying = false;
                     }
                 } while (continueBuying);
 
+            }
+        }
+    }
 
+    /**
+     * @Author Nicolai Wulff, s185036
+     */
+    public void trade() {
+
+        String[] playerOptions = new String[game.getPlayers().size()];
+        int i = 0;
+        for (Player player : game.getPlayers()) {
+            playerOptions[i] = player.getName();
+            i++;
+        }
+        String player1name = gui.getUserSelection("Hvem er den ene part i handlen?", playerOptions);
+        playerOptions = new String[game.getPlayers().size() - 1];
+        i = 0;
+        for (Player player : game.getPlayers()) {
+            if (!player.getName().equals(player1name)) {
+                playerOptions[i] = player.getName();
+                i++;
+            }
+        }
+        String player2name = gui.getUserSelection("Hvem er den anden part i handlen?", playerOptions);
+
+        Player player1 = null;
+        Player player2 = null;
+        for (Player player : game.getPlayers()) {
+            if (player.getName().equals(player1name)) player1 = player;
+            if (player.getName().equals(player2name)) player2 = player;
+        }
+        Player[] tradingPlayers = {player1, player2};
+        int[] moneyInOffers = new int[2];
+        ArrayList<String>[] propertiesInOffers = new ArrayList[2];
+        propertiesInOffers[0] = new ArrayList<>();
+        propertiesInOffers[1] = new ArrayList<>();
+
+        for (int j = 0; j < 2; j++) {
+            moneyInOffers[i] = gui.getUserInteger(tradingPlayers[j].getName() + ", hvilket beløb vil du tilføje i handlen?", 0, tradingPlayers[j].getBalance());
+
+            String[] propertyOptions = new String[tradingPlayers[j].getOwnedProperties().size() + 1];
+            i = 0;
+            for (Property property : tradingPlayers[j].getOwnedProperties()) {
+                propertyOptions[i] = property.getName();
+                i++;
+            }
+            propertyOptions[i] = "Stop med at tilføje grunde";
+
+            boolean continueAdding = true;
+            while(continueAdding) {
+                String propertyToOffer = gui.getUserSelection(tradingPlayers[j].getName() + ", hvilke grunde vil du tilføje i handlen?", propertyOptions);
+                if (propertyToOffer.equals("Stop med at tilføje grunde")) {
+                    continueAdding = false;
+                } else {
+                    propertiesInOffers[j].add(propertyToOffer);
+                    propertyOptions = new String[propertyOptions.length - 1];
+                    i = 0;
+                    for (Property property : tradingPlayers[j].getOwnedProperties()) {
+                        if (!property.getName().equals(propertyToOffer)) {
+                            propertyOptions[i] = property.getName();
+                            i++;
+                        }
+                    }
+                    propertyOptions[propertyOptions.length - 1] = "Stop med at tilføje grunde";
+                }
             }
         }
 
+        String[] playerProperties = {"", ""};
+        for (i = 0; i < 2; i++) {
+            for (String property : propertiesInOffers[i]) {
+                playerProperties[i] += property;
+                if (!property.equals(propertiesInOffers[i].get(propertiesInOffers[i].size() - 1))) {
+                    playerProperties[i] += ", ";
+                }
+            }
+        }
+
+        String tradeOverview = tradingPlayers[0].getName() + ": " + moneyInOffers[0] + "kr.\n"
+                + tradingPlayers[1].getName() + ": " + moneyInOffers[1] + "kr.\n"
+                + tradingPlayers[0].getName() + ": " + playerProperties[0] + "\n"
+                + tradingPlayers[1].getName() + ": " + playerProperties[1] + "\n";
+
+        String accept = gui.getUserButtonPressed("Jeres byttehandel ser således ud:\n" + tradeOverview + "\nVil I acceptere og lukke handlen?", "Ja", "Nej");
+
+        if (accept.equals("Ja")) {
+
+        }
     }
 }
 
