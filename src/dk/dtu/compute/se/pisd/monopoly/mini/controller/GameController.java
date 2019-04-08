@@ -1,16 +1,13 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
-import dk.dtu.compute.se.pisd.monopoly.mini.MiniMonopoly;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
-import gui_fields.GUI_Street;
 import gui_main.GUI;
 
-import java.sql.Statement;
 import java.util.*;
 
 /**
@@ -79,6 +76,8 @@ public class GameController {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             game.shuffleCardDeck();
+            int numOfPlayers = gui.getUserInteger("Hvor mange spillere?", 3,6);
+            game.createPlayers(numOfPlayers);
             initializeGUI();
             play();
         } else {
