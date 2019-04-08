@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Main class for setting up and running a (Mini-)Monoploy game.
- *
  * @author Ekkart Kindler, ekki@dtu.dk
  */
 public class MiniMonopoly {
@@ -24,15 +22,11 @@ public class MiniMonopoly {
      * cards, creates players, and then starts the game. Note
      * that, eventually, the game could be loaded from a database.
      *
-     * @param args not used
+     * main metoden ændret af Nicolai L
      */
     public static void main(String[] args) {
         Game game = new Game();
-        GameController controller = new GameController(game.createGame());
+        GameController controller = new GameController(game);
         controller.playOrLoadGame();
-
-
-
     }
-
 }
