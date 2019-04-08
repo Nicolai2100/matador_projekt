@@ -190,13 +190,34 @@ public class Game extends Subject {
         }
         notifyChange();
     }
+
     /**
-     * Creates the initial static situation of a Monopoly game. Note
-     * that the players are not created here, and the chance cards
-     * are not shuffled here.
-     *
-     * @return the initial game board and (not shuffled) deck of chance cards
+     * Returns a list of all players currently active in the game.
+     * @param prisonIgnored if true, it returns only players that are not broke.
+     *                      If false, it returns players that are not broke or in prison.
+     * @return
+     * @Author Nicolai Wulff, s185036
      */
+	public List<Player> getActivePlayers(Boolean prisonIgnored) {
+		List<Player> activePlayers = new ArrayList<>();
+		for (Player player : players) {
+			if (!prisonIgnored) {
+				if (!player.isBroke() && !player.isInPrison()) activePlayers.add(player);
+			} else {
+				if (!player.isBroke()) activePlayers.add(player);
+			}
+		}
+		return Collections.unmodifiableList(players);
+	}
+
+
+	/**
+	 * Creates the initial static situation of a Monopoly game. Note
+	 * that the players are not created here, and the chance cards
+	 * are not shuffled here.
+	 *
+	 * @return the initial game board and (not shuffled) deck of chance cards
+	 */
 
     public void createGame() {
 
