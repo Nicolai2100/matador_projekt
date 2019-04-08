@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * @author Jeppe s170196, Nicolai s185036
+ * @author Jeppe s170196, Nicolai s185036, Nicolai s185020
  */
 public class GameDAO implements IGameDAO {
 
@@ -43,6 +43,9 @@ public class GameDAO implements IGameDAO {
                 "s185020", "iEFSqK2BFP60YWMPlw77I");
     }
 
+    /**
+     * @author Jeppe s170196, Nicolai s185020
+     */
     @Override
     public void saveGame(Game game) {
 
@@ -131,12 +134,18 @@ public class GameDAO implements IGameDAO {
 
     }
 
+    /**
+     * @author Jeppe s170196
+     */
     @Override
     public void updateGame(Game game) {
         deleteGame(game);
         saveGame(game);
     }
 
+    /**
+     * @author Jeppe s170196
+     */
     @Override
     public void deleteGame(Game game) {
         try {
@@ -237,6 +246,9 @@ public class GameDAO implements IGameDAO {
         return game;
     }
 
+    /**
+     * @author Jeppe s170196
+     */
     @Override
     public List<String> getGamesList() {
 
@@ -259,6 +271,9 @@ public class GameDAO implements IGameDAO {
     }
 
 
+    /**
+     * @author Nicolai s185020
+     */
     public void initializeDataBase() {
         try {
             c.setAutoCommit(false);
@@ -305,6 +320,9 @@ public class GameDAO implements IGameDAO {
         }
     }
 
+    /**
+     * @author Nicolai s185020
+     */
     public void dropAllTables(int deleteTable) {
         try {
 
