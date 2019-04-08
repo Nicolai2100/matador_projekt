@@ -18,8 +18,6 @@ public class GameControllerTest {
 
         game = new Game();
 
-        GameController gameController = new GameController(game);
-
 
     }
     @org.junit.Test

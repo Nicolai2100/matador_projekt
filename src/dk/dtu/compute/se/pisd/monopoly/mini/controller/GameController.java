@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
+import dk.dtu.compute.se.pisd.monopoly.mini.MiniMonopoly;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
@@ -40,8 +41,8 @@ import java.util.*;
 public class GameController {
 
     private Game game;
-
     private GUI gui;
+    private GameDAO gameDb;
 
     private View view;
 
@@ -55,8 +56,8 @@ public class GameController {
     public GameController(Game game) {
         super();
         this.game = game;
-
         gui = new GUI();
+        gameDb = new GameDAO();
     }
 
     /**
@@ -68,6 +69,27 @@ public class GameController {
      */
     public void initializeGUI() {
         this.view = new View(game, gui);
+    }
+
+    /**
+     * Nicolai L
+     */
+    public void playOrLoadGame(){
+        String userSelection = gui.getUserButtonPressed("Vælg","Start nyt spil","Hent spil");
+        if (userSelection.substring(0,5).equalsIgnoreCase("start")){
+            game.shuffleCardDeck();
+            game.createPlayers(game);
+            initializeGUI();
+            play();
+        }
+        else{
+            System.out.println("load game metoden bør køre nu!");
+            String userGameSelection = gui.getUserSelection("Vælg spil:", "2");
+            game = gameDb.loadGame(2);
+            game.shuffleCardDeck();
+            play();
+
+        }
     }
 
     /**
@@ -223,8 +245,6 @@ public class GameController {
                 offerToBuild(this, player);
             }
         } while (castDouble);
-
-        GameDAO gameDb = new GameDAO();
 
         if (game.getGameId()<0){
             gameDb.saveGame(game);
