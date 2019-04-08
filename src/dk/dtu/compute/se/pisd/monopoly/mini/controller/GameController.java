@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
+import dk.dtu.compute.se.pisd.monopoly.mini.database.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
@@ -222,6 +223,8 @@ public class GameController {
                 offerToBuild(this, player);
             }
         } while (castDouble);
+        GameDAO gameDb = new GameDAO();
+        gameDb.saveGame(game);
     }
 
     /**

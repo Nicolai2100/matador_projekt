@@ -58,11 +58,11 @@ public class GameDAO implements IGameDAO {
 
             int curPlayer = game.getPlayers().indexOf(game.getCurrentPlayer());
             insertGame.setInt(1, curPlayer);
-            insertGame.executeQuery();
+            insertGame.executeUpdate();
             ResultSet gen = insertGame.getGeneratedKeys();
             int gameid = 0;
             if (gen.next()) {
-                gameid = gen.getInt("gameid");
+                gameid = gen.getInt(1);
                 System.out.println(gameid);
             }
 
@@ -71,8 +71,8 @@ public class GameDAO implements IGameDAO {
 
                 index = game.getPlayers().indexOf(player);
                 insertPLayers.setInt(1, index);
-                insertPLayers.setInt(2, player.getBalance());
-                insertPLayers.setString(3, player.getName());
+                insertPLayers.setString(2, player.getName());
+                insertPLayers.setInt(3, player.getBalance());
                 insertPLayers.setInt(4, player.getCurrentPosition().getIndex());
                 insertPLayers.setBoolean(5, player.isInPrison());
                 insertPLayers.setBoolean(6, player.isBroke());
@@ -200,10 +200,11 @@ public class GameDAO implements IGameDAO {
                             "numofhouses int, " +
                             "superowned bit, " +
                             "playerid int, " +
-                            "primary key (posonboard), " +
-                            "FOREIGN KEY (playerid) REFERENCES player (playerid) " +
-                            "ON DELETE CASCADE " +
-                            "ON UPDATE CASCADE);");
+                            "primary key (posonboard));"
+//                            + "FOREIGN KEY (playerid) REFERENCES player (playerid) " +
+//                            "ON DELETE CASCADE " +
+//                            "ON UPDATE CASCADE);"
+            );
 
             createTableGame.execute();
             createTablePlayer.execute();
