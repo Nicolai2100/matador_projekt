@@ -85,7 +85,7 @@ public class GameController {
         else{
             System.out.println("load game metoden bør køre nu!");
             String userGameSelection = gui.getUserSelection("Vælg spil:", "2");
-            game = gameDb.loadGame(2);
+            game = gameDb.loadGame(game);
             game.shuffleCardDeck();
             play();
 
