@@ -118,8 +118,9 @@ public class GameController {
             Player player = players.get(current);
             if (!player.isBroke()) {
                 try {
+                    showTurnMenu(player, true);
                     this.makeMove(player);
-                    //Her skal han kunne købe hus
+                    showTurnMenu(player, false);
                 } catch (PlayerBrokeException e) {
                 } catch (GameEndedException w) {
                     gui.showMessage(w.getMessage());
@@ -147,6 +148,27 @@ public class GameController {
         }
 
         dispose();
+    }
+
+    public void showTurnMenu(Player player, Boolean startOfTurn) {
+        boolean continueChoosing = true;
+        while (continueChoosing) {
+            String choice = null;
+
+            if (startOfTurn) {
+                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Hvad skal der ske?" , "Kast terningerne", "Byg huse", "Handle");
+            } else {
+                choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "s tur. Hvad skal der ske?" , "Giv turen videre", "Byg huse", "Handle");
+            }
+
+            if (choice.equals("Byg huse")) {
+                offerToBuyHouse();
+            } else if (choice.equals("Handle")) {
+                trade();
+            } else {
+                continueChoosing = false;
+            }
+        }
     }
 
     public boolean gameEnds() {
@@ -245,8 +267,8 @@ public class GameController {
                 if (castDouble) {
                     gui.showMessage("Player " + player.getName() + " cast a double and makes another move.");
                 }
-                offerToBuyHouse(player);
-                trade();
+                //offerToBuyHouse(player);
+                //trade();
             }
         } while (castDouble);
 
@@ -595,10 +617,22 @@ public class GameController {
     }
 
     /** Asks the player, if he/she wants to build houses, if the player owns any real estate.
-     * @param player
      * @Author Nicolai Wulff s185036
      */
-    public void offerToBuyHouse(Player player) {
+    public void offerToBuyHouse() {
+
+        String[] players = new String[game.getPlayers().size()];
+        for (int i = 0; i < players.length; i++) {
+            players[i] = game.getPlayers().get(i).getName();
+        }
+
+        String playerName = gui.getUserSelection("Hvilken spiller ønsker at bygge huse?", players);
+        Player player = null;
+        for (Player p : game.getPlayers()) {
+            if (p.getName().equals(playerName)) {
+                player = p;
+            }
+        }
 
         //Makes a list of all superowned real estate owned by the player, if any.
 
@@ -635,6 +669,8 @@ public class GameController {
                 } while (continueBuying);
 
             }
+        } else {
+            gui.showMessage(player.getName() + " kan ikke bygge huse endnu,\nda man først skal eje alle grunde af én farve.");
         }
     }
 
