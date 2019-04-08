@@ -270,7 +270,7 @@ public class GameDAO implements IGameDAO {
                             "isbroke bit, " +
                             "gameid int, " +
                             "color int, " +
-                            "primary key (playerid), " +
+                            "primary key (playerid, gameid), " +
                             "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
                             "ON DELETE CASCADE);");
 
@@ -282,7 +282,7 @@ public class GameDAO implements IGameDAO {
                             "playerid int, " +
                             "gameid int, " +
                             "type varchar(20), " +
-                            "primary key (posonboard), " +
+                            "primary key (posonboard, gameid), " +
                             "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
                             "ON DELETE CASCADE);");
 
