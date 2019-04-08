@@ -6,6 +6,7 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Space;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 
+import java.awt.*;
 import java.sql.*;
 
 import java.sql.Connection;
@@ -50,7 +51,7 @@ public class GameDAO implements IGameDAO {
                             "VALUES(?);", Statement.RETURN_GENERATED_KEYS);
             PreparedStatement insertPLayers = c.prepareStatement(
                     "INSERT INTO player " +
-                            "VALUES(?,?,?,?,?,?,?);");
+                            "VALUES(?,?,?,?,?,?,?,?);");
 
             PreparedStatement insertProperties = c.prepareStatement(
                     "INSERT INTO property " +
@@ -64,7 +65,6 @@ public class GameDAO implements IGameDAO {
             if (gen.next()) {
                 gameid = gen.getInt(1);
                 game.setGameId(gameid);
-                System.out.println(gameid);
             }
 
             int index = 0;
@@ -78,6 +78,7 @@ public class GameDAO implements IGameDAO {
                 insertPLayers.setBoolean(5, player.isInPrison());
                 insertPLayers.setBoolean(6, player.isBroke());
                 insertPLayers.setInt(7, gameid);
+                insertPLayers.setInt(8, player.getColor().getRGB());
                 insertPLayers.executeUpdate();
             }
 
@@ -130,54 +131,77 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     * @param gameId
+     * @param game
      * @return a game
      * @author Jeppe s170196
      */
     @Override
-    public Game loadGame(int gameId) {
-        Game game = new Game();
+    public Game loadGame(Game game) {
+        int gameId = game.getGameId();
 
 /*
     checkConnection();
 */
         try {
-            PreparedStatement gameStm = c.prepareStatement("SELECT * FROM Game WHERE GameID=?");
+            PreparedStatement gameStm = c.prepareStatement("SELECT * FROM game WHERE gameid=?");
+            PreparedStatement playerStm = c.prepareStatement("SELECT * FROM player WHERE gameid=?");
+            PreparedStatement propertyStm = c.prepareStatement("SELECT * FROM property WHERE gameid=?");
             gameStm.setInt(1, gameId);
+            playerStm.setInt(1, gameId);
+            propertyStm.setInt(1, gameId);
 
             ResultSet gameRS = gameStm.executeQuery();
+            ResultSet playerRS = gameStm.executeQuery();
+            ResultSet propertyRS = gameStm.executeQuery();
 
+            game.setGameId(gameId);
+
+            List<Player> listOfPlayers = new ArrayList<Player>();
+            while (playerRS.next()) {
+                Player p = new Player();
+                p.setName(playerRS.getString("name"));
+                p.setCurrentPosition(game.getSpaces().get(playerRS.getInt("position")));
+                p.setBalance(playerRS.getInt("balance"));
+                p.setInPrison(playerRS.getBoolean("injail"));
+                p.setBroke(playerRS.getBoolean("isbroke"));
+                p.setColor(new Color(playerRS.getInt("color")));
+                listOfPlayers.add(playerRS.getInt("playerid"), p);
+            }
+            game.setPlayers(listOfPlayers);
+
+            while (propertyRS.next()) {
+             //   game.
+            }
 
             if (gameRS.next()) {
-                //TODO: Make resultset
+                game.setCurrentPlayer(game.getPlayers().get(gameRS.getInt("curplayerid")));
             }
 
 
         } catch (SQLException e) {
-            //TODO: Handle exception?
+            e.printStackTrace();
         }
         return game;
     }
 
     @Override
-    public List<Game> getGamesList() {
+    public List<String> getGamesList() {
 
-        List gameList = new ArrayList<Game>();
-    /*
+        List gameList = new ArrayList<String>();
+
             try (Connection c = createConnection()) {
 
-                PreparedStatement gameStm = c.prepareStatement("SELECT * FROM Game");
+                PreparedStatement gameStm = c.prepareStatement("SELECT * FROM game");
 
                 ResultSet gameRS = gameStm.executeQuery();
                 while (gameRS.next()) {
-                    //TODO: Make resultset
+                    gameList.add(gameRS.getString("date"));
                 }
             } catch (SQLException e) {
-                //TODO: Handle exception?
+                e.printStackTrace();
             }
-            */
-        return gameList;
 
+        return gameList;
 
     }
 
@@ -201,6 +225,7 @@ public class GameDAO implements IGameDAO {
                             "injail bit, " +
                             "isbroke bit, " +
                             "gameid int, " +
+                            "color int, " +
                             "primary key (playerid), " +
                             "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
                             "ON DELETE CASCADE);");

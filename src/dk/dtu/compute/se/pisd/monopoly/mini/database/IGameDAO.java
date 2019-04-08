@@ -9,7 +9,7 @@ public interface IGameDAO {
 
     Game loadGame(int gameId);
 
-    List<Game> getGamesList();
+    List<String> getGamesList();
 
     void updateGame(Game game);
 
