@@ -116,6 +116,13 @@ public class GameController {
         boolean terminated = false;
         while (!terminated) {
             Player player = players.get(current);
+
+            if (game.getGameId() < 0) {
+                gameDb.saveGame(game);
+            } else {
+                gameDb.updateGame(game);
+            }
+
             if (!player.isBroke()) {
                 try {
                     showTurnMenu(player, true);
@@ -268,12 +275,6 @@ public class GameController {
                 //trade();
             }
         } while (castDouble);
-
-        if (game.getGameId() < 0) {
-            gameDb.saveGame(game);
-        } else {
-            gameDb.updateGame(game);
-        }
 
 
     }
