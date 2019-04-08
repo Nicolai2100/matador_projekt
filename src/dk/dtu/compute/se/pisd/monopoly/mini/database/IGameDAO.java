@@ -7,7 +7,7 @@ import java.util.List;
 public interface IGameDAO {
     void saveGame(Game game);
 
-    Game loadGame(int gameId);
+    Game loadGame(Game game);
 
     List<String> getGamesList();
 
