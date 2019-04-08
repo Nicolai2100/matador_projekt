@@ -679,7 +679,7 @@ public class GameController {
 
         String[] playerOptions = new String[game.getActivePlayers(true).size()];
         int i = 0;
-        for (Player player : game.getPlayers()) {
+        for (Player player : game.getActivePlayers(true)) {
             playerOptions[i] = player.getName();
             i++;
         }
@@ -693,11 +693,11 @@ public class GameController {
         while (choosing) {
             player1name = gui.getUserSelection("Hvem er den ene part i handlen?", playerOptions);
             for (Player player : game.getPlayers()) {
-                if (player.getName().equals(player1name) && !player.isInPrison()) {
+                if (player.getName().equals(player1name) && player.isInPrison()) {
+                    gui.showMessage(player1name + " er i fængsel, og må derfor ikke handle!");
+                } else if (player.getName().equals(player1name)){
                     player1 = player;
                     choosing = false;
-                } else {
-                    gui.showMessage(player + " er i fængsel, og må derfor ikke handle!");
                 }
             }
         }
@@ -714,11 +714,11 @@ public class GameController {
         while(choosing) {
             player2name = gui.getUserSelection("Hvem er den ene part i handlen?", playerOptions);
             for (Player player : game.getPlayers()) {
-                if (player.getName().equals(player2name) && !player.isInPrison()) {
+                if (player.getName().equals(player2name) && player.isInPrison()) {
+                    gui.showMessage(player2name + " er i fængsel, og må derfor ikke handle!");
+                } else if (player.getName().equals(player2name)){
                     player2 = player;
                     choosing = false;
-                } else {
-                    gui.showMessage(player2 + " er i fængsel, og må derfor ikke handle!");
                 }
             }
         }
@@ -729,7 +729,10 @@ public class GameController {
         }
         Player[] tradingPlayers = {player1, player2};
         int[] moneyInOffers = new int[2];
-        ArrayList<String>[] propertiesInOffers = new ArrayList[2];
+        ArrayList<String>[] propertiesInOffersString = new ArrayList[2];
+        ArrayList<Property>[] propertiesInOffers = new ArrayList[2];
+        propertiesInOffersString[0] = new ArrayList<>();
+        propertiesInOffersString[1] = new ArrayList<>();
         propertiesInOffers[0] = new ArrayList<>();
         propertiesInOffers[1] = new ArrayList<>();
 
@@ -750,13 +753,15 @@ public class GameController {
                 if (propertyToOffer.equals("Stop med at tilføje grunde")) {
                     continueAdding = false;
                 } else {
-                    propertiesInOffers[j].add(propertyToOffer);
+                    propertiesInOffersString[j].add(propertyToOffer);
                     propertyOptions = new String[propertyOptions.length - 1];
                     i = 0;
                     for (Property property : tradingPlayers[j].getOwnedProperties()) {
                         if (!property.getName().equals(propertyToOffer)) {
                             propertyOptions[i] = property.getName();
                             i++;
+                        } else if (property.getName().equals(propertyToOffer)) {
+                            propertiesInOffers[j].add(property);
                         }
                     }
                     propertyOptions[propertyOptions.length - 1] = "Stop med at tilføje grunde";
@@ -766,9 +771,9 @@ public class GameController {
 
         String[] playerProperties = {"", ""};
         for (i = 0; i < 2; i++) {
-            for (String property : propertiesInOffers[i]) {
+            for (String property : propertiesInOffersString[i]) {
                 playerProperties[i] += property;
-                if (!property.equals(propertiesInOffers[i].get(propertiesInOffers[i].size() - 1))) {
+                if (!property.equals(propertiesInOffersString[i].get(propertiesInOffersString[i].size() - 1))) {
                     playerProperties[i] += ", ";
                 }
             }
@@ -783,7 +788,29 @@ public class GameController {
 
         if (accept.equals("Ja")) {
             //TODO: Lav det nu færdigt..
+            try {
+                payment(player1, moneyInOffers[0], player2);
+                payment(player2, moneyInOffers[1], player1);
+
+                for (Property property : propertiesInOffers[0]) {
+                    transferProperty(player1, property, player2);
+                }
+                for (Property property : propertiesInOffers[0]) {
+                    transferProperty(player2, property, player1);
+                }
+
+            } catch (PlayerBrokeException e) {
+                e.printStackTrace();
+            } catch (GameEndedException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    public void transferProperty(Player giver, Property property, Player receiver) {
+        property.setOwner(receiver);
+        giver.removeOwnedProperty(property);
+        receiver.addOwnedProperty(property);
     }
 }
 
