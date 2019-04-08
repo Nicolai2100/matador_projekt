@@ -10,6 +10,7 @@ import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_fields.GUI_Street;
 import gui_main.GUI;
 
+import java.sql.Statement;
 import java.util.*;
 
 /**
@@ -84,14 +85,14 @@ public class GameController {
         }
         else{
             List<String> games = gameDb.getGamesList();
-
-            String userGameSelection = gui.getUserSelection("Vælg spil:", games);
+            String [] gamesArray = games.toArray(new String[games.size()]);
+            String userGameSelection = gui.getUserSelection("Vælg spil:", gamesArray);
+            System.out.println(userGameSelection);
 /*
             game = gameDb.loadGame(game);
 */
             game.shuffleCardDeck();
             play();
-
         }
     }
 
