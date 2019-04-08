@@ -757,7 +757,7 @@ public class GameController {
         String accept = gui.getUserButtonPressed("Jeres byttehandel ser således ud:\n" + tradeOverview + "\nVil I acceptere og lukke handlen?", "Ja", "Nej");
 
         if (accept.equals("Ja")) {
-            //TODO: Lav det nu færdigt
+            //TODO: Lav det nu færdigt..
         }
     }
 }
