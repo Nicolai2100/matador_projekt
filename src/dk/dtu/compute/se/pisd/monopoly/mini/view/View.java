@@ -60,7 +60,6 @@ public class View implements Observer {
             PlayerPanel playerPanel = new PlayerPanel(game, player);
             player2PlayerPanel.put(player, playerPanel);
         }
-
         GUI_Field[] guiFields = gui.getFields();
 
         int i = 0;
@@ -70,31 +69,6 @@ public class View implements Observer {
             // fields
             space2GuiField.put(space, guiFields[i++]);
             space.attach(this);
-        }
-
-        // create the players in the GUI
-/*  p.setCurrentPosition(getSpaces().get(0));
-        p.setColor(Color.RED);
-        addPlayer(p);*/
-        CarColor carColor = new CarColor();
-        for (Player player : game.getPlayers()) {
-/*
-            GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.CAR, Pattern.FILL);
-*/
-
-            enterNamePlayer(player);
-            Color userColor = chooseCarColor(carColor, player);
-            player.setColor(userColor);
-
-            GUI_Car car = chosePlayerCar(player);
-            GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
-            player2GuiPlayer.put(player, guiPlayer);
-            gui.addPlayer(guiPlayer);
-            // player2position.put(player, 0);
-            // register this view with the player as an observer, in order to update the
-            // player's state in the GUI
-            player.attach(this);
-            updatePlayer(player);
         }
     }
 
@@ -109,6 +83,7 @@ public class View implements Observer {
             }
         }
     }
+
     public GUI_Car chosePlayerCar(Player player) {
         String carChoice = gui.getUserSelection("Choose car", "Car", "Ufo", "Tractor", "Racecar");
         GUI_Car car;
@@ -122,6 +97,7 @@ public class View implements Observer {
         car = new GUI_Car(player.getColor(), Color.BLUE, enumMap.get(carChoice), GUI_Car.Pattern.FILL);
         return car;
     }
+
     public Color chooseCarColor(CarColor carColorObj, Player player) {
         String[] chooseColorStrings = carColorObj.setColorsToChooseFrom().split(" ");
         String carColorS;
@@ -146,11 +122,16 @@ public class View implements Observer {
     @Override
     public void update(Subject subject) {
         if (!disposed) {
+
             if (subject instanceof Player) {
                 updatePlayer((Player) subject);
             }
             if (subject instanceof Property) {
                 updateProperty((Property) subject);
+            }
+            if (subject instanceof Game) {
+                createPlayers();
+                System.out.println("snap");
             }
         }
 
@@ -229,8 +210,24 @@ public class View implements Observer {
         }
     }
 
-    public int createPlayers() {
-       int userInput = gui.getUserInteger("Vælg antallet af spillere", 3,6);
-       return userInput;
+    public void createPlayers() {
+        CarColor carColor = new CarColor();
+        for (Player player : game.getPlayers()) {
+/*
+            GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.CAR, Pattern.FILL);
+*/
+            enterNamePlayer(player);
+            Color userColor = chooseCarColor(carColor, player);
+            player.setColor(userColor);
+            GUI_Car car = chosePlayerCar(player);
+            GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
+            player2GuiPlayer.put(player, guiPlayer);
+            gui.addPlayer(guiPlayer);
+            // player2position.put(player, 0);
+            // register this view with the player as an observer, in order to update the
+            // player's state in the GUI
+            player.attach(this);
+            updatePlayer(player);
+        }
     }
 }

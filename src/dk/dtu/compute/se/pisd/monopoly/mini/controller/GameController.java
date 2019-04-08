@@ -79,6 +79,7 @@ public class GameController {
             int numOfPlayers = gui.getUserInteger("Hvor mange spillere?", 3,6);
             game.createPlayers(numOfPlayers);
             initializeGUI();
+            view.createPlayers();
             play();
         } else {
             List<String> games = gameDb.getGamesList();

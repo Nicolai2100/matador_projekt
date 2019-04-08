@@ -339,9 +339,10 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
     public void createPlayers(int numOfPlayers) {
         for (int i = 0; i < numOfPlayers; i++) {
             Player player = new Player();
-            player.setName("player" + i+1);
+            player.setName("player " + i+1);
             player.setCurrentPosition(getSpaces().get(0));
             addPlayer(player);
+
         }
 
    /*
@@ -382,5 +383,9 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.cyan);
 		game.addPlayer(p);*/
+    }
+
+    public void callGui(){
+        notifyChange();
     }
 }
