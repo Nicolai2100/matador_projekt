@@ -36,16 +36,17 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     * Metoden opretter forbindelse til databasen, som gemmes som i en lokal variabel.
+     * Metoden opretter en forbindelse til databasen, som gemmes som i en lokal variabel.
      * Den er gjort public for at kunne bruges i test.
      * @return
      * @throws SQLException
      */
     public Connection createConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020",
-                "s185020", "iEFSqK2BFP60YWMPlw77I");
+        String url = "jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020";
+        String user = "s185020";
+        String password = "iEFSqK2BFP60YWMPlw77I";
+        return DriverManager.getConnection(url, user, password);
     }
-
     /**Metoden bruges til at gemme et spil i databasen
      * @author Jeppe s170196, Nicolai s185020
      */
