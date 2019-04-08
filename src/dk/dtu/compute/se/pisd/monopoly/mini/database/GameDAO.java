@@ -14,12 +14,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 /**
- * @author Jeppe s170196, Nicolai s185036
+ * @author Jeppe s170196, Nicolai s185036, Nicolai s185020
  */
 public class GameDAO implements IGameDAO {
 
@@ -41,6 +43,9 @@ public class GameDAO implements IGameDAO {
                 "s185020", "iEFSqK2BFP60YWMPlw77I");
     }
 
+    /**
+     * @author Jeppe s170196, Nicolai s185020
+     */
     @Override
     public void saveGame(Game game) {
 
@@ -48,8 +53,8 @@ public class GameDAO implements IGameDAO {
             c.setAutoCommit(false);
 
             PreparedStatement insertGame = c.prepareStatement(
-                    "INSERT INTO game (curplayerid) " +
-                            "VALUES(?);", Statement.RETURN_GENERATED_KEYS);
+                    "INSERT INTO game (curplayerid, date) " +
+                            "VALUES(?,?);", Statement.RETURN_GENERATED_KEYS);
             PreparedStatement insertPLayers = c.prepareStatement(
                     "INSERT INTO player " +
                             "VALUES(?,?,?,?,?,?,?,?);");
@@ -60,6 +65,13 @@ public class GameDAO implements IGameDAO {
 
             int curPlayer = game.getPlayers().indexOf(game.getCurrentPlayer());
             insertGame.setInt(1, curPlayer);
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+
+            insertGame.setString(2, dtf.format(now));
+
+
             insertGame.executeUpdate();
             ResultSet gen = insertGame.getGeneratedKeys();
             int gameid = 0;
@@ -122,12 +134,18 @@ public class GameDAO implements IGameDAO {
 
     }
 
+    /**
+     * @author Jeppe s170196
+     */
     @Override
     public void updateGame(Game game) {
         deleteGame(game);
         saveGame(game);
     }
 
+    /**
+     * @author Jeppe s170196
+     */
     @Override
     public void deleteGame(Game game) {
         try {
@@ -228,12 +246,15 @@ public class GameDAO implements IGameDAO {
         return game;
     }
 
+    /**
+     * @author Jeppe s170196
+     */
     @Override
     public List<String> getGamesList() {
 
         List gameList = new ArrayList<String>();
 
-        try (Connection c = createConnection()) {
+        try {
 
             PreparedStatement gameStm = c.prepareStatement("SELECT * FROM game");
 
@@ -250,13 +271,16 @@ public class GameDAO implements IGameDAO {
     }
 
 
+    /**
+     * @author Nicolai s185020
+     */
     public void initializeDataBase() {
         try {
             c.setAutoCommit(false);
             PreparedStatement createTableGame = c.prepareStatement(
                     "CREATE TABLE if NOT EXISTS game " +
                             "(gameid int NOT NULL AUTO_INCREMENT, " +
-                            "date DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+                            "date VARCHAR(20) NOT NULL, " +
                             "curplayerid int, " +
                             "primary key (gameid));");
 
@@ -296,6 +320,9 @@ public class GameDAO implements IGameDAO {
         }
     }
 
+    /**
+     * @author Nicolai s185020
+     */
     public void dropAllTables(int deleteTable) {
         try {
 
