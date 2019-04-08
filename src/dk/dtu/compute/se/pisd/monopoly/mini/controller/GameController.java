@@ -75,7 +75,7 @@ public class GameController {
      * Nicolai L
      */
     public void playOrLoadGame(){
-        String userSelection = gui.getUserButtonPressed("Vælg","Start nyt spil","Hent spil");
+        String userSelection = gui.getUserButtonPressed("","Start nyt spil","Hent spil");
         if (userSelection.substring(0,5).equalsIgnoreCase("start")){
             game.shuffleCardDeck();
             game.createPlayers(game);
@@ -83,9 +83,12 @@ public class GameController {
             play();
         }
         else{
-            System.out.println("load game metoden bør køre nu!");
-            String userGameSelection = gui.getUserSelection("Vælg spil:", "2");
+            List<String> games = gameDb.getGamesList();
+
+            String userGameSelection = gui.getUserSelection("Vælg spil:", games);
+/*
             game = gameDb.loadGame(game);
+*/
             game.shuffleCardDeck();
             play();
 
