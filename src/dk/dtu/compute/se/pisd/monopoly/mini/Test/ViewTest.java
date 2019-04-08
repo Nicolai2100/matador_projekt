@@ -6,8 +6,6 @@ import gui_main.GUI;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class ViewTest {
     Game game;
     GUI gui;

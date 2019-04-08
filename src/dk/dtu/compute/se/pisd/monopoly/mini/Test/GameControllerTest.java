@@ -1,4 +1,4 @@
-package dk.dtu.compute.se.pisd.monopoly.mini.controller;
+package dk.dtu.compute.se.pisd.monopoly.mini.Test;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;

@@ -18,17 +18,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /**
- * @author Jeppe s170196, Nicolai s185036, Nicolai s185020
+ * @author Jeppe s170196, Nicolai s185036, Nicolai L s185020
  */
 public class GameDAO implements IGameDAO {
 
     private Connection c;
 
     public GameDAO() {
-
         try {
             c = createConnection();
             initializeDataBase();
@@ -37,13 +35,18 @@ public class GameDAO implements IGameDAO {
         }
     }
 
-    //Jeg har lavet den public så vi kan bruge den i tests - Nicolai L
+    /**
+     * Metoden opretter forbindelse til databasen, som gemmes som i en lokal variabel.
+     * Den er gjort public for at kunne bruges i test.
+     * @return
+     * @throws SQLException
+     */
     public Connection createConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020",
                 "s185020", "iEFSqK2BFP60YWMPlw77I");
     }
 
-    /**
+    /**Metoden bruges til at gemme et spil i databasen
      * @author Jeppe s170196, Nicolai s185020
      */
     @Override
@@ -71,7 +74,6 @@ public class GameDAO implements IGameDAO {
 
             insertGame.setString(2, dtf.format(now));
 
-
             insertGame.executeUpdate();
             ResultSet gen = insertGame.getGeneratedKeys();
             int gameid = 0;
@@ -94,26 +96,20 @@ public class GameDAO implements IGameDAO {
                 insertPLayers.setInt(8, player.getColor().getRGB());
                 insertPLayers.executeUpdate();
             }
-
             for (Space space : game.getSpaces()) {
                 if (space instanceof Property) {
-
                     insertProperties.setInt(1, space.getIndex());
-
                     if (space instanceof RealEstate) {
                         RealEstate realEstate = (RealEstate) space;
                         insertProperties.setInt(2, realEstate.getHouseCount());
                         insertProperties.setBoolean(3, realEstate.getSuperOwned());
                         insertProperties.setString(6, "realestate");
-
                     }
                     if (space instanceof Utility) {
                         Utility utility = (Utility) space;
                         insertProperties.setBoolean(3, utility.getSuperOwned());
                         insertProperties.setString(6, "utility");
-
                     }
-
                     int playerId = -1;
                     for (Player player : game.getPlayers()) {
                         if (player.getOwnedProperties().contains(space)) {
@@ -130,11 +126,9 @@ public class GameDAO implements IGameDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
 
-    /**
+    /**Metoden "opdaterer" et allerede gemt spil.
      * @author Jeppe s170196
      */
     @Override
@@ -143,7 +137,7 @@ public class GameDAO implements IGameDAO {
         saveGame(game);
     }
 
-    /**
+    /**Metoden bruges til at slette et spil fra databasen
      * @author Jeppe s170196
      */
     @Override
@@ -158,7 +152,7 @@ public class GameDAO implements IGameDAO {
         }
     }
 
-    /**
+    /**Metoden bruges til at hente et gemt spil fra databasen
      * @param game
      * @return a game
      * @author Jeppe s170196
@@ -239,7 +233,6 @@ public class GameDAO implements IGameDAO {
             }
             game.setSpaces(listOfSpaces);
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -255,7 +248,6 @@ public class GameDAO implements IGameDAO {
         List gameList = new ArrayList<String>();
 
         try {
-
             PreparedStatement gameStm = c.prepareStatement("SELECT * FROM game");
 
             ResultSet gameRS = gameStm.executeQuery();
@@ -265,13 +257,10 @@ public class GameDAO implements IGameDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return gameList;
-
     }
 
-
-    /**
+    /**Metoden sætter alle tabellerne op, hvis de ikke allerede ligger i databasen.
      * @author Nicolai s185020
      */
     public void initializeDataBase() {
@@ -320,12 +309,11 @@ public class GameDAO implements IGameDAO {
         }
     }
 
-    /**
+    /** Metoden er kun til brug i test - for hurtigt at kunne slette og oprette tabellerne ved fejl.
      * @author Nicolai s185020
      */
     public void dropAllTables(int deleteTable) {
         try {
-
             PreparedStatement dropTableGame = c.prepareStatement(
                     "drop table game;"
             );
@@ -350,5 +338,4 @@ public class GameDAO implements IGameDAO {
             e.printStackTrace();
         }
     }
-
 }

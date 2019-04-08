@@ -34,11 +34,8 @@ public class PlayerPanel extends JFrame {
 
         update();
 
-
-//Måske noget med en fængselsstatus
-
+        //Måske noget med en fængselsstatus
     }
-
     public void update() {
         mainPanel.removeAll();
         maltesMap = new HashMap<>();

@@ -1,16 +1,13 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
-import dk.dtu.compute.se.pisd.monopoly.mini.MiniMonopoly;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
-import gui_fields.GUI_Street;
 import gui_main.GUI;
 
-import java.sql.Statement;
 import java.util.*;
 
 /**
@@ -180,7 +177,6 @@ public class GameController {
         return returnBool;
     }
 
-
     public boolean winner() {
         // Check whether we have a winner
         boolean returnBool = false;
@@ -298,7 +294,6 @@ public class GameController {
         // Execute the action associated with the respective space. Note
         // that this is delegated to the field, which implements this action
         space.doAction(this, player);
-
     }
 
     /**
@@ -422,14 +417,11 @@ public class GameController {
                     throw new GameEndedException();
                 throw new PlayerBrokeException(payer);
             }
-
-
         }
         gui.showMessage("Player " + payer.getName() + " pays " + amount + "$ to player " + receiver.getName() + ".");
         payer.payMoney(amount);
         receiver.receiveMoney(amount);
     }
-
     /**
      * This method implements the action of a player receiving money from
      * the bank.
@@ -497,9 +489,7 @@ public class GameController {
                 }
             }
         }
-
         property.setCost(highBid);
-
         try {
             offerToBuy(property, bidders.get(0));
             bidders.clear();
@@ -507,7 +497,6 @@ public class GameController {
             e.printStackTrace();
         }
     }
-
     /**
      * Action handling the situation when one player is broke to another
      * player. All money and properties are transferred to the other player.
@@ -538,7 +527,6 @@ public class GameController {
         gui.showMessage("Player " + brokePlayer.getName() + "went broke and transfered all"
                 + "assets to " + benificiary.getName());
     }
-
     /**
      * Action handling the situation when a player is broke to the bank.
      *
@@ -562,7 +550,6 @@ public class GameController {
             game.returnCardToDeck(player.getOwnedCards().get(0));
         }
     }
-
     /**
      * Method for disposing of this controller and cleaning up its resources.
      */
@@ -578,7 +565,6 @@ public class GameController {
             //      deployed via Maven (or other official versions);
         }
     }
-
     /**
      * Buys a house, if the player can afford it.
      * @param player
@@ -592,7 +578,6 @@ public class GameController {
                 lowestHouseCount = ((RealEstate) property).getHouseCount();
             }
         }
-
         if(re.getHouseCount() == 4) {
             gui.showMessage("You can't build more than four houses on a property!");
         } else if (re.getHouseCount() > lowestHouseCount){
@@ -608,7 +593,6 @@ public class GameController {
             }
         }
     }
-
     /** Asks the player, if he/she wants to build houses, if the player owns any real estate.
      * @Author Nicolai Wulff s185036
      */
@@ -626,16 +610,13 @@ public class GameController {
                 player = p;
             }
         }
-
         //Makes a list of all superowned real estate owned by the player, if any.
-
         ArrayList<RealEstate> potentialProperties = new ArrayList<>();
         for (Property property : player.getOwnedProperties()) {
             if (property instanceof RealEstate && property.getSuperOwned()) {
                 potentialProperties.add((RealEstate) property);
             }
         }
-
         //If the player owns superowned real estate, ask if he/she wants to build houses.
         if (potentialProperties.size() > 0) {
             String answer = gui.getUserButtonPressed("Do you wish to buy houses for your properties?", "yes", "no");
@@ -666,7 +647,6 @@ public class GameController {
             gui.showMessage(player.getName() + " kan ikke bygge huse endnu,\nda man først skal eje alle grunde af én farve.");
         }
     }
-
     /**
      * @Author Nicolai Wulff, s185036
      */
@@ -731,7 +711,6 @@ public class GameController {
                 }
             }
         }
-
         String[] playerProperties = {"", ""};
         for (i = 0; i < 2; i++) {
             for (String property : propertiesInOffers[i]) {
@@ -741,7 +720,6 @@ public class GameController {
                 }
             }
         }
-
         String tradeOverview = tradingPlayers[0].getName() + ": " + moneyInOffers[0] + "kr.\n"
                 + tradingPlayers[1].getName() + ": " + moneyInOffers[1] + "kr.\n"
                 + tradingPlayers[0].getName() + ": " + playerProperties[0] + "\n"
@@ -754,4 +732,3 @@ public class GameController {
         }
     }
 }
-
