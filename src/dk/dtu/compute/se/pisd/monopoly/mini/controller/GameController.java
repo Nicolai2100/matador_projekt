@@ -1,6 +1,6 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
-import dk.dtu.compute.se.pisd.monopoly.mini.MiniMonopoly;
+import dk.dtu.compute.se.pisd.monopoly.mini.Main;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
@@ -733,7 +733,7 @@ public class GameController {
         propertiesInOffers[1] = new ArrayList<>();
 
         for (int j = 0; j < 2; j++) {
-            moneyInOffers[i] = gui.getUserInteger(tradingPlayers[j].getName() + ", hvilket beløb vil du tilføje i handlen?", 0, tradingPlayers[j].getBalance());
+            moneyInOffers[j] = gui.getUserInteger(tradingPlayers[j].getName() + ", hvilket beløb vil du tilføje i handlen?", 0, tradingPlayers[j].getBalance());
 
             String[] propertyOptions = new String[tradingPlayers[j].getOwnedProperties().size() + 1];
             i = 0;
@@ -783,7 +783,6 @@ public class GameController {
         String accept = gui.getUserButtonPressed("Jeres byttehandel ser således ud:\n" + tradeOverview + "\nVil I acceptere og lukke handlen?", "Ja", "Nej");
 
         if (accept.equals("Ja")) {
-            //TODO: Lav det nu færdigt..
             try {
                 payment(player1, moneyInOffers[0], player2);
                 payment(player2, moneyInOffers[1], player1);
@@ -803,10 +802,17 @@ public class GameController {
         }
     }
 
+    /**
+     * Transfers a property from one player (giver) to another (receiver)
+     * @param giver
+     * @param property
+     * @param receiver
+     * @Author Nicolai Wulff, s185036
+     */
     public void transferProperty(Player giver, Property property, Player receiver) {
-        property.setOwner(receiver);
         giver.removeOwnedProperty(property);
         receiver.addOwnedProperty(property);
+        property.setOwner(receiver);
     }
 }
 
