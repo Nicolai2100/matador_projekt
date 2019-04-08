@@ -612,14 +612,16 @@ public class GameController {
     /** Asks the player, if he/she wants to build houses, if the player owns any real estate.
      * @Author Nicolai Wulff s185036
      */
-    public void offerToBuyHouse() {
+    public boolean offerToBuyHouse() {
 
-        String[] players = new String[game.getActivePlayers(false).size()];
-        for (int i = 0; i < players.length; i++) {
+        String[] players = new String[game.getActivePlayers(false).size() + 1];
+        for (int i = 0; i < players.length - 1; i++) {
             players[i] = game.getPlayers().get(i).getName();
         }
+        players[players.length - 1] = "Annuller";
 
         String playerName = gui.getUserSelection("Hvilken spiller ønsker at bygge huse?", players);
+        if (playerName.equals("Annuller")) return false;
         Player player = null;
         for (Player p : game.getPlayers()) {
             if (p.getName().equals(playerName)) {
@@ -638,33 +640,29 @@ public class GameController {
 
         //If the player owns superowned real estate, ask if he/she wants to build houses.
         if (potentialProperties.size() > 0) {
-            String answer = gui.getUserButtonPressed("Do you wish to buy houses for your properties?", "yes", "no");
-            if (answer.equals("yes")) {
+            boolean continueBuying = true;
+            do {
+                String[] propertyNames = new String[potentialProperties.size() + 1];
+                for (int i = 0; i < propertyNames.length - 1; i++) {
+                    propertyNames[i] = potentialProperties.get(i).getName();
+                }
+                propertyNames[propertyNames.length - 1] = "Stop med at bygge";
+                String propertyString = gui.getUserSelection("On which property, do you wish to build houses?", propertyNames);
 
-                boolean continueBuying = true;
-                do {
-                    String[] propertyNames = new String[potentialProperties.size() + 1];
+                if (!propertyString.equals("Stop med at bygge")) {
+                    RealEstate chosenProperty = potentialProperties.get(0);
                     for (int i = 0; i < propertyNames.length - 1; i++) {
-                        propertyNames[i] = potentialProperties.get(i).getName();
+                        if (propertyNames[i].equals(propertyString)) chosenProperty = potentialProperties.get(i);
                     }
-                    propertyNames[propertyNames.length - 1] = "Stop med at bygge";
-                    String propertyString = gui.getUserSelection("On which property, do you wish to build houses?", propertyNames);
-
-                    if (!propertyString.equals("Stop med at bygge")) {
-                        RealEstate chosenProperty = potentialProperties.get(0);
-                        for (int i = 0; i < propertyNames.length - 1; i++) {
-                            if (propertyNames[i].equals(propertyString)) chosenProperty = potentialProperties.get(i);
-                        }
-                        buyHouse(player, chosenProperty);
-                    } else {
-                        continueBuying = false;
-                    }
-                } while (continueBuying);
-
-            }
+                    buyHouse(player, chosenProperty);
+                } else {
+                    continueBuying = false;
+                }
+            } while (continueBuying);
         } else {
             gui.showMessage(player.getName() + " kan ikke bygge huse endnu,\nda man først skal eje alle grunde af én farve.");
         }
+        return true;
     }
 
     /**
