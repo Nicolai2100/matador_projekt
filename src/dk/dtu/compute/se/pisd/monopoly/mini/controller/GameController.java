@@ -79,18 +79,14 @@ public class GameController {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             game.shuffleCardDeck();
-            game.createPlayers(game);
             initializeGUI();
             play();
         } else {
             List<String> games = gameDb.getGamesList();
             String[] gamesArray = games.toArray(new String[games.size()]);
             String userGameSelection = gui.getUserSelection("Vælg spil:", gamesArray);
-
             game = gameDb.loadGame(game, userGameSelection);
-
             game.shuffleCardDeck();
-
             initializeGUI();
             play();
         }
@@ -397,8 +393,8 @@ public class GameController {
                 // PlayerBrokeException again
                 throw e;
             }
-            player.addOwnedProperty(property);
             property.setOwner(player);
+            player.addOwnedProperty(property);
             return;
         }
 

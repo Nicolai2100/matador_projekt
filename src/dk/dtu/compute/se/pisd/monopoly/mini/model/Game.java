@@ -17,207 +17,206 @@ import java.util.List;
  * to use this model with the MVC-pattern, it extends the
  * {@link dk.dtu.compute.se.pisd.designpatterns.Subject} of the observer
  * design pattern.
- * 
- * @author Ekkart Kindler, ekki@dtu.dk
  *
+ * @author Ekkart Kindler, ekki@dtu.dk
  */
 public class Game extends Subject {
-	
-	private List<Space> spaces = new ArrayList<Space>();
-	
-	private List<Card> cardDeck = new ArrayList<Card>();
-	
-	private List<Player> players = new ArrayList<Player>();
-	
-	private Player current;
 
-	private int gameId = -1;
+    private List<Space> spaces = new ArrayList<Space>();
 
+    private List<Card> cardDeck = new ArrayList<Card>();
 
-	public int getGameId() {
-		return gameId;
-	}
+    private List<Player> players = new ArrayList<Player>();
 
-	public void setGameId(int gameId) {
-		this.gameId = gameId;
-	}
+    private Player current;
 
-	/**
-	 * Returns a list of all the games spaces.
-	 * 
-	 * @return an unmodifiable list of the games spaces
-	 */
-	public List<Space> getSpaces() {
-		return Collections.unmodifiableList(spaces);
-	}
+    private int gameId = -1;
 
-	/**
-	 * Sets all the spaces of the game. Note that the provided
-	 * list of spaces is copied, so that they cannot be changed
-	 * without the game being aware of the change.
-	 * 
-	 * @param spaces the list of spaces
-	 */
-	public void setSpaces(List<Space> spaces) {
-		this.spaces = new ArrayList<Space>(spaces);
-		notifyChange();
-	}
+    public Game() {
+        createGame();
+        createPlayers();
+    }
 
-	/**
-	 * Adds a space to the game at the end.
-	 * 
-	 * @param space the added space
-	 */
-	public void addSpace(Space space) {
-		space.setIndex(spaces.size());
-		spaces.add(space);
-		notifyChange();
-	}
+    public int getGameId() {
+        return gameId;
+    }
 
-	/**
-	 * Returns a list of the cards in the current deck.
-	 * 
-	 * @return an unmodifiable list of all the cards currently in the deck
-	 */
-	public List<Card> getCardDeck() {
-		return Collections.unmodifiableList(cardDeck);
-	}
-	
-	/**
-	 * Removes the topmost card from the deck and returns it.
-	 * 
-	 * @return the topmost card of the deck
-	 */
-	public Card drawCardFromDeck() {
-		// TODO should be more defensive
-		Card card = cardDeck.remove(0);
-		notifyChange();
-		return card;
-		
-	}
-	
-	/**
-	 * Add the given card to the bottom of the deck.
-	 * 
-	 * @param card the card added to the bottom of the deck.
-	 */
-	public void returnCardToDeck(Card card) {
-		cardDeck.add(card);
-		notifyChange();
-	}
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
 
-	/**
-	 * Uses the provided list of cards as the new deck. The
-	 * list will be copied in order to avoid, changes on it
-	 * without the game being aware of it.
-	 *  
-	 * @param cardDeck the new deck of cards
-	 */
-	public void setCardDeck(List<Card> cardDeck) {
-		this.cardDeck = new ArrayList<Card>(cardDeck);
-		notifyChange();
-	}
-	
+    /**
+     * Returns a list of all the games spaces.
+     *
+     * @return an unmodifiable list of the games spaces
+     */
+    public List<Space> getSpaces() {
+        return Collections.unmodifiableList(spaces);
+    }
 
-	/**
-	 * Shuffles the cards in the deck.
-	 */
-	public void shuffleCardDeck() {
-		Collections.shuffle(cardDeck);
-		// This notification is probably not needed, but for
-		// completeness sake, we have it here
-		notifyChange();
-	}
+    /**
+     * Sets all the spaces of the game. Note that the provided
+     * list of spaces is copied, so that they cannot be changed
+     * without the game being aware of the change.
+     *
+     * @param spaces the list of spaces
+     */
+    public void setSpaces(List<Space> spaces) {
+        this.spaces = new ArrayList<Space>(spaces);
+        notifyChange();
+    }
 
-	/**
-	 * Returns all the players of the game as an unmodifiable list.
-	 * 
-	 * @return a list of the current players
-	 */
-	public List<Player> getPlayers() {
-		return Collections.unmodifiableList(players);
-	}
+    /**
+     * Adds a space to the game at the end.
+     *
+     * @param space the added space
+     */
+    public void addSpace(Space space) {
+        space.setIndex(spaces.size());
+        spaces.add(space);
+        notifyChange();
+    }
 
-	/**
-	 * Sets the list of players. The list of players is actually copied
-	 * in order to avoid the list being modified without the game being
-	 * aware of it.
-	 * 
-	 * @param players the list of players
-	 */
-	public void setPlayers(List<Player> players) {
-		this.players = new ArrayList<Player>(players);
-		notifyChange();
-	}
-	
-	/**
-	 * Adds a player to the game.
-	 * 
-	 * @param player the player to be added.
-	 */
-	public void addPlayer(Player player) {
-		players.add(player);
-		notifyChange();
-	}
-	
-	/**
-	 * Returns the current player of the game. This is the player
-	 * who's turn it is to do the next move (or currently is doing a move).
-	 * 
-	 * @return the current player
-	 */
-	public Player getCurrentPlayer() {
-		if (current == null) {
-			current = players.get(0);
-		}
-		return current;
-	}
-	
-	/**
-	 * Sets the current player. It is required that the player is a
-	 * player of the game already; otherwise an IllegalArumentException
-	 * will be thrown.
-	 * 
-	 * @param player the new current player
-	 */
-	public void setCurrentPlayer(Player player) {
-		if (player != null && players.contains(player)) {
-			current = player;
-		} else {
-			throw new IllegalArgumentException("Player is not in the game!");
-		}
-		notifyChange();
-	}
+    /**
+     * Returns a list of the cards in the current deck.
+     *
+     * @return an unmodifiable list of all the cards currently in the deck
+     */
+    public List<Card> getCardDeck() {
+        return Collections.unmodifiableList(cardDeck);
+    }
+
+    /**
+     * Removes the topmost card from the deck and returns it.
+     *
+     * @return the topmost card of the deck
+     */
+    public Card drawCardFromDeck() {
+        // TODO should be more defensive
+        Card card = cardDeck.remove(0);
+        notifyChange();
+        return card;
+    }
+
+    /**
+     * Add the given card to the bottom of the deck.
+     *
+     * @param card the card added to the bottom of the deck.
+     */
+    public void returnCardToDeck(Card card) {
+        cardDeck.add(card);
+        notifyChange();
+    }
+
+    /**
+     * Uses the provided list of cards as the new deck. The
+     * list will be copied in order to avoid, changes on it
+     * without the game being aware of it.
+     *
+     * @param cardDeck the new deck of cards
+     */
+    public void setCardDeck(List<Card> cardDeck) {
+        this.cardDeck = new ArrayList<Card>(cardDeck);
+        notifyChange();
+    }
 
 
-	/**
-	 * Creates the initial static situation of a Monopoly game. Note
-	 * that the players are not created here, and the chance cards
-	 * are not shuffled here.
-	 *
-	 * @return the initial game board and (not shuffled) deck of chance cards
-	 */
+    /**
+     * Shuffles the cards in the deck.
+     */
+    public void shuffleCardDeck() {
+        Collections.shuffle(cardDeck);
+        // This notification is probably not needed, but for
+        // completeness sake, we have it here
+        notifyChange();
+    }
 
-	public Game createGame() {
+    /**
+     * Returns all the players of the game as an unmodifiable list.
+     *
+     * @return a list of the current players
+     */
+    public List<Player> getPlayers() {
+        return Collections.unmodifiableList(players);
+    }
 
-		// Create the initial Game set up (note that, in this simple
-		// setup, we use only 11 spaces). Note also that this setup
-		// could actually be loaded from a file or database instead
-		// of creating it programmatically. This will be discussed
-		// later in this course.
-		Game game = new Game();
+    /**
+     * Sets the list of players. The list of players is actually copied
+     * in order to avoid the list being modified without the game being
+     * aware of it.
+     *
+     * @param players the list of players
+     */
+    public void setPlayers(List<Player> players) {
+        this.players = new ArrayList<Player>(players);
+        notifyChange();
+    }
 
-		Space go = new Space();
-		go.setName("Go");
-		game.addSpace(go);
+    /**
+     * Adds a player to the game.
+     *
+     * @param player the player to be added.
+     */
+    public void addPlayer(Player player) {
+        players.add(player);
+        notifyChange();
+    }
 
-		Property p = new RealEstate();
-		p.setName("Rødovrevej");
-		p.setCost(1200);
-		p.setRent(50);
-		p.setColorGroup(ColorGroup.lightblue);
-		((RealEstate) p).setPriceForHouse(50);
-		game.addSpace(p);
+    /**
+     * Returns the current player of the game. This is the player
+     * who's turn it is to do the next move (or currently is doing a move).
+     *
+     * @return the current player
+     */
+    public Player getCurrentPlayer() {
+        if (current == null) {
+            current = players.get(0);
+        }
+        return current;
+    }
+
+    /**
+     * Sets the current player. It is required that the player is a
+     * player of the game already; otherwise an IllegalArumentException
+     * will be thrown.
+     *
+     * @param player the new current player
+     */
+    public void setCurrentPlayer(Player player) {
+        if (player != null && players.contains(player)) {
+            current = player;
+        } else {
+            throw new IllegalArgumentException("Player is not in the game!");
+        }
+        notifyChange();
+    }
+    /**
+     * Creates the initial static situation of a Monopoly game. Note
+     * that the players are not created here, and the chance cards
+     * are not shuffled here.
+     *
+     * @return the initial game board and (not shuffled) deck of chance cards
+     */
+
+    public void createGame() {
+
+        // Create the initial Game set up (note that, in this simple
+        // setup, we use only 11 spaces). Note also that this setup
+        // could actually be loaded from a file or database instead
+        // of creating it programmatically. This will be discussed
+        // later in this course.
+
+        Space go = new Space();
+        go.setName("Go");
+        addSpace(go);
+
+        Property p = new RealEstate();
+        p.setName("Rødovrevej");
+        p.setCost(1200);
+        p.setRent(50);
+        p.setColorGroup(ColorGroup.lightblue);
+        ((RealEstate) p).setPriceForHouse(50);
+        addSpace(p);
 
 		/*Browns\Purples and Light Blues- £\$50
 Pinks and Oranges- £\$100
@@ -225,135 +224,133 @@ Reds and Yellows- £\$150
 Greens and Dark blues- £\$200
 A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 
-		Chance chance = new Chance();
-		chance.setName("Chance");
-		game.addSpace(chance);
+        Chance chance = new Chance();
+        chance.setName("Chance");
+        addSpace(chance);
 
-		p = new RealEstate();
-		p.setName("Hvidovrevej");
-		p.setCost(1200);
-		p.setRent(50);
-		p.setColorGroup(ColorGroup.lightblue);
-		((RealEstate) p).setPriceForHouse(50);
-		game.addSpace(p);
+        p = new RealEstate();
+        p.setName("Hvidovrevej");
+        p.setCost(1200);
+        p.setRent(50);
+        p.setColorGroup(ColorGroup.lightblue);
+        ((RealEstate) p).setPriceForHouse(50);
+        addSpace(p);
 
-		Tax t = new Tax();
-		t.setName("Pay tax (10% on Cash)");
-		game.addSpace(t);
+        Tax t = new Tax();
+        t.setName("Pay tax (10% on Cash)");
+        addSpace(t);
 
-		Property s = new Utility();
-		s.setName("Øresund");
-		s.setCost(4000);
-		s.setRent(500);
-		s.setColorGroup(ColorGroup.navy);
-		game.addSpace(s);
+        Property s = new Utility();
+        s.setName("Øresund");
+        s.setCost(4000);
+        s.setRent(500);
+        s.setColorGroup(ColorGroup.navy);
+        addSpace(s);
 
-		p = new RealEstate();
-		p.setName("Roskildevej");
-		p.setCost(2000);
-		p.setRent(100);
-		p.setColorGroup(ColorGroup.pink);
+        p = new RealEstate();
+        p.setName("Roskildevej");
+        p.setCost(2000);
+        p.setRent(100);
+        p.setColorGroup(ColorGroup.pink);
 
-		((RealEstate) p).setPriceForHouse(50);
-		game.addSpace(p);
+        ((RealEstate) p).setPriceForHouse(50);
+        addSpace(p);
 
-		chance = new Chance();
-		chance.setName("Chance");
-		game.addSpace(chance);
+        chance = new Chance();
+        chance.setName("Chance");
+        addSpace(chance);
 
-		p = new RealEstate();
-		p.setName("Valby Langgade");
-		p.setCost(2000);
-		p.setRent(100);
-		((RealEstate) p).setPriceForHouse(50);
-		p.setColorGroup(ColorGroup.pink);
-		game.addSpace(p);
+        p = new RealEstate();
+        p.setName("Valby Langgade");
+        p.setCost(2000);
+        p.setRent(100);
+        ((RealEstate) p).setPriceForHouse(50);
+        p.setColorGroup(ColorGroup.pink);
+        addSpace(p);
 
-		p = new RealEstate();
-		p.setName("Allégade");
-		p.setCost(2400);
-		p.setRent(150);
-		((RealEstate) p).setPriceForHouse(50);
-		p.setColorGroup(ColorGroup.pink);
-		game.addSpace(p);
+        p = new RealEstate();
+        p.setName("Allégade");
+        p.setCost(2400);
+        p.setRent(150);
+        ((RealEstate) p).setPriceForHouse(50);
+        p.setColorGroup(ColorGroup.pink);
+        addSpace(p);
 
-		Space prison = new Space();
-		prison.setName("Prison");
-		game.addSpace(prison);
+        Space prison = new Space();
+        prison.setName("Prison");
+        addSpace(prison);
 
-		p = new RealEstate();
-		p.setName("Frederiksberg Allé");
-		p.setCost(2800);
-		p.setRent(200);
-		((RealEstate) p).setPriceForHouse(50);
-		p.setColorGroup(ColorGroup.green);
+        p = new RealEstate();
+        p.setName("Frederiksberg Allé");
+        p.setCost(2800);
+        p.setRent(200);
+        ((RealEstate) p).setPriceForHouse(50);
+        p.setColorGroup(ColorGroup.green);
 
-		game.addSpace(p);
+        addSpace(p);
 
-		p = new Utility();
-		p.setName("Coca-Cola Tapperi");
-		p.setCost(3000);
-		p.setRent(300);
-		p.setColorGroup(ColorGroup.darkgreen);
-		game.addSpace(p);
+        p = new Utility();
+        p.setName("Coca-Cola Tapperi");
+        p.setCost(3000);
+        p.setRent(300);
+        p.setColorGroup(ColorGroup.darkgreen);
+        addSpace(p);
 
-		p = new RealEstate();
-		p.setName("Bülowsvej");
-		p.setCost(2800);
-		p.setRent(200);
-		p.setColorGroup(ColorGroup.green);
+        p = new RealEstate();
+        p.setName("Bülowsvej");
+        p.setCost(2800);
+        p.setRent(200);
+        p.setColorGroup(ColorGroup.green);
 
-		((RealEstate) p).setPriceForHouse(50);
+        ((RealEstate) p).setPriceForHouse(50);
 
-		game.addSpace(p);
+        addSpace(p);
 
-		p = new RealEstate();
-		p.setName("Gl. Kongevej");
-		p.setCost(3200);
-		p.setRent(250);
-		((RealEstate) p).setPriceForHouse(50);
-		p.setColorGroup(ColorGroup.green);
+        p = new RealEstate();
+        p.setName("Gl. Kongevej");
+        p.setCost(3200);
+        p.setRent(250);
+        ((RealEstate) p).setPriceForHouse(50);
+        p.setColorGroup(ColorGroup.green);
 
-		game.addSpace(p);
+        addSpace(p);
 
-		List<Card> cards = new ArrayList<Card>();
+        List<Card> cards = new ArrayList<Card>();
 
-		CardMove move = new CardMove();
-		move.setTarget(game.getSpaces().get(9));
-		move.setText("Move to Allégade!");
-		cards.add(move);
+        CardMove move = new CardMove();
+        move.setTarget(getSpaces().get(9));
+        move.setText("Move to Allégade!");
+        cards.add(move);
 
-		PayTax tax = new PayTax();
-		tax.setText("Pay 10% income tax!");
-		cards.add(tax);
+        PayTax tax = new PayTax();
+        tax.setText("Pay 10% income tax!");
+        cards.add(tax);
 
-		CardReceiveMoneyFromBank b = new CardReceiveMoneyFromBank();
-		b.setText("You receive 100$ from the bank.");
-		b.setAmount(100);
-		cards.add(b);
-		game.setCardDeck(cards);
+        CardReceiveMoneyFromBank b = new CardReceiveMoneyFromBank();
+        b.setText("You receive 100$ from the bank.");
+        b.setAmount(100);
+        cards.add(b);
+        setCardDeck(cards);
+    }
 
-		return game;
-	}
+    /**
+     * This method will be called before the game is started to create
+     * the participating players.
+     */
+    public void createPlayers() {
+        // TODO the players should eventually be created interactively or
+        // be loaded from a database
+        Player p = new Player();
+        p.setName("Player 1");
+        p.setCurrentPosition(getSpaces().get(0));
+        p.setColor(Color.RED);
+        addPlayer(p);
 
-	/**
-	 * This method will be called before the game is started to create
-	 * the participating players.
-	 */
-	public static void createPlayers(Game game) {
-		// TODO the players should eventually be created interactively or
-		// be loaded from a database
-		Player p = new Player();
-		p.setName("Player 1");
-		p.setCurrentPosition(game.getSpaces().get(0));
-		p.setColor(Color.RED);
-		game.addPlayer(p);
-
-		p = new Player();
-		p.setName("Player 2");
-		p.setCurrentPosition(game.getSpaces().get(0));
-		p.setColor(Color.YELLOW);
-		game.addPlayer(p);
+        p = new Player();
+        p.setName("Player 2");
+        p.setCurrentPosition(getSpaces().get(0));
+        p.setColor(Color.YELLOW);
+        addPlayer(p);
 /*
 		p = new Player();
 		p.setName("Player 3");
@@ -378,6 +375,5 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.cyan);
 		game.addPlayer(p);*/
-	}
-
+    }
 }

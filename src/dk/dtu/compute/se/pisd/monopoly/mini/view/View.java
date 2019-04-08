@@ -116,7 +116,7 @@ public class View implements Observer {
                 gui_ownable.setOwnerName(null);
             }
         }
-        if (property instanceof RealEstate){
+        if (property instanceof RealEstate) {
             GUI_Street street = (GUI_Street) gui_field;
             street.setHouses(((RealEstate) property).getHouseCount());
         }
@@ -154,10 +154,8 @@ public class View implements Observer {
             if (!name.equals(guiPlayer.getName())) {
                 guiPlayer.setName(name);
             }
+            player2PlayerPanel.get(player).update();
         }
-        player2PlayerPanel.get(player).update();
-
-
     }
 
     public void dispose() {
@@ -172,5 +170,4 @@ public class View implements Observer {
             }
         }
     }
-
 }
