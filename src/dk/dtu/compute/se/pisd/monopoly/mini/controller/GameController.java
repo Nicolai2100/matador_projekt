@@ -265,10 +265,9 @@ public class GameController {
                 Space space = spaces.get(newPos);
                 moveToSpace(player, space);
                 if (castDouble) {
-                    gui.showMessage("Player " + player.getName() + " cast a double and makes another move.");
+                    gui.showMessage("Player " + player.getName() + " cast a double and gets to make another move.");
+                    showTurnMenu(player, true);
                 }
-                //offerToBuyHouse(player);
-                //trade();
             }
         } while (castDouble);
 
@@ -671,14 +670,15 @@ public class GameController {
     /**
      * @Author Nicolai Wulff, s185036
      */
-    public void trade() {
+    public boolean trade() {
 
-        String[] playerOptions = new String[game.getActivePlayers(true).size()];
+        String[] playerOptions = new String[game.getActivePlayers(true).size() + 1];
         int i = 0;
         for (Player player : game.getActivePlayers(true)) {
             playerOptions[i] = player.getName();
             i++;
         }
+        playerOptions[i] = "Annuller";
 
         Boolean choosing = true;
         String player1name = null;
@@ -688,6 +688,7 @@ public class GameController {
 
         while (choosing) {
             player1name = gui.getUserSelection("Hvem er den ene part i handlen?", playerOptions);
+            if (player1name.equals("Annuller")) return false;
             for (Player player : game.getPlayers()) {
                 if (player.getName().equals(player1name) && player.isInPrison()) {
                     gui.showMessage(player1name + " er i fængsel, og må derfor ikke handle!");
@@ -698,17 +699,19 @@ public class GameController {
             }
         }
 
-        playerOptions = new String[game.getPlayers().size() - 1];
+        playerOptions = new String[playerOptions.length - 1];
         i = 0;
-        for (Player player : game.getPlayers()) {
+        for (Player player : game.getActivePlayers(true)) {
             if (!player.getName().equals(player1name)) {
                 playerOptions[i] = player.getName();
                 i++;
             }
         }
+        playerOptions[i] = "Annuller";
         choosing = true;
         while(choosing) {
-            player2name = gui.getUserSelection("Hvem er den ene part i handlen?", playerOptions);
+            player2name = gui.getUserSelection("Hvem er den anden part i handlen?", playerOptions);
+            if (player2name.equals("Annuller")) return false;
             for (Player player : game.getPlayers()) {
                 if (player.getName().equals(player2name) && player.isInPrison()) {
                     gui.showMessage(player2name + " er i fængsel, og må derfor ikke handle!");
@@ -735,7 +738,8 @@ public class GameController {
         for (int j = 0; j < 2; j++) {
             moneyInOffers[j] = gui.getUserInteger(tradingPlayers[j].getName() + ", hvilket beløb vil du tilføje i handlen?", 0, tradingPlayers[j].getBalance());
 
-            String[] propertyOptions = new String[tradingPlayers[j].getOwnedProperties().size() + 1];
+            int numberOfoptions = tradingPlayers[j].getOwnedProperties().size() + 1;
+            String[] propertyOptions = new String[numberOfoptions];
             i = 0;
             for (Property property : tradingPlayers[j].getOwnedProperties()) {
                 propertyOptions[i] = property.getName();
@@ -750,13 +754,18 @@ public class GameController {
                     continueAdding = false;
                 } else {
                     propertiesInOffersString[j].add(propertyToOffer);
-                    propertyOptions = new String[propertyOptions.length - 1];
+                    numberOfoptions--;
+                    propertyOptions = new String[numberOfoptions];
                     i = 0;
                     for (Property property : tradingPlayers[j].getOwnedProperties()) {
-                        if (!property.getName().equals(propertyToOffer)) {
+                        boolean alreadyAdded = false;
+                        for (Property p : propertiesInOffers[j]) {
+                            if (property == p) alreadyAdded = true;
+                        }
+                        if (!alreadyAdded && !property.getName().equals(propertyToOffer)) {
                             propertyOptions[i] = property.getName();
                             i++;
-                        } else if (property.getName().equals(propertyToOffer)) {
+                        } else if (!alreadyAdded && property.getName().equals(propertyToOffer)) {
                             propertiesInOffers[j].add(property);
                         }
                     }
@@ -764,6 +773,7 @@ public class GameController {
                 }
             }
         }
+        String[] test = new String[1];
 
         String[] playerProperties = {"", ""};
         for (i = 0; i < 2; i++) {
@@ -790,7 +800,7 @@ public class GameController {
                 for (Property property : propertiesInOffers[0]) {
                     transferProperty(player1, property, player2);
                 }
-                for (Property property : propertiesInOffers[0]) {
+                for (Property property : propertiesInOffers[1]) {
                     transferProperty(player2, property, player1);
                 }
 
@@ -800,6 +810,7 @@ public class GameController {
                 e.printStackTrace();
             }
         }
+        return true;
     }
 
     /**
@@ -810,9 +821,10 @@ public class GameController {
      * @Author Nicolai Wulff, s185036
      */
     public void transferProperty(Player giver, Property property, Player receiver) {
+        property.setOwner(null);
         giver.removeOwnedProperty(property);
-        receiver.addOwnedProperty(property);
         property.setOwner(receiver);
+        receiver.addOwnedProperty(property);
     }
 }
 
