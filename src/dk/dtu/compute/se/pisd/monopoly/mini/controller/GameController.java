@@ -76,9 +76,10 @@ public class GameController {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             game.shuffleCardDeck();
-            int numOfPlayers = gui.getUserInteger("Hvor mange spillere?", 3,6);
+            int numOfPlayers = gui.getUserInteger("Hvor mange spillere?", 3,4);
             game.createPlayers(numOfPlayers);
             initializeGUI();
+            view.createPlayers();
             play();
         } else {
             List<String> games = gameDb.getGamesList();
@@ -87,6 +88,7 @@ public class GameController {
             game = gameDb.loadGame(game, userGameSelection);
             game.shuffleCardDeck();
             initializeGUI();
+            view.loadPlayers();
             play();
         }
     }
