@@ -465,9 +465,11 @@ public class Game extends Subject {
         bornholm.setName("Bornholm");
         ((Utility) bornholm).setCost(4000);
         ((Utility) bornholm).setRent(500);
-        spaces.add(bornholm);
+        addSpace(bornholm);
 
-        spaces.add(chance);
+        chance = new Chance(); //colorgroup?
+        chance.setName("chance");
+        addSpace(chance);
 
         Space frederiksberggade = new RealEstate();
         frederiksberggade.setName("Frederiksberggade");
@@ -475,11 +477,11 @@ public class Game extends Subject {
         ((RealEstate) frederiksberggade).setRent(700);
         ((RealEstate) frederiksberggade).setColorGroup(ColorGroup.purple);
         ((RealEstate) frederiksberggade).setPriceForHouse(4000);
-        spaces.add(frederiksberggade);
+        addSpace(frederiksberggade);
 
         Space ekstraskat = new Space();
         ekstraskat.setName("Ekstraordinær statsskat");
-        spaces.add(ekstraskat);
+        addSpace(ekstraskat);
 
         Space raadhuspladsen = new RealEstate();
         raadhuspladsen.setName("Rådhuspladsen");
@@ -487,9 +489,8 @@ public class Game extends Subject {
         ((RealEstate) raadhuspladsen).setRent(1000);
         ((RealEstate) raadhuspladsen).setColorGroup(ColorGroup.purple);
         ((RealEstate) raadhuspladsen).setPriceForHouse(4000);
-        spaces.add(raadhuspladsen);
+        addSpace(raadhuspladsen);
 
-        this.setSpaces(spaces);
 
     }
 
