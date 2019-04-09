@@ -200,6 +200,7 @@ public class GameDAO implements IGameDAO {
                 p.setInPrison(playerRS.getBoolean("injail"));
                 p.setBroke(playerRS.getBoolean("isbroke"));
                 p.setColor(new Color(playerRS.getInt("color")));
+                p.setToken(playerRS.getString("token"));
                 listOfPlayers.add(playerRS.getInt("playerid"), p);
             }
             game.setPlayers(listOfPlayers);
@@ -294,7 +295,7 @@ public class GameDAO implements IGameDAO {
                             "isbroke bit, " +
                             "gameid int, " +
                             "color int, " +
-                            "token varchar(5)," +
+                            "token varchar(10)," +
                             "primary key (playerid, gameid), " +
                             "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
                             "ON DELETE CASCADE);");
