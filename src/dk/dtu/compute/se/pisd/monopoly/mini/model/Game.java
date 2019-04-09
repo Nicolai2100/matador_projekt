@@ -287,8 +287,8 @@ public class Game extends Subject {
         ((RealEstate) allegade).setCost(2400);
         ((RealEstate) allegade).setRent(150);
         ((RealEstate) allegade).setColorGroup(ColorGroup.pink);
-        ((RealEstate) valbyLanggade).setPriceForHouse(1000);
-        addSpace(valbyLanggade);
+        ((RealEstate) allegade).setPriceForHouse(1000);
+        addSpace(allegade);
 
         Space faengsel = new Space();
         faengsel.setName("I fængsel/På besøg");
