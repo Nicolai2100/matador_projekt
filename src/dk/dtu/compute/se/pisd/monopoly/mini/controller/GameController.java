@@ -114,12 +114,6 @@ public class GameController {
         while (!terminated) {
             Player player = players.get(current);
 
-            if (game.getGameId() < 0) {
-                gameDb.saveGame(game);
-            } else {
-                gameDb.updateGame(game);
-            }
-
             if (!player.isBroke()) {
                 try {
                     showTurnMenu(player, true);
@@ -155,7 +149,7 @@ public class GameController {
             String choice = null;
 
             if (startOfTurn) {
-                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
+                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil");
             } else {
                 choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "'s tur. Hvad skal der ske?" , "Slut turen", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
             }
@@ -172,6 +166,12 @@ public class GameController {
                     mortgageAction();
                 } else if (input.equals("Indfri gæld")) {
                     unmortgageAction();
+                }
+            } else if (choice.equals("Gem spil")) {
+                if (game.getGameId() < 0) {
+                    gameDb.saveGame(game);
+                } else {
+                    gameDb.updateGame(game);
                 }
             } else {
                 continueChoosing = false;
