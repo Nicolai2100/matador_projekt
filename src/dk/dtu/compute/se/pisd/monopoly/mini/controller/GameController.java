@@ -163,9 +163,11 @@ public class GameController {
             }
 
             if (choice.equals("Byg huse")) {
-                offerToBuyHouse();
+                buyHouseAction();
             } else if (choice.equals("Handel")) {
                 trade();
+            } else if (choice.equals("Sælg huse")) {
+                sellHouseAction();
             } else {
                 continueChoosing = false;
             }
@@ -578,20 +580,20 @@ public class GameController {
     public void buyHouse(Player player, RealEstate re) {
         int lowestHouseCount = 5;
         for (Property property : player.getOwnedProperties()) {
-            if (property.getColorGroup() == ((Property) re).getColorGroup() && ((RealEstate) property).getHouseCount() < lowestHouseCount) {
+            if (property.getColorGroup() == re.getColorGroup() && ((RealEstate) property).getHouseCount() < lowestHouseCount) {
                 lowestHouseCount = ((RealEstate) property).getHouseCount();
             }
         }
-        if(re.getHouseCount() == 4) {
-            gui.showMessage("You can't build more than four houses on a property!");
+        if(re.getHouseCount() == 5) {
+            gui.showMessage("Du kan ikke bygge mere på denne grund!");
         } else if (re.getHouseCount() > lowestHouseCount){
-            gui.showMessage("You have to build evenly!");
+            gui.showMessage("Du skal bygge jævnt!");
         } else {
             try {
                 paymentToBank(player, re.getPriceForHouse());
                 re.setHouseCount(re.getHouseCount() + 1);
             } catch (PlayerBrokeException e){
-                gui.showMessage("Player " + player.getName() + " can't afford a new house!");
+                gui.showMessage(player.getName() + " har ikke råd til at bygge et hus på denne grund.");
             } catch (GameEndedException e) {
                 e.printStackTrace();
             }
@@ -599,13 +601,24 @@ public class GameController {
     }
 
     public void sellHouse(Player player, RealEstate re) {
-
+        int highestHouseCount = 0;
+        for (Property property : player.getOwnedProperties()) {
+            if (property.getColorGroup() == re.getColorGroup() && ((RealEstate) property).getHouseCount() > highestHouseCount) {
+                highestHouseCount = ((RealEstate) property).getHouseCount();
+            }
+        }
+        if (re.getHouseCount() < highestHouseCount) {
+            gui.showMessage("Du skal sælge dine huse jævnt!");
+        } else {
+            paymentFromBank(player, re.getPriceForHouse() / 2);
+            re.setHouseCount(re.getHouseCount() - 1);
+        }
     }
 
     /** Asks the player, if he/she wants to build houses, if the player owns any real estate.
      * @Author Nicolai Wulff s185036
      */
-    public boolean offerToBuyHouse() {
+    public boolean buyHouseAction() {
 
         String[] players = new String[game.getActivePlayers(false).size() + 1];
         for (int i = 0; i < players.length - 1; i++) {
@@ -654,6 +667,59 @@ public class GameController {
         }
         return true;
     }
+
+    public boolean sellHouseAction() {
+        String[] players = new String[game.getActivePlayers(false).size() + 1];
+        for (int i = 0; i < players.length - 1; i++) {
+            players[i] = game.getPlayers().get(i).getName();
+        }
+        players[players.length - 1] = "Annuller";
+
+        String playerName = gui.getUserSelection("Hvilken spiller ønsker at sælge huse?", players);
+        if (playerName.equals("Annuller")) return false;
+        Player player = null;
+        for (Player p : game.getPlayers()) {
+            if (p.getName().equals(playerName)) {
+                player = p;
+            }
+        }
+
+        //Makes a list of all real estate, that has at least one house built on it.
+        ArrayList<RealEstate> potentialProperties = new ArrayList<>();
+        for (Property property : player.getOwnedProperties()) {
+            if (property instanceof RealEstate) {
+                if (((RealEstate) property).getHouseCount() > 0) {
+                    potentialProperties.add((RealEstate) property);
+                }
+            }
+        }
+
+        if (potentialProperties.size() > 0) {
+            boolean continueSelling = true;
+            do {
+                String[] propertyNames = new String[potentialProperties.size() + 1];
+                for (int i = 0; i < propertyNames.length - 1; i++) {
+                    propertyNames[i] = potentialProperties.get(i).getName();
+                }
+                propertyNames[propertyNames.length - 1] = "Stop med at sælge";
+                String propertyString = gui.getUserSelection("Fra hvilken grund ønsker du at sælge huse?", propertyNames);
+
+                if (!propertyString.equals("Stop med at sælge")) {
+                    RealEstate chosenProperty = null;
+                    for (int i = 0; i < propertyNames.length - 1; i++) {
+                        if (propertyNames[i].equals(propertyString)) chosenProperty = potentialProperties.get(i);
+                    }
+                    sellHouse(player, chosenProperty);
+                } else {
+                    continueSelling = false;
+                }
+            } while (continueSelling);
+        } else {
+            gui.showMessage("Du kan ikke sælge huse endnu, da du ikke ejer nogen huse!");
+        }
+        return true;
+    }
+
     /**
      * @Author Nicolai Wulff, s185036
      */
@@ -768,7 +834,7 @@ public class GameController {
                     //Check if the chosen property or any property with the same color group has any houses.
                     //If they do, refuse to trade it, and tell the player to sell their houses first.
                     for (Property property : tradingPlayers[j].getOwnedProperties()) {
-                        if (property.getColorGroup() == chosenProperty.getColorGroup()) {
+                        if (property instanceof RealEstate && property.getColorGroup() == chosenProperty.getColorGroup()) {
                             if (((RealEstate) property).getHouseCount() > 0) {
                                 gui.showMessage("Du kan ikke handle med grunde, hvor du har bygget huse i dens farvegruppe.\nSælg din huse i gruppen, før du handler.");
                                 return false;
