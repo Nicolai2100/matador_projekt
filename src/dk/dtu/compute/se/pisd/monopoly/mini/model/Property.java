@@ -110,17 +110,19 @@ public class Property extends Space {
         if (owner == null) {
             controller.offerToBuy(this, player);
 
-        } else if (!owner.equals(player)) {
-            // TODO also check whether the property is mortgaged
-
+        } else if (!owner.equals(player) && !mortgaged && !owner.isInPrison()) {
             controller.payment(player, rent, owner);
-        }
+        } else if (!owner.equals(player) && owner.isInPrison()) {
+            controller.showMessage(player + "skal ikke betale leje til " + owner + ", fordi " + owner + " er i fængsel!");
+        } else if (!owner.equals(player) && mortgaged) {
+            controller.showMessage(this.getName() + " er pantsat, og " + player + " skal derfor ikke betale leje.");
+        /*
         if (owner == player) {
             if (this instanceof RealEstate) {
                 RealEstate realEstate = (RealEstate) this;
                 realEstate.computeRent();
             }
-
+        */
 
         }
 

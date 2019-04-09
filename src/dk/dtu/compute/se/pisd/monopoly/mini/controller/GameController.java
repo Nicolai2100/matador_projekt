@@ -157,7 +157,7 @@ public class GameController {
             if (startOfTurn) {
                 choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
             } else {
-                choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "s tur. Hvad skal der ske?" , "Slut turen", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
+                choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "'s tur. Hvad skal der ske?" , "Slut turen", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
             }
 
             if (choice.equals("Byg huse")) {
@@ -953,6 +953,11 @@ public class GameController {
                 }
             }
 
+            if (potentialProperties.size() == 0) {
+                gui.showMessage("Du ejer ingen grunde, du kan pantsætte!");
+                return false;
+            }
+
             String[] properties = new String[potentialProperties.size() + 1];
             for (int i = 0; i < properties.length - 1; i++) {
                 properties[i] = potentialProperties.get(i).getName();
@@ -1003,6 +1008,11 @@ public class GameController {
                 }
             }
 
+            if (potentialProperties.size() == 0) {
+                gui.showMessage("Du har ingen pantsatte grunde!");
+                return false;
+            }
+
             String[] properties = new String[potentialProperties.size() + 1];
             for (int i = 0; i < properties.length - 1; i++) {
                 properties[i] = potentialProperties.get(i).getName();
@@ -1032,5 +1042,9 @@ public class GameController {
         } catch (GameEndedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showMessage(String message) {
+        gui.showMessage(message);
     }
 }
