@@ -5,7 +5,9 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -76,39 +78,30 @@ public class PlayerPanel extends JFrame {
             }
         }
 
-        boolean hasPawnedProperties = false;
-        for (Property p : player.getOwnedProperties()) {
-            if (p.getPawned()) {
-                ColorGroup colorGroup = p.getColorGroup();
-                JPanel jPanel = maltesMap.get(colorGroup);
-                JLabel pawnedLabel = new JLabel("Pantsatte:");
-                jPanel.add(pawnedLabel);
-            }
-        }
-
-
-
-        /*
-
-            boolean hasPawnedProperties = false;
-            for (Property p : player.getOwnedProperties()) {
-                if (p.getPawned()) hasPawnedProperties = true;
-            }
-
-            if (hasPawnedProperties) {
-                JLabel pawnedLabel = new JLabel("Pantsatte:");
-                jPanel.add(pawnedLabel);
-                pawnedLabelMaker(jPanel, property);
-            }
-
-         */
-
-
         //Således er der oprettet netop et panel for hver farvegruppe
       /*  for (ColorGroup colorGroup : ColorGroup.values()) {
             JPanel jPanel = panelMaker(colorGroup);
             maltesMap.put(colorGroup, jPanel);
         }*/
+
+
+        HashSet<ColorGroup> groupsWithPawns = new HashSet<>();
+        for (Property property : player.getOwnedProperties()) {
+            if (property.getPawned()) {
+                groupsWithPawns.add(property.getColorGroup());
+            }
+        }
+        for (ColorGroup colorGroup : groupsWithPawns) {
+            JPanel jPanel = maltesMap.get(colorGroup);
+            jPanel.add(new JLabel(" "));
+            JLabel pawnedLabel = new JLabel("Pantsatte:");
+            jPanel.add(pawnedLabel);
+        }
+        for (Property property : player.getOwnedProperties()) {
+            ColorGroup colorGroup = property.getColorGroup();
+            JPanel jPanel = maltesMap.get(colorGroup);
+            pawnedLabelMaker(jPanel, property);
+        }
 
         this.revalidate();
         this.repaint();

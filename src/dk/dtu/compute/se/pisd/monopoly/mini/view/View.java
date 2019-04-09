@@ -157,7 +157,10 @@ public class View implements Observer {
             GUI_Street street = (GUI_Street) gui_field;
             street.setHouses(((RealEstate) property).getHouseCount());
         }
-        player2PlayerPanel.get(property.getOwner()).update();
+
+        if(property.getOwner() != null) {
+            player2PlayerPanel.get(property.getOwner()).update();
+        }
     }
 
     /**
