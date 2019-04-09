@@ -23,7 +23,7 @@ public class JSONUtility {
         Path path = Paths.get("resources/");
         Files.createDirectory(path);
 
-        FileWriter fileWriter = new FileWriter(path+ "\\spaces.json");
+        FileWriter fileWriter = new FileWriter(path+ "\\game.json");
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
 
         Gson gson = builder.create();
@@ -301,7 +301,7 @@ public class JSONUtility {
 
         try {
 
-            FileReader fileReader = new FileReader("resources\\spaces.json");
+            FileReader fileReader = new FileReader("resources\\game.json");
 
             Gson gson = new Gson();
 
