@@ -227,130 +227,271 @@ public class Game extends Subject {
         // later in this course.
 
         Space go = new Space();
-        go.setName("Go");
+        go.setName("Start");
         addSpace(go);
 
-        Property p = new RealEstate();
-        p.setName("Rødovrevej");
-        p.setCost(1200);
-        p.setRent(50);
-        p.setColorGroup(ColorGroup.lightblue);
-        ((RealEstate) p).setPriceForHouse(50);
-        addSpace(p);
+        Space roedovrevej = new RealEstate();
+        roedovrevej.setName("Rødovrevej");
+        ((RealEstate) roedovrevej).setCost(1200);
+        ((RealEstate) roedovrevej).setRent(50);
+        ((RealEstate) roedovrevej).setColorGroup(ColorGroup.lightblue);
+        ((RealEstate) roedovrevej).setPriceForHouse(1000);
+        addSpace(roedovrevej);
 
-		/*Browns\Purples and Light Blues- £\$50
-Pinks and Oranges- £\$100
-Reds and Yellows- £\$150
-Greens and Dark blues- £\$200
-A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
-
-        Chance chance = new Chance();
-        chance.setName("Chance");
+        Space chance = new Chance(); //colorgroup?
+        chance.setName("chance");
         addSpace(chance);
 
-        p = new RealEstate();
-        p.setName("Hvidovrevej");
-        p.setCost(1200);
-        p.setRent(50);
-        p.setColorGroup(ColorGroup.lightblue);
-        ((RealEstate) p).setPriceForHouse(50);
-        addSpace(p);
+        Space hvidovrevej = new RealEstate();
+        hvidovrevej.setName("Hvidovrevej");
+        ((RealEstate) hvidovrevej).setCost(1200);
+        ((RealEstate) hvidovrevej).setRent(50);
+        ((RealEstate) hvidovrevej).setColorGroup(ColorGroup.lightblue);
+        ((RealEstate) hvidovrevej).setPriceForHouse(1000);
+        addSpace(hvidovrevej);
 
-        Tax t = new Tax();
-        t.setName("Pay tax (10% on Cash)");
-        addSpace(t);
+        Space indkomstskat = new Tax();
+        indkomstskat.setName("Indkomstskat");
+        addSpace(indkomstskat);
 
-        Property s = new Utility();
-        s.setName("Øresund");
-        s.setCost(4000);
-        s.setRent(500);
-        s.setColorGroup(ColorGroup.navy);
-        addSpace(s);
+        Space oeresund = new Utility();
+        //TODO ændr alle utilities til enten Ship eller Brewery (som kan have begyndelsespris sat fra start)
+        oeresund.setName("Øresund");
+        ((Utility) oeresund).setCost(4000);
+        ((Utility) oeresund).setRent(500);
+        ((Utility) oeresund).setColorGroup(ColorGroup.navy);
+        addSpace(oeresund);
 
-        p = new RealEstate();
-        p.setName("Roskildevej");
-        p.setCost(2000);
-        p.setRent(100);
-        p.setColorGroup(ColorGroup.pink);
+        Space roskildevej = new RealEstate();
+        roskildevej.setName("Roskildevej");
+        ((RealEstate) roskildevej).setCost(2000);
+        ((RealEstate) roskildevej).setRent(100);
+        ((RealEstate) roskildevej).setColorGroup(ColorGroup.pink);
+        ((RealEstate) roskildevej).setPriceForHouse(1000);
+        addSpace(roskildevej);
 
-        ((RealEstate) p).setPriceForHouse(50);
-        addSpace(p);
-
-        chance = new Chance();
-        chance.setName("Chance");
+        chance = new Chance(); //colorgroup?
+        chance.setName("chance");
         addSpace(chance);
 
-        p = new RealEstate();
-        p.setName("Valby Langgade");
-        p.setCost(2000);
-        p.setRent(100);
-        ((RealEstate) p).setPriceForHouse(50);
-        p.setColorGroup(ColorGroup.pink);
-        addSpace(p);
+        Space valbyLanggade = new RealEstate();
+        valbyLanggade.setName("Valby Langgade");
+        ((RealEstate) valbyLanggade).setCost(2000);
+        ((RealEstate) valbyLanggade).setRent(100);
+        ((RealEstate) valbyLanggade).setColorGroup(ColorGroup.pink);
+        ((RealEstate) valbyLanggade).setPriceForHouse(1000);
+        addSpace(valbyLanggade);
 
-        p = new RealEstate();
-        p.setName("Allégade");
-        p.setCost(2400);
-        p.setRent(150);
-        ((RealEstate) p).setPriceForHouse(50);
-        p.setColorGroup(ColorGroup.pink);
-        addSpace(p);
+        Space allegade = new RealEstate();
+        allegade.setName("Allégade");
+        ((RealEstate) allegade).setCost(2400);
+        ((RealEstate) allegade).setRent(150);
+        ((RealEstate) allegade).setColorGroup(ColorGroup.pink);
+        ((RealEstate) valbyLanggade).setPriceForHouse(1000);
+        addSpace(valbyLanggade);
 
-        Space prison = new Space();
-        prison.setName("Prison");
-        addSpace(prison);
+        Space faengsel = new Space();
+        faengsel.setName("I fængsel/På besøg");
+        addSpace(faengsel);
 
-        p = new RealEstate();
-        p.setName("Frederiksberg Allé");
-        p.setCost(2800);
-        p.setRent(200);
-        ((RealEstate) p).setPriceForHouse(50);
-        p.setColorGroup(ColorGroup.green);
+        Space frederiksbergAlle = new RealEstate();
+        frederiksbergAlle.setName("Fredriksberg Allé");
+        ((RealEstate) frederiksbergAlle).setCost(2800);
+        ((RealEstate) frederiksbergAlle).setRent(200);
+        ((RealEstate) frederiksbergAlle).setColorGroup(ColorGroup.green);
+        ((RealEstate) frederiksbergAlle).setPriceForHouse(2000);
+        addSpace(frederiksbergAlle);
 
-        addSpace(p);
+        Space tuborg = new Utility();
+        tuborg.setName("Tuborg");
+        ((Utility) tuborg).setCost(3000);
+        ((Utility) tuborg).setRent(0);
+        ((Utility) tuborg).setColorGroup(ColorGroup.darkgreen);
+        addSpace(tuborg);
 
-        p = new Utility();
-        p.setName("Coca-Cola Tapperi");
-        p.setCost(3000);
-        p.setRent(300);
-        p.setColorGroup(ColorGroup.darkgreen);
-        addSpace(p);
+        Space bulowsvej = new RealEstate();
+        bulowsvej.setName("Bülowsvej");
+        ((RealEstate) bulowsvej).setCost(2800);
+        ((RealEstate) bulowsvej).setRent(200);
+        ((RealEstate) bulowsvej).setColorGroup(ColorGroup.green);
+        ((RealEstate) bulowsvej).setPriceForHouse(2000);
+        addSpace(bulowsvej);
 
-        p = new RealEstate();
-        p.setName("Bülowsvej");
-        p.setCost(2800);
-        p.setRent(200);
-        p.setColorGroup(ColorGroup.green);
+        Space gammelkongevej = new RealEstate();
+        gammelkongevej.setName("Gammelkongevej");
+        ((RealEstate) gammelkongevej).setCost(3200);
+        ((RealEstate) gammelkongevej).setRent(250);
+        ((RealEstate) gammelkongevej).setColorGroup(ColorGroup.green);
+        ((RealEstate) gammelkongevej).setPriceForHouse(2000);
+        addSpace(gammelkongevej);
 
-        ((RealEstate) p).setPriceForHouse(50);
+        Space dfds = new Utility();
+        dfds.setName("D.F.D.S");
+        ((Utility) dfds).setCost(4000);
+        ((Utility) dfds).setRent(500);
+        ((Utility) dfds).setColorGroup(ColorGroup.navy);
+        addSpace(dfds);
 
-        addSpace(p);
+        Space bernstorffsvej = new RealEstate();
+        bernstorffsvej.setName("Bernstorffsvej");
+        ((RealEstate) bernstorffsvej).setCost(3600);
+        ((RealEstate) bernstorffsvej).setRent(300);
+        ((RealEstate) bernstorffsvej).setColorGroup(ColorGroup.darkgrey);
+        ((RealEstate) bernstorffsvej).setPriceForHouse(2000);
+        addSpace(bernstorffsvej);
 
-        p = new RealEstate();
-        p.setName("Gl. Kongevej");
-        p.setCost(3200);
-        p.setRent(250);
-        ((RealEstate) p).setPriceForHouse(50);
-        p.setColorGroup(ColorGroup.green);
+        chance = new Chance(); //colorgroup?
+        chance.setName("chance");
+        addSpace(chance);
 
-        addSpace(p);
+        Space hellerupvej = new RealEstate();
+        hellerupvej.setName("Hellerupvej");
+        ((RealEstate) hellerupvej).setCost(3600);
+        ((RealEstate) hellerupvej).setRent(300);
+        ((RealEstate) hellerupvej).setColorGroup(ColorGroup.darkgrey);
+        ((RealEstate) hellerupvej).setPriceForHouse(2000);
+        addSpace(hellerupvej);
 
-        List<Card> cards = new ArrayList<Card>();
+        Space strandvej = new RealEstate();
+        strandvej.setName("Strandvej");
+        ((RealEstate) strandvej).setCost(4000);
+        ((RealEstate) strandvej).setRent(350);
+        ((RealEstate) strandvej).setColorGroup(ColorGroup.darkgrey);
+        ((RealEstate) strandvej).setPriceForHouse(2000);
+        addSpace(strandvej);
 
-        CardMove move = new CardMove();
-        move.setTarget(getSpaces().get(9));
-        move.setText("Move to Allégade!");
-        cards.add(move);
+        Space parkering = new Space();
+        parkering.setName("Helle");
+        addSpace(parkering);
 
-        PayTax tax = new PayTax();
-        tax.setText("Pay 10% income tax!");
-        cards.add(tax);
+        Space trianglen = new RealEstate();
+        trianglen.setName("Trianglen");
+        ((RealEstate) trianglen).setCost(4400);
+        ((RealEstate) trianglen).setRent(350);
+        ((RealEstate) trianglen).setColorGroup(ColorGroup.red);
+        ((RealEstate) trianglen).setPriceForHouse(3000);
+        addSpace(trianglen);
 
-        CardReceiveMoneyFromBank b = new CardReceiveMoneyFromBank();
-        b.setText("You receive 100$ from the bank.");
-        b.setAmount(100);
-        cards.add(b);
-        setCardDeck(cards);
+        chance = new Chance(); //colorgroup?
+        chance.setName("chance");
+        addSpace(chance);
+
+        Space oesterbrogade = new RealEstate();
+        oesterbrogade.setName("Østerbrogade");
+        ((RealEstate) oesterbrogade).setCost(4400);
+        ((RealEstate) oesterbrogade).setRent(350);
+        ((RealEstate) oesterbrogade).setColorGroup(ColorGroup.red);
+        ((RealEstate) oesterbrogade).setPriceForHouse(3000);
+        addSpace(oesterbrogade);
+
+        Space gronningen = new RealEstate();
+        gronningen.setName("Grønningen");
+        ((RealEstate) gronningen).setCost(4800);
+        ((RealEstate) gronningen).setRent(400);
+        ((RealEstate) gronningen).setColorGroup(ColorGroup.red);
+        ((RealEstate) gronningen).setPriceForHouse(3000);
+        addSpace(gronningen);
+
+        Space oes = new Utility();
+        oes.setName("Ø.S.");
+        ((Utility) oes).setCost(4000);
+        ((Utility) oes).setCost(500);
+        ((Utility) oes).setColorGroup(ColorGroup.navy);
+        addSpace(oes);
+
+        Space bredgade = new RealEstate();
+        bredgade.setName("Bredgade");
+        ((RealEstate) bredgade).setCost(5200);
+        ((RealEstate) bredgade).setRent(450);
+        ((RealEstate) bredgade).setColorGroup(ColorGroup.white);
+        ((RealEstate) bredgade).setPriceForHouse(3000);
+        addSpace(bredgade);
+
+        Space kgsnytorv = new RealEstate();
+        kgsnytorv.setName("Kgs. Nytorv");
+        ((RealEstate) kgsnytorv).setCost(5200);
+        ((RealEstate) kgsnytorv).setRent(450);
+        ((RealEstate) kgsnytorv).setColorGroup(ColorGroup.white);
+        ((RealEstate) kgsnytorv).setPriceForHouse(3000);
+        addSpace(kgsnytorv);
+
+        Space carlsberg = new Utility();
+        carlsberg.setName("Carlsberg");
+        ((Utility) carlsberg).setCost(3000);
+        ((Utility) carlsberg).setRent(0);
+        ((Utility) carlsberg).setColorGroup(ColorGroup.darkgreen);
+        addSpace(carlsberg);
+
+        Space oestergade = new RealEstate();
+        oestergade.setName("Østergade");
+        ((RealEstate) oestergade).setCost(5600);
+        ((RealEstate) oestergade).setRent(500);
+        ((RealEstate) oestergade).setColorGroup(ColorGroup.white);
+        ((RealEstate) oestergade).setPriceForHouse(3000);
+        addSpace(oestergade);
+
+        Space ifaengsel = new Space();
+        ifaengsel.setName("I fængsel");
+        addSpace(ifaengsel);
+
+        Space amagertorv = new RealEstate();
+        amagertorv.setName("Amagertorv");
+        ((RealEstate) amagertorv).setCost(6000);
+        ((RealEstate) amagertorv).setRent(550);
+        ((RealEstate) amagertorv).setColorGroup(ColorGroup.yellow);
+        ((RealEstate) amagertorv).setPriceForHouse(4000);
+        addSpace(amagertorv);
+
+        Space vimmelskaftet = new RealEstate();
+        vimmelskaftet.setName("Vimmelskaftet");
+        ((RealEstate) vimmelskaftet).setCost(6000);
+        ((RealEstate) vimmelskaftet).setRent(550);
+        ((RealEstate) vimmelskaftet).setColorGroup(ColorGroup.yellow);
+        ((RealEstate) vimmelskaftet).setPriceForHouse(4000);
+        addSpace(vimmelskaftet);
+
+        chance = new Chance(); //colorgroup?
+        chance.setName("chance");
+        addSpace(chance);
+
+        Space nygade = new RealEstate();
+        nygade.setName("Nygade");
+        ((RealEstate) nygade).setCost(6400);
+        ((RealEstate) nygade).setRent(600);
+        ((RealEstate) nygade).setColorGroup(ColorGroup.yellow);
+        addSpace(nygade);
+
+        Space bornholm = new Utility();
+        bornholm.setName("Bornholm");
+        ((Utility) bornholm).setCost(4000);
+        ((Utility) bornholm).setRent(500);
+        addSpace(bornholm);
+
+        chance = new Chance(); //colorgroup?
+        chance.setName("chance");
+        addSpace(chance);
+
+        Space frederiksberggade = new RealEstate();
+        frederiksberggade.setName("Frederiksberggade");
+        ((RealEstate) frederiksberggade).setCost(7000);
+        ((RealEstate) frederiksberggade).setRent(700);
+        ((RealEstate) frederiksberggade).setColorGroup(ColorGroup.purple);
+        ((RealEstate) frederiksberggade).setPriceForHouse(4000);
+        addSpace(frederiksberggade);
+
+        Space ekstraskat = new Space();
+        ekstraskat.setName("Ekstraordinær statsskat");
+        addSpace(ekstraskat);
+
+        Space raadhuspladsen = new RealEstate();
+        raadhuspladsen.setName("Rådhuspladsen");
+        ((RealEstate) raadhuspladsen).setCost(8000);
+        ((RealEstate) raadhuspladsen).setRent(1000);
+        ((RealEstate) raadhuspladsen).setColorGroup(ColorGroup.purple);
+        ((RealEstate) raadhuspladsen).setPriceForHouse(4000);
+        addSpace(raadhuspladsen);
+
+
     }
 
     /**
