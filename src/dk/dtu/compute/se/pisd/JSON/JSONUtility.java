@@ -33,7 +33,7 @@ public class JSONUtility {
 
         Space go = new Space();
         go.setName("Start");
-        spaces.add(go);
+        //spaces.add(go);
 
         Space roedovrevej = new RealEstate();
         roedovrevej.setName("Rødovrevej");
@@ -95,7 +95,7 @@ public class JSONUtility {
 
         Space faengsel = new Space();
         faengsel.setName("I fængsel/På besøg");
-        spaces.add(faengsel);
+        //spaces.add(faengsel);
 
         Space frederiksbergAlle = new RealEstate();
         frederiksbergAlle.setName("Fredriksberg Allé");
@@ -163,7 +163,7 @@ public class JSONUtility {
 
         Space parkering = new Space();
         parkering.setName("Helle");
-        spaces.add(parkering);
+        //spaces.add(parkering);
 
         Space trianglen = new RealEstate();
         trianglen.setName("Trianglen");
@@ -231,7 +231,7 @@ public class JSONUtility {
 
         Space ifaengsel = new Space();
         ifaengsel.setName("I fængsel");
-        spaces.add(ifaengsel);
+        //spaces.add(ifaengsel);
 
         Space amagertorv = new RealEstate();
         amagertorv.setName("Amagertorv");
@@ -276,7 +276,7 @@ public class JSONUtility {
 
         Space ekstraskat = new Space();
         ekstraskat.setName("Ekstraordinær statsskat");
-        spaces.add(ekstraskat);
+        //spaces.add(ekstraskat);
 
         Space raadhuspladsen = new RealEstate();
         raadhuspladsen.setName("Rådhuspladsen");
