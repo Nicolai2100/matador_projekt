@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import dk.dtu.compute.se.pisd.designpatterns.Subject;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
@@ -17,19 +18,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * Main-method creates data for JSON-file,
+ * createGame() loads game configuration from said file
+ *
+ * @author s185039
+ */
+
 public class JSONUtility {
     public static void main(String[] args) throws IOException {
 
-        Path path = Paths.get("resources/");
-        Files.createDirectory(path);
-
-        FileWriter fileWriter = new FileWriter(path+ "\\game.json");
-        GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
-
-        Gson gson = builder.create();
-
-        JsonWriter writer = gson.newJsonWriter(fileWriter);
-
+        //creating data for the game's spaces
         ArrayList<Space> spaces = new ArrayList<>(); //TODO ændr priserne til de rigtige på GUI'en
 
         Space go = new Space();
@@ -76,7 +75,7 @@ public class JSONUtility {
         ((RealEstate) roskildevej).setPriceForHouse(1000);
         spaces.add(roskildevej);
 
-        spaces.add(chance); //virker dette?
+        //spaces.add(chance); //virker dette?
 
         Space valbyLanggade = new RealEstate();
         valbyLanggade.setName("Valby Langgade");
@@ -144,7 +143,7 @@ public class JSONUtility {
         ((RealEstate) bernstorffsvej).setPriceForHouse(2000);
         spaces.add(bernstorffsvej);
 
-        spaces.add(chance);
+        //spaces.add(chance);
 
         Space hellerupvej = new RealEstate();
         hellerupvej.setName("Hellerupvej");
@@ -174,7 +173,7 @@ public class JSONUtility {
         ((RealEstate) trianglen).setPriceForHouse(3000);
         spaces.add(trianglen);
 
-        spaces.add(chance);
+        //spaces.add(chance);
 
         Space oesterbrogade = new RealEstate();
         oesterbrogade.setName("Østerbrogade");
@@ -250,7 +249,7 @@ public class JSONUtility {
         ((RealEstate) vimmelskaftet).setPriceForHouse(4000);
         spaces.add(vimmelskaftet);
 
-        spaces.add(chance);
+        //spaces.add(chance);
 
         Space nygade = new RealEstate();
         nygade.setName("Nygade");
@@ -265,7 +264,7 @@ public class JSONUtility {
         ((Utility) bornholm).setRent(500);
         spaces.add(bornholm);
 
-        spaces.add(chance);
+        //spaces.add(chance);
 
         Space frederiksberggade = new RealEstate();
         frederiksberggade.setName("Frederiksberggade");
@@ -289,6 +288,18 @@ public class JSONUtility {
 
         Game game = new Game();
         game.setSpaces(spaces);
+
+        //JSON-GSON operations
+        Path path = Paths.get("resources/");
+        Files.createDirectory(path);
+
+        FileWriter fileWriter = new FileWriter(path+ "\\game.json");
+        GsonBuilder builder = new GsonBuilder().setPrettyPrinting()
+                .registerTypeAdapter(Subject.class, new Adapter<Subject>());
+
+        Gson gson = builder.create();
+
+        JsonWriter writer = gson.newJsonWriter(fileWriter);
 
         gson.toJson(game, game.getClass(), writer);
 
