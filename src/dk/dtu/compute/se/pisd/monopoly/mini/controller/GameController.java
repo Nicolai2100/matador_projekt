@@ -132,12 +132,14 @@ public class GameController {
 
             current = (current + 1) % players.size();
             game.setCurrentPlayer(players.get(current));
+            /* Commented out, because I think it's not neccesary.
             if (current == 0) {
                 String selection = gui.getUserButtonPressed("En runde er slut. Vil I fortsætte spillet?", "Ja", "Nej");
                 if (selection.equals("Nej")) {
                     terminated = true;
                 }
             }
+            */
         }
 
         dispose();
@@ -168,15 +170,20 @@ public class GameController {
                     unmortgageAction();
                 }
             } else if (choice.equals("Gem spil")) {
-                if (game.getGameId() < 0) {
-                    gameDb.saveGame(game);
-                } else {
-                    gameDb.updateGame(game);
-                }
+                saveGame();
             } else {
                 continueChoosing = false;
             }
         }
+    }
+
+    public void saveGame() {
+        if (game.getGameId() < 0) {
+            gameDb.saveGame(game);
+        } else {
+            gameDb.updateGame(game);
+        }
+        gui.showMessage("Spillet blev gemt!");
     }
 
     public boolean gameEnds() {
@@ -615,7 +622,9 @@ public class GameController {
                 highestHouseCount = ((RealEstate) property).getHouseCount();
             }
         }
-        if (re.getHouseCount() < highestHouseCount) {
+        if (re.getHouseCount() == 0) {
+            gui.showMessage("Du har ingen huse på denne grund!");
+        } else if (re.getHouseCount() < highestHouseCount) {
             gui.showMessage("Du skal sælge dine huse jævnt!");
         } else {
             paymentFromBank(player, re.getPriceForHouse() / 2);
@@ -655,15 +664,15 @@ public class GameController {
             do {
                 String[] propertyNames = new String[potentialProperties.size() + 1];
                 for (int i = 0; i < propertyNames.length - 1; i++) {
-                    propertyNames[i] = potentialProperties.get(i).getName();
+                    propertyNames[i] = potentialProperties.get(i).getName() + ", " + potentialProperties.get(i).getPriceForHouse() + "kr/hus";
                 }
                 propertyNames[propertyNames.length - 1] = "Stop med at bygge";
                 String propertyString = gui.getUserSelection("On which property, do you wish to build houses?", propertyNames);
 
                 if (!propertyString.equals("Stop med at bygge")) {
-                    RealEstate chosenProperty = potentialProperties.get(0);
+                    RealEstate chosenProperty = null;
                     for (int i = 0; i < propertyNames.length - 1; i++) {
-                        if (propertyNames[i].equals(propertyString)) chosenProperty = potentialProperties.get(i);
+                        if (propertyString.contains(propertyNames[i])) chosenProperty = potentialProperties.get(i);
                     }
                     buyHouse(player, chosenProperty);
                 } else {
@@ -707,7 +716,7 @@ public class GameController {
             do {
                 String[] propertyNames = new String[potentialProperties.size() + 1];
                 for (int i = 0; i < propertyNames.length - 1; i++) {
-                    propertyNames[i] = potentialProperties.get(i).getName();
+                    propertyNames[i] = potentialProperties.get(i).getName() + ", " + potentialProperties.get(i).getPriceForHouse() / 2 + "kr/hus";
                 }
                 propertyNames[propertyNames.length - 1] = "Stop med at sælge";
                 String propertyString = gui.getUserSelection("Fra hvilken grund ønsker du at sælge huse?", propertyNames);
@@ -715,7 +724,7 @@ public class GameController {
                 if (!propertyString.equals("Stop med at sælge")) {
                     RealEstate chosenProperty = null;
                     for (int i = 0; i < propertyNames.length - 1; i++) {
-                        if (propertyNames[i].equals(propertyString)) chosenProperty = potentialProperties.get(i);
+                        if (propertyString.contains(propertyNames[i])) chosenProperty = potentialProperties.get(i);
                     }
                     sellHouse(player, chosenProperty);
                 } else {
@@ -963,7 +972,7 @@ public class GameController {
 
             String[] properties = new String[potentialProperties.size() + 1];
             for (int i = 0; i < properties.length - 1; i++) {
-                properties[i] = potentialProperties.get(i).getName();
+                properties[i] = potentialProperties.get(i).getName() + ", pantsætningsværdi: " + potentialProperties.get(i).getCost() / 2 + "kr.";
             }
             properties[properties.length - 1] = "Stop med at pantsætte";
 
@@ -972,7 +981,7 @@ public class GameController {
                 continuePawning = false;
             } else {
                 for (Property property : player.getOwnedProperties()) {
-                    if (property.getName().equals(choice)) {
+                    if (choice.contains(property.getName())) {
                         if (property instanceof RealEstate) {
                             boolean ableToMortgage = true;
                             for (Property p : player.getOwnedProperties()) {
@@ -1033,7 +1042,7 @@ public class GameController {
 
             String[] properties = new String[potentialProperties.size() + 1];
             for (int i = 0; i < properties.length - 1; i++) {
-                properties[i] = potentialProperties.get(i).getName();
+                properties[i] = potentialProperties.get(i).getName() + ", pantsætningsgæld: " + potentialProperties.get(i).getCost() / 2 + "kr.";
             }
             properties[properties.length - 1] = "Tilbage til hovedmenuen";
 
@@ -1042,7 +1051,7 @@ public class GameController {
                 continuePawning = false;
             } else {
                 for (Property property : player.getOwnedProperties()) {
-                    if (property.getName().equals(choice)) {
+                    if (choice.contains(property.getName())) {
                         unmortgage(player, property);
                     }
                 }
