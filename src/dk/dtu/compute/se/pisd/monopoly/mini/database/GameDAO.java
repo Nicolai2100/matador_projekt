@@ -101,7 +101,6 @@ public class GameDAO implements IGameDAO {
             for (Space space : game.getSpaces()) {
                 if (space instanceof Property) {
                     insertProperties.setInt(1, space.getIndex());
-                    System.out.println(space.getIndex());
                     if (space instanceof RealEstate) {
                         RealEstate realEstate = (RealEstate) space;
                         insertProperties.setInt(2, realEstate.getHouseCount());

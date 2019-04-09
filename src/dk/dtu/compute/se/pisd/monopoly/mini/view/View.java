@@ -72,52 +72,6 @@ public class View implements Observer {
         }
     }
 
-    public void enterNamePlayer(Player player) {
-        while (true) {
-            String input = gui.getUserString("indtast navn");
-            if (input.length() > 0) {
-                player.setName(input);
-                break;
-            } else {
-                gui.showMessage("prøv igen");
-            }
-        }
-    }
-
-    public GUI_Car chosePlayerCar(Player player) {
-        String carChoice = gui.getUserSelection("Choose car", "Car", "Ufo", "Tractor", "Racecar");
-        GUI_Car car;
-        HashMap<String, GUI_Car.Type> enumMap = new HashMap();
-        enumMap.put("Ufo", UFO);
-        enumMap.put("Car", CAR);
-        enumMap.put("Tractor", TRACTOR);
-        enumMap.put("Racecar", RACECAR);
-        car = new GUI_Car(player.getColor(), Color.BLUE, enumMap.get(carChoice), GUI_Car.Pattern.FILL);
-        player.setToken(enumMap.get(carChoice).toString());
-        return car;
-    }
-
-    public Color chooseCarColor(CarColor carColorObj, Player player) {
-        String[] chooseColorStrings = carColorObj.setColorsToChooseFrom().split(" ");
-        String carColorS;
-
-        for (int i = 0; i < chooseColorStrings.length; i++) {
-        }
-        if (chooseColorStrings.length == 4) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3]);
-        } else if (chooseColorStrings.length == 3) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2]);
-        } else if (chooseColorStrings.length == 2) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1]);
-        } else {
-            gui.showMessage(player.getName() + "'s color is " + chooseColorStrings[0]);
-            carColorS = chooseColorStrings[0];
-        }
-        Color carColorChoice = carColorObj.colorChosen(carColorS);
-
-        return carColorChoice;
-    }
-
     @Override
     public void update(Subject subject) {
         if (!disposed) {
@@ -242,5 +196,53 @@ public class View implements Observer {
             updatePlayer(player);
         }
     }
-    //merget sammen
+
+    public void enterNamePlayer(Player player) {
+        while (true) {
+            String input = gui.getUserString("indtast navn");
+            if (input.length() > 0) {
+                player.setName(input);
+                break;
+            } else {
+/*
+                gui.showMessage("prøv igen");
+*/
+                break;
+            }
+        }
+    }
+
+    public GUI_Car chosePlayerCar(Player player) {
+        String carChoice = gui.getUserSelection("Choose car", "Car", "Ufo", "Tractor", "Racecar");
+        GUI_Car car;
+        HashMap<String, GUI_Car.Type> enumMap = new HashMap();
+        enumMap.put("Ufo", UFO);
+        enumMap.put("Car", CAR);
+        enumMap.put("Tractor", TRACTOR);
+        enumMap.put("Racecar", RACECAR);
+        car = new GUI_Car(player.getColor(), Color.BLUE, enumMap.get(carChoice), GUI_Car.Pattern.FILL);
+        player.setToken(enumMap.get(carChoice).toString());
+        return car;
+    }
+
+    public Color chooseCarColor(CarColor carColorObj, Player player) {
+        String[] chooseColorStrings = carColorObj.setColorsToChooseFrom().split(" ");
+        String carColorS;
+
+        for (int i = 0; i < chooseColorStrings.length; i++) {
+        }
+        if (chooseColorStrings.length == 4) {
+            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3]);
+        } else if (chooseColorStrings.length == 3) {
+            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2]);
+        } else if (chooseColorStrings.length == 2) {
+            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1]);
+        } else {
+            gui.showMessage(player.getName() + "'s color is " + chooseColorStrings[0]);
+            carColorS = chooseColorStrings[0];
+        }
+        Color carColorChoice = carColorObj.colorChosen(carColorS);
+
+        return carColorChoice;
+    }
 }

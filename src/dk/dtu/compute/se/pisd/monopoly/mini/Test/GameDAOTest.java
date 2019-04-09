@@ -1,5 +1,6 @@
-package dk.dtu.compute.se.pisd.monopoly.mini.database;
+package dk.dtu.compute.se.pisd.monopoly.mini.Test;
 
+import dk.dtu.compute.se.pisd.monopoly.mini.database.GameDAO;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

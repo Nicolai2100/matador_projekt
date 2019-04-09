@@ -17,12 +17,14 @@ public class PlayerPanel extends JFrame {
     private Player player;
     private JPanel mainPanel;
     private Dimension dimension;
+    private Dimension dimension2;
     private Map<ColorGroup, JPanel> maltesMap;
 
     public PlayerPanel(Game game, Player player) {
         this.game = game;
         this.player = player;
         dimension = new Dimension(72, 100);
+        dimension2 = new Dimension(72, 25);
 
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         mainPanel = new JPanel();
@@ -37,20 +39,30 @@ public class PlayerPanel extends JFrame {
 
         //Måske noget med en fængselsstatus
     }
+
     public void update() {
         mainPanel.removeAll();
         maltesMap = new HashMap<>();
 
         JPanel playerPanel = new JPanel();
-        playerPanel.setBackground(player.getColor());
+        playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
         playerPanel.setBorder(new EtchedBorder());
-        JLabel nameLabel = new JLabel(player.getName());
-        playerPanel.add(nameLabel);
-        JLabel balanceLabel = new JLabel("" + player.getBalance());
-        playerPanel.add(balanceLabel);
         playerPanel.setMaximumSize(dimension);
         playerPanel.setPreferredSize(dimension);
+
+        JLabel nameLabel = new JLabel(player.getName());
+        nameLabel.setMinimumSize(dimension2);
+        JLabel balanceLabel = new JLabel("" + player.getBalance());
+        balanceLabel.setMinimumSize(dimension2);
+        JPanel colorPanel = new JPanel();
+        colorPanel.setMaximumSize(dimension2);
+        colorPanel.setMinimumSize(dimension2);
+        colorPanel.setBackground(player.getColor());
+
+        playerPanel.add(colorPanel);
+        playerPanel.add(nameLabel);
+        playerPanel.add(balanceLabel);
         mainPanel.add(playerPanel);
 
         for (Space space : game.getSpaces()) {
@@ -102,7 +114,7 @@ public class PlayerPanel extends JFrame {
             pawnedLabelMaker(jPanel, property);
         }
 
-        mainPanel.setPreferredSize(new Dimension(maltesMap.size()*72 + 72, 100));
+        mainPanel.setPreferredSize(new Dimension(maltesMap.size() * 72 + 72, 100));
         this.pack();
         this.revalidate();
         this.repaint();

@@ -328,14 +328,14 @@ public class GameController {
      */
     public void takeChanceCard(Player player) throws PlayerBrokeException, GameEndedException {
         Card card = game.drawCardFromDeck();
-        gui.displayChanceCard(card.getText());
+/*        gui.displayChanceCard(card.getText());
         gui.showMessage("Player " + player.getName() + " draws a chance card.");
 
         try {
             card.doAction(this, player);
         } finally {
             gui.displayChanceCard("done");
-        }
+        }*/
     }
 
     /**

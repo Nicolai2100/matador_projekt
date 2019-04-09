@@ -219,13 +219,6 @@ public class Game extends Subject {
 	 */
 
     public void createGame() {
-
-        // Create the initial Game set up (note that, in this simple
-        // setup, we use only 11 spaces). Note also that this setup
-        // could actually be loaded from a file or database instead
-        // of creating it programmatically. This will be discussed
-        // later in this course.
-
         Space go = new Space();
         go.setName("Start");
         addSpace(go);
@@ -501,14 +494,15 @@ public class Game extends Subject {
     public void createPlayers(int numOfPlayers) {
         for (int i = 0; i < numOfPlayers; i++) {
             Player player = new Player();
-            player.setName("player " + i+1);
+            int numOfPlayer = i+1;
+            player.setName("player " + numOfPlayer);
             player.setCurrentPosition(getSpaces().get(0));
             addPlayer(player);
 
         }
 
    /*
-        // TODO the players should eventually be created interactively or
+        Test players
         // be loaded from a database
         Player p = new Player();
         p.setName("Player 1");
