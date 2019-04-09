@@ -5,9 +5,6 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 
-import java.awt.*;
-import java.util.List;
-
 /**
  * A property which is a space that can be owned by a player.
  *
@@ -19,6 +16,7 @@ public class Property extends Space {
     private int rent;
     private boolean isOwned = false;
     private boolean superOwned = false;
+    private boolean mortgaged = false;
     private Player owner;
     private ColorGroup colorGroup;
 
@@ -36,6 +34,15 @@ public class Property extends Space {
 
     public void setSuperOwned(boolean bool) {
         this.superOwned = bool;
+    }
+
+    public void setMortgaged(boolean bool) {
+        this.mortgaged = bool;
+        notifyChange();
+    }
+
+    public boolean getMortgaged() {
+        return mortgaged;
     }
 
     /**
@@ -103,17 +110,19 @@ public class Property extends Space {
         if (owner == null) {
             controller.offerToBuy(this, player);
 
-        } else if (!owner.equals(player)) {
-            // TODO also check whether the property is mortgaged
-
+        } else if (!owner.equals(player) && !mortgaged && !owner.isInPrison()) {
             controller.payment(player, rent, owner);
-        }
+        } else if (!owner.equals(player) && owner.isInPrison()) {
+            controller.showMessage(player + "skal ikke betale leje til " + owner + ", fordi " + owner + " er i fængsel!");
+        } else if (!owner.equals(player) && mortgaged) {
+            controller.showMessage(this.getName() + " er pantsat, og " + player + " skal derfor ikke betale leje.");
+        /*
         if (owner == player) {
             if (this instanceof RealEstate) {
                 RealEstate realEstate = (RealEstate) this;
                 realEstate.computeRent();
             }
-
+        */
 
         }
 

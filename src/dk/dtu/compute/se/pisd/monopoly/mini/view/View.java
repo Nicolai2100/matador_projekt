@@ -141,7 +141,7 @@ public class View implements Observer {
         //med at indramme grunde med ejerens farve og også vise antalet af huse.
     }
     public void updateProperty(Property property) {
-        GUI_Field gui_field = this.space2GuiField.get((Property) property);
+        GUI_Field gui_field = this.space2GuiField.get(property);
         if (gui_field instanceof GUI_Ownable) {
             GUI_Ownable gui_ownable = (GUI_Ownable) gui_field;
             Player owner = property.getOwner();
@@ -156,6 +156,10 @@ public class View implements Observer {
         if (property instanceof RealEstate) {
             GUI_Street street = (GUI_Street) gui_field;
             street.setHouses(((RealEstate) property).getHouseCount());
+        }
+
+        if(property.getOwner() != null) {
+            player2PlayerPanel.get(property.getOwner()).update();
         }
     }
 
