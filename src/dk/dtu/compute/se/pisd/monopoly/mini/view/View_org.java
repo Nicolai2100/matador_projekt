@@ -16,9 +16,6 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static gui_fields.GUI_Car.Type.*;
-import static gui_fields.GUI_Car.Type.RACECAR;
-
 /**
  * This class implements a view on the Monopoly game based
  * on the original Matador GUI; it serves as a kind of
@@ -31,7 +28,7 @@ import static gui_fields.GUI_Car.Type.RACECAR;
  * @author Ekkart Kindler, ekki@dtu.dk
  * Sørg for at udvide klassen View, så at dens metode
  */
-public class View implements Observer {
+public class View_org implements Observer {
 
     private Game game;
     private GUI gui;
@@ -49,7 +46,7 @@ public class View implements Observer {
      * @param game the game
      * @param gui  the GUI
      */
-    public View(Game game, GUI gui) {
+    public View_org(Game game, GUI gui) {
         this.game = game;
         this.gui = gui;
 
@@ -57,6 +54,7 @@ public class View implements Observer {
             PlayerPanel playerPanel = new PlayerPanel(game, player);
             player2PlayerPanel.put(player, playerPanel);
         }
+
         GUI_Field[] guiFields = gui.getFields();
 
         int i = 0;
@@ -67,66 +65,30 @@ public class View implements Observer {
             space2GuiField.put(space, guiFields[i++]);
             space.attach(this);
         }
-    }
 
-    public void enterNamePlayer(Player player) {
-        while (true) {
-            String input = gui.getUserString("indtast navn");
-            if (input.length() > 0) {
-                player.setName(input);
-                break;
-            } else {
-                gui.showMessage("prøv igen");
-            }
+        // create the players in the GUI
+        for (Player player : game.getPlayers()) {
+            GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.CAR, Pattern.FILL);
+            GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
+            player2GuiPlayer.put(player, guiPlayer);
+            gui.addPlayer(guiPlayer);
+            // player2position.put(player, 0);
+
+            // register this view with the player as an observer, in order to update the
+            // player's state in the GUI
+            player.attach(this);
+
+            updatePlayer(player);
         }
-    }
-
-    public GUI_Car chosePlayerCar(Player player) {
-        String carChoice = gui.getUserSelection("Choose car", "Car", "Ufo", "Tractor", "Racecar");
-        GUI_Car car;
-        HashMap<String, GUI_Car.Type> enumMap = new HashMap();
-        enumMap.put("Ufo", UFO);
-        enumMap.put("Car", CAR);
-        enumMap.put("Tractor", TRACTOR);
-        enumMap.put("Racecar", RACECAR);
-        car = new GUI_Car(player.getColor(), Color.BLUE, enumMap.get(carChoice), GUI_Car.Pattern.FILL);
-        player.setToken(enumMap.get(carChoice).toString());
-        return car;
-    }
-
-    public Color chooseCarColor(CarColor carColorObj, Player player) {
-        String[] chooseColorStrings = carColorObj.setColorsToChooseFrom().split(" ");
-        String carColorS;
-
-        for (int i = 0; i < chooseColorStrings.length; i++) {
-        }
-        if (chooseColorStrings.length == 4) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3]);
-        } else if (chooseColorStrings.length == 3) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2]);
-        } else if (chooseColorStrings.length == 2) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1]);
-        } else {
-            gui.showMessage(player.getName() + "'s color is " + chooseColorStrings[0]);
-            carColorS = chooseColorStrings[0];
-        }
-        Color carColorChoice = carColorObj.colorChosen(carColorS);
-
-        return carColorChoice;
     }
     @Override
     public void update(Subject subject) {
         if (!disposed) {
-
             if (subject instanceof Player) {
                 updatePlayer((Player) subject);
             }
             if (subject instanceof Property) {
                 updateProperty((Property) subject);
-            }
-            if (subject instanceof Game) {
-                createPlayers();
-                System.out.println("snap");
             }
         }
 
@@ -201,37 +163,6 @@ public class View implements Observer {
             for (Space space : game.getSpaces()) {
                 space.detach(this);
             }
-        }
-    }
-
-    public void createPlayers() {
-        CarColor carColor = new CarColor();
-        for (Player player : game.getPlayers()) {
-            enterNamePlayer(player);
-            Color userColor = chooseCarColor(carColor, player);
-            player.setColor(userColor);
-            GUI_Car car = chosePlayerCar(player);
-            GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
-            player2GuiPlayer.put(player, guiPlayer);
-            gui.addPlayer(guiPlayer);
-            player2position.put(player, 0);
-            player.attach(this);
-            updatePlayer(player);
-        }
-    }
-
-    /**
-     * @author Jeppe s170196, Nicolai s185020
-     */
-    public void loadPlayers() {
-        for (Player player : game.getPlayers()) {
-            GUI_Car car = new GUI_Car(player.getColor(),Color.black,Type.valueOf(player.getToken()), Pattern.FILL);
-            GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
-            player2GuiPlayer.put(player, guiPlayer);
-            gui.addPlayer(guiPlayer);
-            player2position.put(player, player.getCurrentPosition().getIndex());
-            player.attach(this);
-            updatePlayer(player);
         }
     }
 }

@@ -61,7 +61,7 @@ public class GameDAO implements IGameDAO {
                             "VALUES(?,?);", Statement.RETURN_GENERATED_KEYS);
             PreparedStatement insertPLayers = c.prepareStatement(
                     "INSERT INTO player " +
-                            "VALUES(?,?,?,?,?,?,?,?);");
+                            "VALUES(?,?,?,?,?,?,?,?,?);");
 
             PreparedStatement insertProperties = c.prepareStatement(
                     "INSERT INTO property " +
@@ -95,6 +95,7 @@ public class GameDAO implements IGameDAO {
                 insertPLayers.setBoolean(6, player.isBroke());
                 insertPLayers.setInt(7, gameid);
                 insertPLayers.setInt(8, player.getColor().getRGB());
+                insertPLayers.setString(9,player.getToken());
                 insertPLayers.executeUpdate();
             }
             for (Space space : game.getSpaces()) {
@@ -195,6 +196,7 @@ public class GameDAO implements IGameDAO {
                 p.setInPrison(playerRS.getBoolean("injail"));
                 p.setBroke(playerRS.getBoolean("isbroke"));
                 p.setColor(new Color(playerRS.getInt("color")));
+                p.setToken(playerRS.getString("token"));
                 listOfPlayers.add(playerRS.getInt("playerid"), p);
             }
             game.setPlayers(listOfPlayers);
@@ -284,6 +286,7 @@ public class GameDAO implements IGameDAO {
                             "isbroke bit, " +
                             "gameid int, " +
                             "color int, " +
+                            "token varchar(10)," +
                             "primary key (playerid, gameid), " +
                             "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
                             "ON DELETE CASCADE);");

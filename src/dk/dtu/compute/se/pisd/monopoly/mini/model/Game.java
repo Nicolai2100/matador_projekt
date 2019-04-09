@@ -34,7 +34,6 @@ public class Game extends Subject {
 
     public Game() {
         createGame();
-        createPlayers();
     }
 
     public int getGameId() {
@@ -337,7 +336,16 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
      * This method will be called before the game is started to create
      * the participating players.
      */
-    public void createPlayers() {
+    public void createPlayers(int numOfPlayers) {
+        for (int i = 0; i < numOfPlayers; i++) {
+            Player player = new Player();
+            player.setName("player " + i+1);
+            player.setCurrentPosition(getSpaces().get(0));
+            addPlayer(player);
+
+        }
+
+   /*
         // TODO the players should eventually be created interactively or
         // be loaded from a database
         Player p = new Player();
@@ -351,7 +359,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
         p.setCurrentPosition(getSpaces().get(0));
         p.setColor(Color.YELLOW);
         addPlayer(p);
-/*
+
 		p = new Player();
 		p.setName("Player 3");
 		p.setCurrentPosition(game.getSpaces().get(0));
