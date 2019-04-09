@@ -201,9 +201,13 @@ public class GameDAO implements IGameDAO {
             }
             game.setPlayers(listOfPlayers);
 
+            //Jeg har flyttet denne linje ud fra if-statementet nedenunder, fordi det aldrig blev kørt.
+            game.setCurrentPlayer(game.getPlayers().get(gameRS.getInt("curplayerid")));
+            /*
             if (gameRS.next()) {
+                //flyt denne op
                 game.setCurrentPlayer(game.getPlayers().get(gameRS.getInt("curplayerid")));
-            }
+            }*/
 
             List<Space> listOfSpaces = new ArrayList<Space>();
             listOfSpaces.addAll(game.getSpaces());
@@ -217,6 +221,7 @@ public class GameDAO implements IGameDAO {
 
                     if (propertyRS.getInt("playerid") != -1) {
                         utility.setOwner(game.getPlayers().get(propertyRS.getInt("playerid")));
+                        utility.getOwner().addOwnedProperty(utility);
                     }
 
                     listOfSpaces.set(propertyRS.getInt("posonboard"), utility);
@@ -228,6 +233,7 @@ public class GameDAO implements IGameDAO {
 
                     if (propertyRS.getInt("playerid") != -1) {
                         realEstate.setOwner(game.getPlayers().get(propertyRS.getInt("playerid")));
+                        realEstate.getOwner().addOwnedProperty(realEstate);
                     }
 
                     listOfSpaces.set(propertyRS.getInt("posonboard"), realEstate);

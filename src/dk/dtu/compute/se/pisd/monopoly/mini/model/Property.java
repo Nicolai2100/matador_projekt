@@ -113,9 +113,9 @@ public class Property extends Space {
         } else if (!owner.equals(player) && !mortgaged && !owner.isInPrison()) {
             controller.payment(player, rent, owner);
         } else if (!owner.equals(player) && owner.isInPrison()) {
-            controller.showMessage(player + "skal ikke betale leje til " + owner + ", fordi " + owner + " er i fængsel!");
+            controller.showMessage(player + "skal ikke betale leje til " + owner.getName() + ", fordi " + owner.getName() + " er i fængsel!");
         } else if (!owner.equals(player) && mortgaged) {
-            controller.showMessage(this.getName() + " er pantsat, og " + player + " skal derfor ikke betale leje.");
+            controller.showMessage(this.getName() + " er pantsat, og " + player.getName() + " skal derfor ikke betale leje.");
         /*
         if (owner == player) {
             if (this instanceof RealEstate) {

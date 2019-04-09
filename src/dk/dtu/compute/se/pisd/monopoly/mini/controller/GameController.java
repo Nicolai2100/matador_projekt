@@ -327,7 +327,7 @@ public class GameController {
      * @throws PlayerBrokeException if the player goes broke by this activity
      */
     public void takeChanceCard(Player player) throws PlayerBrokeException, GameEndedException {
-        Card card = game.drawCardFromDeck();
+        //Card card = game.drawCardFromDeck();
 
         System.out.println("Der er kommenteret en metode ud fordi den smed fejl");
 
@@ -642,7 +642,7 @@ public class GameController {
                 player = p;
             }
         }
-        //Makes a list of all superowned real estate owned by the player, if any.
+        //Makes a list of all superowned real estate owned by the player, if any. Doesn't include mortgaged properties.
         ArrayList<RealEstate> potentialProperties = new ArrayList<>();
         for (Property property : player.getOwnedProperties()) {
             if (property instanceof RealEstate && property.getSuperOwned()) {
@@ -976,12 +976,12 @@ public class GameController {
                         if (property instanceof RealEstate) {
                             boolean ableToMortgage = true;
                             for (Property p : player.getOwnedProperties()) {
-                                if (p.getColorGroup() == property.getColorGroup() && ((RealEstate)p).getHouseCount() > 0) {
+                                if (p.getColorGroup() == property.getColorGroup() && ((RealEstate) p).getHouseCount() > 0) {
                                     ableToMortgage = false;
                                 }
                             }
 
-                            if (ableToMortgage) {
+                            if (!ableToMortgage) {
                                 gui.showMessage("Du skal sælge alle huse i farvegruppen, før du kan pantsætte!");
                             } else {
                                 mortgage(player, property);
