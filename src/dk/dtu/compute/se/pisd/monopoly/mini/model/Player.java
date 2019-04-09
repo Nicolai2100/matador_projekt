@@ -30,6 +30,8 @@ public class Player extends Subject {
 
     private boolean broke = false;
 
+    private String token;
+
     private Set<Property> ownedProperties = new HashSet<Property>();
 
     private List<Card> ownedCards = new ArrayList<Card>();
@@ -305,4 +307,11 @@ public class Player extends Subject {
         }
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

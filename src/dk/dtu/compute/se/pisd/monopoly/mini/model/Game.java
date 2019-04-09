@@ -384,8 +384,4 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setColor(Color.cyan);
 		game.addPlayer(p);*/
     }
-
-    public void callGui(){
-        notifyChange();
-    }
 }

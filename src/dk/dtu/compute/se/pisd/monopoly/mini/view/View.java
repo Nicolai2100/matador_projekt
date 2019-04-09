@@ -87,14 +87,13 @@ public class View implements Observer {
     public GUI_Car chosePlayerCar(Player player) {
         String carChoice = gui.getUserSelection("Choose car", "Car", "Ufo", "Tractor", "Racecar");
         GUI_Car car;
-
         HashMap<String, GUI_Car.Type> enumMap = new HashMap();
         enumMap.put("Ufo", UFO);
         enumMap.put("Car", CAR);
         enumMap.put("Tractor", TRACTOR);
         enumMap.put("Race car", RACECAR);
-
         car = new GUI_Car(player.getColor(), Color.BLUE, enumMap.get(carChoice), GUI_Car.Pattern.FILL);
+        player.setToken(enumMap.get(carChoice).toString());
         return car;
     }
 

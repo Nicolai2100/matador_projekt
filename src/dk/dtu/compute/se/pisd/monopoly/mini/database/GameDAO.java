@@ -57,7 +57,7 @@ public class GameDAO implements IGameDAO {
                             "VALUES(?,?);", Statement.RETURN_GENERATED_KEYS);
             PreparedStatement insertPLayers = c.prepareStatement(
                     "INSERT INTO player " +
-                            "VALUES(?,?,?,?,?,?,?,?);");
+                            "VALUES(?,?,?,?,?,?,?,?,?);");
 
             PreparedStatement insertProperties = c.prepareStatement(
                     "INSERT INTO property " +
@@ -70,7 +70,6 @@ public class GameDAO implements IGameDAO {
             LocalDateTime now = LocalDateTime.now();
 
             insertGame.setString(2, dtf.format(now));
-
 
             insertGame.executeUpdate();
             ResultSet gen = insertGame.getGeneratedKeys();
@@ -92,6 +91,7 @@ public class GameDAO implements IGameDAO {
                 insertPLayers.setBoolean(6, player.isBroke());
                 insertPLayers.setInt(7, gameid);
                 insertPLayers.setInt(8, player.getColor().getRGB());
+                insertPLayers.setString(9,player.getToken());
                 insertPLayers.executeUpdate();
             }
 
@@ -294,6 +294,7 @@ public class GameDAO implements IGameDAO {
                             "isbroke bit, " +
                             "gameid int, " +
                             "color int, " +
+                            "token varchar(5)," +
                             "primary key (playerid, gameid), " +
                             "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
                             "ON DELETE CASCADE);");
