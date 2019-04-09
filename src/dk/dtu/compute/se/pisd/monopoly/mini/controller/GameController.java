@@ -328,6 +328,9 @@ public class GameController {
      */
     public void takeChanceCard(Player player) throws PlayerBrokeException, GameEndedException {
         Card card = game.drawCardFromDeck();
+
+        System.out.println("Der er kommenteret en metode ud fordi den smed fejl");
+
 /*        gui.displayChanceCard(card.getText());
         gui.showMessage("Player " + player.getName() + " draws a chance card.");
 
