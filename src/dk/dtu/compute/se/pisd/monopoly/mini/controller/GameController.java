@@ -970,7 +970,22 @@ public class GameController {
             } else {
                 for (Property property : player.getOwnedProperties()) {
                     if (property.getName().equals(choice)) {
-                        mortgage(player, property);
+                        if (property instanceof RealEstate) {
+                            boolean ableToMortgage = true;
+                            for (Property p : player.getOwnedProperties()) {
+                                if (p.getColorGroup() == property.getColorGroup() && ((RealEstate)p).getHouseCount() > 0) {
+                                    ableToMortgage = false;
+                                }
+                            }
+
+                            if (ableToMortgage) {
+                                gui.showMessage("Du skal sælge alle huse i farvegruppen, før du kan pantsætte!");
+                            } else {
+                                mortgage(player, property);
+                            }
+                        } else {
+                            mortgage(player, property);
+                        }
                     }
                 }
             }
