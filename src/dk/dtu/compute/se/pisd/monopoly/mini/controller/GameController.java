@@ -136,8 +136,6 @@ public class GameController {
                 // We could react to the player having gone broke
             }
 
-            // TODO offer all players the options to trade etc.
-
             current = (current + 1) % players.size();
             game.setCurrentPlayer(players.get(current));
             if (current == 0) {
@@ -169,7 +167,12 @@ public class GameController {
             } else if (choice.equals("Sælg huse")) {
                 sellHouseAction();
             } else if (choice.equals("Pantsættelser")) {
-                pawn();
+                String input = gui.getUserButtonPressed("Vælg:", "Pantsætte", "Indfri gæld", "Tilbage til menu");
+                if (input.equals("Pantsætte")) {
+                    mortgageAction();
+                } else if (input.equals("Indfri gæld")) {
+                    unmortgageAction();
+                }
             } else {
                 continueChoosing = false;
             }
@@ -925,7 +928,7 @@ public class GameController {
         receiver.addOwnedProperty(property);
     }
 
-    public boolean pawn() {
+    public boolean mortgageAction() {
         String[] players = new String[game.getActivePlayers(false).size() + 1];
         for (int i = 0; i < players.length - 1; i++) {
             players[i] = game.getPlayers().get(i).getName();
@@ -945,7 +948,7 @@ public class GameController {
         while (continuePawning) {
             ArrayList<Property> potentialProperties = new ArrayList<>();
             for (Property property : player.getOwnedProperties()) {
-                if (!property.getPawned()) {
+                if (!property.getMortgaged()) {
                     potentialProperties.add(property);
                 }
             }
@@ -962,38 +965,72 @@ public class GameController {
             } else {
                 for (Property property : player.getOwnedProperties()) {
                     if (property.getName().equals(choice)) {
-                        property.setPawned(true);
+                        mortgage(player, property);
                     }
                 }
             }
         }
-
-        /*
-        ArrayList<Property> potentialProperties = new ArrayList<>();
-        for (Property property : player.getOwnedProperties()) {
-            if (!property.getPawned()) {
-                potentialProperties.add(property);
-            }
-        }
-
-
-
-        if (potentialProperties.size() > 0) {
-            boolean continuePawning = true;
-            int numberOfOptions = potentialProperties.size();
-            while (continuePawning) {
-
-                String[] properties = new String[numberOfOptions + 1];
-                for (Property property : potentialProperties) {
-                    if (!property.getPawned()) {
-                        properties[]
-                    }
-                }
-
-            }
-        } else {
-            gui.showMessage("Du ejer ingen grunde, du kan pantsætte!");
-        }*/
         return true;
+    }
+
+    public void mortgage(Player player, Property property) {
+        property.setMortgaged(true);
+        paymentFromBank(player, property.getCost() / 2);
+    }
+
+    public boolean unmortgageAction() {
+        String[] players = new String[game.getActivePlayers(false).size() + 1];
+        for (int i = 0; i < players.length - 1; i++) {
+            players[i] = game.getPlayers().get(i).getName();
+        }
+        players[players.length - 1] = "Annuller";
+
+        String playerName = gui.getUserSelection("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", players);
+        if (playerName.equals("Annuller")) return false;
+        Player player = null;
+        for (Player p : game.getPlayers()) {
+            if (p.getName().equals(playerName)) {
+                player = p;
+            }
+        }
+
+        boolean continuePawning = true;
+        while (continuePawning) {
+            ArrayList<Property> potentialProperties = new ArrayList<>();
+            for (Property property : player.getOwnedProperties()) {
+                if (property.getMortgaged()) {
+                    potentialProperties.add(property);
+                }
+            }
+
+            String[] properties = new String[potentialProperties.size() + 1];
+            for (int i = 0; i < properties.length - 1; i++) {
+                properties[i] = potentialProperties.get(i).getName();
+            }
+            properties[properties.length - 1] = "Tilbage til hovedmenuen";
+
+            String choice = gui.getUserSelection("Hvilken pantsat grund vil du tilbagebetale?", properties);
+            if (choice.equals("Tilbage til hovedmenuen")) {
+                continuePawning = false;
+            } else {
+                for (Property property : player.getOwnedProperties()) {
+                    if (property.getName().equals(choice)) {
+                        unmortgage(player, property);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public void unmortgage(Player player, Property property) {
+        try {
+            paymentToBank(player, property.getCost() / 2);
+            property.setMortgaged(false);
+        } catch (PlayerBrokeException e) {
+            e.printStackTrace();
+        } catch (GameEndedException e) {
+            e.printStackTrace();
+        }
     }
 }

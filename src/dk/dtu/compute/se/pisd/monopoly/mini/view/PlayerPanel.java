@@ -5,7 +5,6 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,14 +22,14 @@ public class PlayerPanel extends JFrame {
     public PlayerPanel(Game game, Player player) {
         this.game = game;
         this.player = player;
-        dimension = new Dimension(72, 100);
+        dimension = new Dimension(72, 120);
 
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         this.setContentPane(mainPanel);
         this.setLocation(710, game.getPlayers().indexOf(player) * 120);
-        this.setSize(800, 120);
+        //this.setSize(800, 120);
         this.validate();
         this.setVisible(true);
 
@@ -87,7 +86,7 @@ public class PlayerPanel extends JFrame {
 
         HashSet<ColorGroup> groupsWithPawns = new HashSet<>();
         for (Property property : player.getOwnedProperties()) {
-            if (property.getPawned()) {
+            if (property.getMortgaged()) {
                 groupsWithPawns.add(property.getColorGroup());
             }
         }
@@ -103,6 +102,8 @@ public class PlayerPanel extends JFrame {
             pawnedLabelMaker(jPanel, property);
         }
 
+        mainPanel.setPreferredSize(new Dimension(maltesMap.size()*72 + 72, 120));
+        this.pack();
         this.revalidate();
         this.repaint();
     }
@@ -122,14 +123,14 @@ public class PlayerPanel extends JFrame {
     }
 
     public void labelMaker(JPanel jPanel, Property property) {
-        if (!property.getPawned()) {
+        if (!property.getMortgaged()) {
             JLabel jLabel = new JLabel(property.getName());
             jPanel.add(jLabel);
         }
     }
 
     public void pawnedLabelMaker(JPanel jPanel, Property property) {
-        if (property.getPawned()) {
+        if (property.getMortgaged()) {
             JLabel jLabel = new JLabel(property.getName());
             jPanel.add(jLabel);
         }
