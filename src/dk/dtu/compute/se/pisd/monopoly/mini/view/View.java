@@ -238,4 +238,5 @@ public class View implements Observer {
             updatePlayer(player);
         }
     }
+    //merget sammen
 }
