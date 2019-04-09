@@ -157,7 +157,7 @@ public class GameController {
             String choice = null;
 
             if (startOfTurn) {
-                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser ");
+                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
             } else {
                 choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "s tur. Hvad skal der ske?" , "Slut turen", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
             }
@@ -168,6 +168,8 @@ public class GameController {
                 trade();
             } else if (choice.equals("Sælg huse")) {
                 sellHouseAction();
+            } else if (choice.equals("Pantsættelser")) {
+                pawn();
             } else {
                 continueChoosing = false;
             }
@@ -921,5 +923,77 @@ public class GameController {
         giver.removeOwnedProperty(property);
         property.setOwner(receiver);
         receiver.addOwnedProperty(property);
+    }
+
+    public boolean pawn() {
+        String[] players = new String[game.getActivePlayers(false).size() + 1];
+        for (int i = 0; i < players.length - 1; i++) {
+            players[i] = game.getPlayers().get(i).getName();
+        }
+        players[players.length - 1] = "Annuller";
+
+        String playerName = gui.getUserSelection("Hvilken spiller ønsker at pantsætte grunde?", players);
+        if (playerName.equals("Annuller")) return false;
+        Player player = null;
+        for (Player p : game.getPlayers()) {
+            if (p.getName().equals(playerName)) {
+                player = p;
+            }
+        }
+
+        boolean continuePawning = true;
+        while (continuePawning) {
+            ArrayList<Property> potentialProperties = new ArrayList<>();
+            for (Property property : player.getOwnedProperties()) {
+                if (!property.getPawned()) {
+                    potentialProperties.add(property);
+                }
+            }
+
+            String[] properties = new String[potentialProperties.size() + 1];
+            for (int i = 0; i < properties.length - 1; i++) {
+                properties[i] = potentialProperties.get(i).getName();
+            }
+            properties[properties.length - 1] = "Stop med at pantsætte";
+
+            String choice = gui.getUserSelection("Hvilken grund ønsker du at pantsætte?", properties);
+            if (choice.equals("Stop med at pantsætte")) {
+                continuePawning = false;
+            } else {
+                for (Property property : player.getOwnedProperties()) {
+                    if (property.getName().equals(choice)) {
+                        property.setPawned(true);
+                    }
+                }
+            }
+        }
+
+        /*
+        ArrayList<Property> potentialProperties = new ArrayList<>();
+        for (Property property : player.getOwnedProperties()) {
+            if (!property.getPawned()) {
+                potentialProperties.add(property);
+            }
+        }
+
+
+
+        if (potentialProperties.size() > 0) {
+            boolean continuePawning = true;
+            int numberOfOptions = potentialProperties.size();
+            while (continuePawning) {
+
+                String[] properties = new String[numberOfOptions + 1];
+                for (Property property : potentialProperties) {
+                    if (!property.getPawned()) {
+                        properties[]
+                    }
+                }
+
+            }
+        } else {
+            gui.showMessage("Du ejer ingen grunde, du kan pantsætte!");
+        }*/
+        return true;
     }
 }

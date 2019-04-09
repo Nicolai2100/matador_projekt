@@ -62,19 +62,48 @@ public class PlayerPanel extends JFrame {
                             try {
                                 JPanel jPanel = panelMaker(colorGroup);
                                 maltesMap.put(colorGroup, jPanel);
-                                labelMaker(jPanel, property.getName());
+                                labelMaker(jPanel, property);
                             } catch (NullPointerException e) {
                                 e.getMessage();
                             }
                         else {
                             //Hvis mappet indeholder en værdi med denne farve skal den kun oprette et label
                             JPanel jPanel = maltesMap.get(colorGroup);
-                            labelMaker(jPanel, property.getName());
+                            labelMaker(jPanel, property);
                         }
                     }
                 }
             }
         }
+
+        boolean hasPawnedProperties = false;
+        for (Property p : player.getOwnedProperties()) {
+            if (p.getPawned()) {
+                ColorGroup colorGroup = p.getColorGroup();
+                JPanel jPanel = maltesMap.get(colorGroup);
+                JLabel pawnedLabel = new JLabel("Pantsatte:");
+                jPanel.add(pawnedLabel);
+            }
+        }
+
+
+
+        /*
+
+            boolean hasPawnedProperties = false;
+            for (Property p : player.getOwnedProperties()) {
+                if (p.getPawned()) hasPawnedProperties = true;
+            }
+
+            if (hasPawnedProperties) {
+                JLabel pawnedLabel = new JLabel("Pantsatte:");
+                jPanel.add(pawnedLabel);
+                pawnedLabelMaker(jPanel, property);
+            }
+
+         */
+
+
         //Således er der oprettet netop et panel for hver farvegruppe
       /*  for (ColorGroup colorGroup : ColorGroup.values()) {
             JPanel jPanel = panelMaker(colorGroup);
@@ -99,9 +128,18 @@ public class PlayerPanel extends JFrame {
         return colorGroupPanel;
     }
 
-    public void labelMaker(JPanel jPanel, String name) {
-        JLabel jLabel = new JLabel(name);
-        jPanel.add(jLabel);
+    public void labelMaker(JPanel jPanel, Property property) {
+        if (!property.getPawned()) {
+            JLabel jLabel = new JLabel(property.getName());
+            jPanel.add(jLabel);
+        }
+    }
+
+    public void pawnedLabelMaker(JPanel jPanel, Property property) {
+        if (property.getPawned()) {
+            JLabel jLabel = new JLabel(property.getName());
+            jPanel.add(jLabel);
+        }
     }
     /*Tilføj en metode update() til klassen, som først sletter den gamle inhold fra panelet
     og så kreirer nogle paneler på framet, som viser de forskellige informationer (se skematiske

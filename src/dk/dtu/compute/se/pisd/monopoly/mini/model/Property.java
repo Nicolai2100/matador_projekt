@@ -19,6 +19,7 @@ public class Property extends Space {
     private int rent;
     private boolean isOwned = false;
     private boolean superOwned = false;
+    private boolean pawned = false;
     private Player owner;
     private ColorGroup colorGroup;
 
@@ -36,6 +37,15 @@ public class Property extends Space {
 
     public void setSuperOwned(boolean bool) {
         this.superOwned = bool;
+    }
+
+    public void setPawned(boolean bool) {
+        this.pawned = bool;
+        notifyChange();
+    }
+
+    public boolean getPawned() {
+        return pawned;
     }
 
     /**
