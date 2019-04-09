@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.monopoly.mini;
 
+import dk.dtu.compute.se.pisd.JSON.JSONUtility;
 import dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.cards.CardMove;
@@ -30,138 +31,11 @@ public class MiniMonopoly {
 
 	public static Game createGame() {
 
-		// Create the initial Game set up (note that, in this simple
-		// setup, we use only 11 spaces). Note also that this setup
-		// could actually be loaded from a file or database instead
-		// of creating it programmatically. This will be discussed
-		// later in this course.
 		Game game = new Game();
+		game = JSONUtility.createGame();
 
-		Space go = new Space();
-		go.setName("Go");
-		game.addSpace(go);
-		
-		Property p = new RealEstate();
-		p.setName("Rødovrevej");
-		p.setCost(1200);
-		p.setRent(50);
-		p.setColorGroup(ColorGroup.lightblue);
-		((RealEstate) p).setPriceForHouse(50);
-		game.addSpace(p);
-
-		/*Browns\Purples and Light Blues- £\$50
-Pinks and Oranges- £\$100
-Reds and Yellows- £\$150
-Greens and Dark blues- £\$200
-A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
-
-		Chance chance = new Chance();
-		chance.setName("Chance");
-		game.addSpace(chance);
-
-		p = new RealEstate();
-		p.setName("Hvidovrevej");
-		p.setCost(1200);
-		p.setRent(50);
-		p.setColorGroup(ColorGroup.lightblue);
-		((RealEstate) p).setPriceForHouse(50);
-		game.addSpace(p);
-		
-		Tax t = new Tax();
-		t.setName("Pay tax (10% on Cash)");
-		game.addSpace(t);
-
-		Property s = new Utility();
-		s.setName("Øresund");
-		s.setCost(4000);
-		s.setRent(500);
-		s.setColorGroup(ColorGroup.navy);
-		game.addSpace(s);
-
-		p = new RealEstate();
-		p.setName("Roskildevej");
-		p.setCost(2000);
-		p.setRent(100);
-		p.setColorGroup(ColorGroup.pink);
-
-		((RealEstate) p).setPriceForHouse(50);
-		game.addSpace(p);
-		
-		chance = new Chance();
-		chance.setName("Chance");
-		game.addSpace(chance);
-		
-		p = new RealEstate();
-		p.setName("Valby Langgade");
-		p.setCost(2000);
-		p.setRent(100);
-		((RealEstate) p).setPriceForHouse(50);
-		p.setColorGroup(ColorGroup.pink);
-		game.addSpace(p);
-		
-		p = new RealEstate();
-		p.setName("Allégade");
-		p.setCost(2400);
-		p.setRent(150);
-		((RealEstate) p).setPriceForHouse(50);
-		p.setColorGroup(ColorGroup.pink);
-		game.addSpace(p);
-		
-		Space prison = new Space();
-		prison.setName("Prison");
-		game.addSpace(prison);
-		
-		p = new RealEstate();
-		p.setName("Frederiksberg Allé");
-		p.setCost(2800);
-		p.setRent(200);
-		((RealEstate) p).setPriceForHouse(50);
-		p.setColorGroup(ColorGroup.green);
-
-		game.addSpace(p);
-		
-		p = new Property();
-		p.setName("Coca-Cola Tapperi");
-		p.setCost(3000);
-		p.setRent(300);
-		p.setColorGroup(ColorGroup.darkgreen);
-		game.addSpace(p);
-		
-		p = new RealEstate();
-		p.setName("Bülowsvej");
-		p.setCost(2800);
-		p.setRent(200);
-		p.setColorGroup(ColorGroup.green);
-
-		((RealEstate) p).setPriceForHouse(50);
-
-		game.addSpace(p);
-		
-		p = new RealEstate();
-		p.setName("Gl. Kongevej");
-		p.setCost(3200);
-		p.setRent(250);
-		((RealEstate) p).setPriceForHouse(50);
-		p.setColorGroup(ColorGroup.green);
-
-		game.addSpace(p);
-		
-		List<Card> cards = new ArrayList<Card>();
-		
-		CardMove move = new CardMove();
-		move.setTarget(game.getSpaces().get(9));
-		move.setText("Move to Allégade!");
-		cards.add(move);
-		
-		PayTax tax = new PayTax();
-		tax.setText("Pay 10% income tax!");
-		cards.add(tax);
-		
-		CardReceiveMoneyFromBank b = new CardReceiveMoneyFromBank();
-		b.setText("You receive 100$ from the bank.");
-		b.setAmount(100);
-		cards.add(b);
-		game.setCardDeck(cards);
+		//TODO hvis mappen ikke eksisterer skal den laves (eller skal den bare være der?)
+		//TODO shuffle
 
 		return game;
 	}
