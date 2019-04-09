@@ -91,7 +91,7 @@ public class View implements Observer {
         enumMap.put("Ufo", UFO);
         enumMap.put("Car", CAR);
         enumMap.put("Tractor", TRACTOR);
-        enumMap.put("Race car", RACECAR);
+        enumMap.put("Racecar", RACECAR);
         car = new GUI_Car(player.getColor(), Color.BLUE, enumMap.get(carChoice), GUI_Car.Pattern.FILL);
         player.setToken(enumMap.get(carChoice).toString());
         return car;
