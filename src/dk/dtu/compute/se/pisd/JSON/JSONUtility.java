@@ -295,7 +295,7 @@ public class JSONUtility {
 
         FileWriter fileWriter = new FileWriter(path+ "\\game.json");
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting()
-                .registerTypeAdapter(Subject.class, new Adapter<Subject>());
+                .registerTypeAdapter(Space.class, new Adapter<Space>());
 
         Gson gson = builder.create();
 
