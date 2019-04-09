@@ -153,14 +153,14 @@ public class GameController {
             String choice = null;
 
             if (startOfTurn) {
-                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Hvad skal der ske?" , "Kast terningerne", "Byg huse", "Handle");
+                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser ");
             } else {
-                choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "s tur. Hvad skal der ske?" , "Giv turen videre", "Byg huse", "Handle");
+                choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "s tur. Hvad skal der ske?" , "Slut turen", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
             }
 
             if (choice.equals("Byg huse")) {
                 offerToBuyHouse();
-            } else if (choice.equals("Handle")) {
+            } else if (choice.equals("Handel")) {
                 trade();
             } else {
                 continueChoosing = false;
