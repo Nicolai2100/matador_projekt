@@ -88,6 +88,7 @@ public class GameController {
             game = gameDb.loadGame(game, userGameSelection);
             game.shuffleCardDeck();
             initializeGUI();
+            view.loadPlayers();
             play();
         }
     }

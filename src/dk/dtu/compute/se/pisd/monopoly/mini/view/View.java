@@ -224,4 +224,16 @@ public class View implements Observer {
             updatePlayer(player);
         }
     }
+
+    public void loadPlayers() {
+        for (Player player : game.getPlayers()) {
+            GUI_Car car = new GUI_Car(player.getColor(),Color.black,Type.valueOf(player.getToken()), Pattern.FILL);
+            GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
+            player2GuiPlayer.put(player, guiPlayer);
+            gui.addPlayer(guiPlayer);
+            player2position.put(player, player.getCurrentPosition().getIndex());
+            player.attach(this);
+            updatePlayer(player);
+        }
+    }
 }
