@@ -225,6 +225,9 @@ public class View implements Observer {
         }
     }
 
+    /**
+     * @author Jeppe s170196, Nicolai s185020
+     */
     public void loadPlayers() {
         for (Player player : game.getPlayers()) {
             GUI_Car car = new GUI_Car(player.getColor(),Color.black,Type.valueOf(player.getToken()), Pattern.FILL);
