@@ -891,6 +891,39 @@ public class GameController {
                 return false;
             }
 
+            ArrayList<Integer> mortgageValues = new ArrayList<>();
+            for (Property p : potentialProperties) mortgageValues.add(p.getCost() / 2);
+            Property property = chooseFromOptions(
+                    potentialProperties,
+                    "Hvilken grund ønsker du at pantsætte?",
+                    "Stop med at pantsætte",
+                    ", pantsætningsværdi: ",
+                    mortgageValues,
+                    " kr.");
+
+            if (property == null) {
+                return false;
+            }
+
+            if (property instanceof RealEstate) {
+                boolean ableToMortgage = true;
+                for (Property p : player.getOwnedProperties()) {
+                    if (p.getColorGroup() == property.getColorGroup() && ((RealEstate) p).getHouseCount() > 0) {
+                        ableToMortgage = false;
+                    }
+                }
+
+                if (!ableToMortgage) {
+                    gui.showMessage("Du skal sælge alle huse i farvegruppen, før du kan pantsætte!");
+                } else {
+                    mortgage(player, property);
+                }
+            } else {
+                mortgage(player, property);
+            }
+
+
+            /*
             String[] properties = new String[potentialProperties.size() + 1];
             for (int i = 0; i < properties.length - 1; i++) {
                 properties[i] = potentialProperties.get(i).getName() + ", pantsætningsværdi: " + potentialProperties.get(i).getCost() / 2 + "kr.";
@@ -922,6 +955,7 @@ public class GameController {
                     }
                 }
             }
+            */
         }
         return true;
     }
@@ -1023,7 +1057,7 @@ public class GameController {
         if (choiceString.equals(stopOption)) return null;
         T choice = null;
         for (T t : list) {
-            if (choiceString.equals(t.toString()))
+            if (choiceString.contains(t.toString()))
                 choice = t;
         }
         return choice;
