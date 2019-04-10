@@ -334,7 +334,7 @@ public class GameController {
      * @throws PlayerBrokeException if the player goes broke by this activity
      */
     public void takeChanceCard(Player player) throws PlayerBrokeException, GameEndedException {
-        //Card card = game.drawCardFromDeck();
+        /*Card card = game.drawCardFromDeck();
 
         System.out.println("Der er kommenteret en metode ud fordi den smed fejl");
 
@@ -345,7 +345,7 @@ public class GameController {
             card.doAction(this, player);
         } finally {
             gui.displayChanceCard("done");
-        }
+        }*/
     }
 
     /**
