@@ -948,22 +948,17 @@ public class GameController {
                 return false;
             }
 
-            String[] properties = new String[potentialProperties.size() + 1];
-            for (int i = 0; i < properties.length - 1; i++) {
-                properties[i] = potentialProperties.get(i).getName() + ", pantsætningsgæld: " + potentialProperties.get(i).getCost() / 2 + "kr.";
-            }
-            properties[properties.length - 1] = "Tilbage til hovedmenuen";
-
-            String choice = gui.getUserSelection("Hvilken pantsat grund vil du tilbagebetale?", properties);
-            if (choice.equals("Tilbage til hovedmenuen")) {
-                continuePawning = false;
-            } else {
-                for (Property property : player.getOwnedProperties()) {
-                    if (choice.contains(property.getName())) {
-                        unmortgage(player, property);
-                    }
-                }
-            }
+            ArrayList<Integer> debts = new ArrayList<>();
+            for (Property p : potentialProperties) debts.add(p.getCost() / 2);
+            Property property = chooseFromOptions(
+                    potentialProperties,
+                    "Hvilken pantsat grund vil du tilbagebetale?",
+                    "Tilbage til hovedmenu",
+                    ", pantsætningsgæld: ",
+                    debts,
+                    " kr.");
+            if (property == null) return false;
+            unmortgage(player, property);
         }
         return true;
     }
@@ -985,24 +980,44 @@ public class GameController {
         for (Player player : game.getActivePlayers(mayBeInPrison)) {
             if (player != excludedPlayer) playerList.add(player);
         }
+        return chooseFromOptions(playerList, msg, "Annuller", null, null, null);
+    }
 
-        //Convert list to array of strings. Length + 1;
-        String[] players = new String[playerList.size() + 1];
-        for (int i = 0; i < players.length - 1; i++) {
-            players[i] = playerList.get(i).getName();
-        }
-        players[players.length - 1] = "Annuller";
-
-        //Get input from user
-        String playerName = gui.getUserSelection(msg, players);
-        if (playerName.equals("Annuller")) return null;
-        Player player = null;
-        for (Player p : playerList) {
-            if (p.getName().equals(playerName)) {
-                player = p;
+    /** Method with generic return type used to show a dropdown menu in the gui
+     * with a certain list of options. The last option in the list is used to
+     * cancel and return to menu with no action. Each option may have strings
+     * and values added to the end, eg: ", price: 100$/house".
+     * @Author Nicolai Wulff, s185036
+     * @param list An Arraylist of options.
+     * @param msg Message to be shown over the dropdown menu.
+     * @param stopOption The string to represent the option to cancel, eg: "Cancel".
+     * @param addToEnd1 String to be added to end of each option, before a certain value.
+     * @param values Values to be added to end of each option.
+     * @param addToEnd2 String to be added to end of each option, after a certain value.
+     * @param <T> Type of the objects listed.
+     * @return The chosen option of type T.
+     */
+    private <T> T chooseFromOptions(ArrayList<T> list, String msg, String stopOption, String addToEnd1, ArrayList values, String addToEnd2) {
+        String[] options = new String[list.size() + 1];
+        for (int i = 0; i < options.length - 1; i++) {
+            if (addToEnd1 == null) addToEnd1 = "";
+            if (addToEnd2 == null) addToEnd2 = "";
+            if (values != null) {
+                options[i] = list.get(i) + addToEnd1 + values.get(i) + addToEnd2;
+            } else {
+                options[i] = list.get(i).toString();
             }
         }
-        return player;
+        options[options.length - 1] = stopOption;
+
+        String choiceString = gui.getUserSelection(msg, options);
+        if (choiceString.equals(stopOption)) return null;
+        T choice = null;
+        for (T t : list) {
+            if (choiceString.equals(t.toString()))
+                choice = t;
+        }
+        return choice;
     }
 
     public void showMessage(String message) {
