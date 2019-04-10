@@ -24,7 +24,7 @@ public class PlayerPanel extends JFrame {
         this.game = game;
         this.player = player;
         dimension = new Dimension(72, 100);
-        dimension2 = new Dimension(72, 25);
+        dimension2 = new Dimension(90, 20);
 
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         mainPanel = new JPanel();
@@ -48,17 +48,25 @@ public class PlayerPanel extends JFrame {
         JPanel playerPanel = new JPanel();
         playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
-        playerPanel.setBorder(new EtchedBorder());
+        //playerPanel.setBorder(new EtchedBorder());
         playerPanel.setMaximumSize(dimension);
+        playerPanel.setMinimumSize(dimension);
         playerPanel.setPreferredSize(dimension);
 
         JLabel nameLabel = new JLabel(player.getName());
         nameLabel.setMinimumSize(dimension2);
+        nameLabel.setMaximumSize(dimension2);
+        nameLabel.setPreferredSize(dimension2);
+
         JLabel balanceLabel = new JLabel("" + player.getBalance());
         balanceLabel.setMinimumSize(dimension2);
+        balanceLabel.setMaximumSize(dimension2);
+        balanceLabel.setPreferredSize(dimension2);
+
         JPanel colorPanel = new JPanel();
-        colorPanel.setMaximumSize(dimension2);
         colorPanel.setMinimumSize(dimension2);
+        colorPanel.setMaximumSize(dimension2);
+        colorPanel.setPreferredSize(dimension2);
         colorPanel.setBackground(player.getColor());
 
         playerPanel.add(colorPanel);
@@ -115,14 +123,13 @@ public class PlayerPanel extends JFrame {
             pawnedLabelMaker(jPanel, property);
         }
 
-        mainPanel.setPreferredSize(new Dimension(maltesMap.size() * 72 + 72, 100));
+        mainPanel.setPreferredSize(new Dimension(maltesMap.size() * 72, 100));
         this.pack();
         this.revalidate();
         this.repaint();
     }
 
     public JPanel panelMaker(ColorGroup color) {
-
         JPanel colorGroupPanel = new JPanel();
         colorGroupPanel.setBackground(ColorGroup.colorGroupTransformer(color));
         colorGroupPanel.setLayout(new BoxLayout(colorGroupPanel, BoxLayout.Y_AXIS));
@@ -148,14 +155,4 @@ public class PlayerPanel extends JFrame {
             jPanel.add(jLabel);
         }
     }
-    /*Tilføj en metode update() til klassen, som først sletter den gamle inhold fra panelet
-    og så kreirer nogle paneler på framet, som viser de forskellige informationer (se skematiske
-    tegninger fra forelæsing 7).
-
-Når I er lidt længere i opgaven, så kan I prøve at eksperimentere
- lidt med layoutet, farverne, og randen (border) for at finde ud af hvilken
-  effekt de forskellige indstillinger har (see Java tutorials om layouts og borders).
-
-*/
-
 }
