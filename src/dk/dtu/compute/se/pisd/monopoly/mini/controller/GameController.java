@@ -592,7 +592,7 @@ public class GameController {
      * @param re
      * @Author Nicolai Wulff s185036
      */
-    public void buyHouse(Player player, RealEstate re) {
+    private void buyHouse(Player player, RealEstate re) {
         int lowestHouseCount = 5;
         for (Property property : player.getOwnedProperties()) {
             if (property.getColorGroup() == re.getColorGroup() && ((RealEstate) property).getHouseCount() < lowestHouseCount) {
@@ -615,7 +615,7 @@ public class GameController {
         }
     }
 
-    public void sellHouse(Player player, RealEstate re) {
+    private void sellHouse(Player player, RealEstate re) {
         int highestHouseCount = 0;
         for (Property property : player.getOwnedProperties()) {
             if (property.getColorGroup() == re.getColorGroup() && ((RealEstate) property).getHouseCount() > highestHouseCount) {
@@ -635,22 +635,9 @@ public class GameController {
     /** Asks the player, if he/she wants to build houses, if the player owns any real estate.
      * @Author Nicolai Wulff s185036
      */
-    public boolean buyHouseAction() {
+    private boolean buyHouseAction() {
+        Player player = choosePlayer("Hvilken spiller ønsker at købe huse?", null, false);
 
-        String[] players = new String[game.getActivePlayers(false).size() + 1];
-        for (int i = 0; i < players.length - 1; i++) {
-            players[i] = game.getPlayers().get(i).getName();
-        }
-        players[players.length - 1] = "Annuller";
-
-        String playerName = gui.getUserSelection("Hvilken spiller ønsker at bygge huse?", players);
-        if (playerName.equals("Annuller")) return false;
-        Player player = null;
-        for (Player p : game.getPlayers()) {
-            if (p.getName().equals(playerName)) {
-                player = p;
-            }
-        }
         //Makes a list of all superowned real estate owned by the player, if any. Doesn't include mortgaged properties.
         ArrayList<RealEstate> potentialProperties = new ArrayList<>();
         for (Property property : player.getOwnedProperties()) {
@@ -685,21 +672,8 @@ public class GameController {
         return true;
     }
 
-    public boolean sellHouseAction() {
-        String[] players = new String[game.getActivePlayers(false).size() + 1];
-        for (int i = 0; i < players.length - 1; i++) {
-            players[i] = game.getPlayers().get(i).getName();
-        }
-        players[players.length - 1] = "Annuller";
-
-        String playerName = gui.getUserSelection("Hvilken spiller ønsker at sælge huse?", players);
-        if (playerName.equals("Annuller")) return false;
-        Player player = null;
-        for (Player p : game.getPlayers()) {
-            if (p.getName().equals(playerName)) {
-                player = p;
-            }
-        }
+    private boolean sellHouseAction() {
+        Player player = choosePlayer("Hvilken spiller ønsker at sælge huse?", null, false);
 
         //Makes a list of all real estate, that has at least one house built on it.
         ArrayList<RealEstate> potentialProperties = new ArrayList<>();
@@ -740,70 +714,30 @@ public class GameController {
     /**
      * @Author Nicolai Wulff, s185036
      */
-    public boolean trade() {
+    private boolean trade() {
 
-        //Make string array of all players that are not broke (they may be in jail).
-        //Length is +1 because we need an option to cancel and return to menu.
-        String[] playerOptions = new String[game.getActivePlayers(true).size() + 1];
-        int i = 0;
-        for (Player player : game.getActivePlayers(true)) {
-            playerOptions[i] = player.getName();
-            i++;
-        }
-        //Add option to cancel.
-        playerOptions[i] = "Annuller";
-
-        Boolean choosing = true;
-        String player1name = null;
-        String player2name = null;
         Player player1 = null;
         Player player2 = null;
 
-        //Keep asking who the first player to trade is. Check if that player is in jail).
+        //Keep asking which players wants to trade. Check if each player is in jail).
+        boolean choosing = true;
+        int i = 0;
         while (choosing) {
-            player1name = gui.getUserSelection("Hvem er den ene part i handlen?", playerOptions);
-            if (player1name.equals("Annuller")) return false;
-            for (Player player : game.getPlayers()) {
-                if (player.getName().equals(player1name) && player.isInPrison()) {
-                    gui.showMessage(player1name + " er i fængsel, og må derfor ikke handle!");
-                } else if (player.getName().equals(player1name)){
-                    player1 = player;
-                    choosing = false;
-                }
+            Player player = null;
+            if (i == 0) {
+                player = choosePlayer("Hvem er den ene part i handlen?", null, true);
+            } else if (i == 1) {
+                player = choosePlayer("Hvem er den anden part i handlen?", player1, true);
             }
-        }
-
-        //Construct new array of the active players, minus the one we just selected.
-        playerOptions = new String[playerOptions.length - 1];
-        i = 0;
-        for (Player player : game.getActivePlayers(true)) {
-            if (!player.getName().equals(player1name)) {
-                playerOptions[i] = player.getName();
+            if (player != null && player.isInPrison()) {
+                gui.showMessage(player.getName() + " er i fængsel, og må derfor ikke handle!");
+            } else if (player != null){
+                player1 = player;
+                if (i == 1) choosing = false;
                 i++;
+            } else {
+                return false;
             }
-        }
-        playerOptions[i] = "Annuller";
-
-        //Keep asking who the second player to trade is. Check if that player is in jail).
-        choosing = true;
-        while(choosing) {
-            player2name = gui.getUserSelection("Hvem er den anden part i handlen?", playerOptions);
-            if (player2name.equals("Annuller")) return false;
-            for (Player player : game.getPlayers()) {
-                if (player.getName().equals(player2name) && player.isInPrison()) {
-                    gui.showMessage(player2name + " er i fængsel, og må derfor ikke handle!");
-                } else if (player.getName().equals(player2name)){
-                    player2 = player;
-                    choosing = false;
-                }
-            }
-        }
-
-        //Define the players from the strings of playernames, we just selected.
-        //TODO: Each player must have a unique name, otherwise it won't work.
-        for (Player player : game.getPlayers()) {
-            if (player.getName().equals(player1name)) player1 = player;
-            if (player.getName().equals(player2name)) player2 = player;
         }
 
         Player[] tradingPlayers = {player1, player2};
@@ -933,28 +867,15 @@ public class GameController {
      * @param receiver
      * @Author Nicolai Wulff, s185036
      */
-    public void transferProperty(Player giver, Property property, Player receiver) {
+    private void transferProperty(Player giver, Property property, Player receiver) {
         property.setOwner(null);
         giver.removeOwnedProperty(property);
         property.setOwner(receiver);
         receiver.addOwnedProperty(property);
     }
 
-    public boolean mortgageAction() {
-        String[] players = new String[game.getActivePlayers(false).size() + 1];
-        for (int i = 0; i < players.length - 1; i++) {
-            players[i] = game.getPlayers().get(i).getName();
-        }
-        players[players.length - 1] = "Annuller";
-
-        String playerName = gui.getUserSelection("Hvilken spiller ønsker at pantsætte grunde?", players);
-        if (playerName.equals("Annuller")) return false;
-        Player player = null;
-        for (Player p : game.getPlayers()) {
-            if (p.getName().equals(playerName)) {
-                player = p;
-            }
-        }
+    private boolean mortgageAction() {
+        Player player = choosePlayer("Hvilken spiller ønsker at pantsætte?", null, false);
 
         boolean continuePawning = true;
         while (continuePawning) {
@@ -1005,26 +926,13 @@ public class GameController {
         return true;
     }
 
-    public void mortgage(Player player, Property property) {
+    private void mortgage(Player player, Property property) {
         property.setMortgaged(true);
         paymentFromBank(player, property.getCost() / 2);
     }
 
-    public boolean unmortgageAction() {
-        String[] players = new String[game.getActivePlayers(false).size() + 1];
-        for (int i = 0; i < players.length - 1; i++) {
-            players[i] = game.getPlayers().get(i).getName();
-        }
-        players[players.length - 1] = "Annuller";
-
-        String playerName = gui.getUserSelection("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", players);
-        if (playerName.equals("Annuller")) return false;
-        Player player = null;
-        for (Player p : game.getPlayers()) {
-            if (p.getName().equals(playerName)) {
-                player = p;
-            }
-        }
+    private boolean unmortgageAction() {
+        Player player = choosePlayer("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", null, false);
 
         boolean continuePawning = true;
         while (continuePawning) {
@@ -1060,7 +968,7 @@ public class GameController {
         return true;
     }
 
-    public void unmortgage(Player player, Property property) {
+    private void unmortgage(Player player, Property property) {
         try {
             paymentToBank(player, property.getCost() / 2);
             property.setMortgaged(false);
@@ -1069,6 +977,32 @@ public class GameController {
         } catch (GameEndedException e) {
             e.printStackTrace();
         }
+    }
+
+    private Player choosePlayer(String msg, Player excludedPlayer, boolean mayBeInPrison) {
+        //Make list of active players, that either may be or may not be in prison (depending on mayBeInPrison).
+        ArrayList<Player> playerList = new ArrayList<>();
+        for (Player player : game.getActivePlayers(mayBeInPrison)) {
+            if (player != excludedPlayer) playerList.add(player);
+        }
+
+        //Convert list to array of strings. Length + 1;
+        String[] players = new String[playerList.size() + 1];
+        for (int i = 0; i < players.length - 1; i++) {
+            players[i] = playerList.get(i).getName();
+        }
+        players[players.length - 1] = "Annuller";
+
+        //Get input from user
+        String playerName = gui.getUserSelection(msg, players);
+        if (playerName.equals("Annuller")) return null;
+        Player player = null;
+        for (Player p : playerList) {
+            if (p.getName().equals(playerName)) {
+                player = p;
+            }
+        }
+        return player;
     }
 
     public void showMessage(String message) {
