@@ -974,6 +974,15 @@ public class GameController {
         }
     }
 
+    /**
+     * Use to choose an active player from a dropdown menu in the gui.
+     * May exclude a specific player from the list and may exclude players in prison.
+     * @Author Nicolai Wulff, s185036
+     * @param msg Message over dropdown menu.
+     * @param excludedPlayer Exlude a specific player.
+     * @param mayBeInPrison If true, include players in prison. If false, exclude players in prison.
+     * @return the chosen player.
+     */
     private Player choosePlayer(String msg, Player excludedPlayer, boolean mayBeInPrison) {
         //Make list of active players, that either may be or may not be in prison (depending on mayBeInPrison).
         ArrayList<Player> playerList = new ArrayList<>();
