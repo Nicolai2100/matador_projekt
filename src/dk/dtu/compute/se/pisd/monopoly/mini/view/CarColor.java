@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.monopoly.mini.view;
 
 import java.awt.*;
 import java.util.HashMap;
+//todo Nicolai L - implementer 6 mulige farver
 
 public class CarColor {
     private HashMap<String, Color> colorMap;

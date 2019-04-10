@@ -76,6 +76,7 @@ public class GameController {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             game.shuffleCardDeck();
+            //todo Nicolai L - mulighed for at oprette 6 spillere
             int numOfPlayers = gui.getUserInteger("Hvor mange spillere?", 3,4);
             game.createPlayers(numOfPlayers);
             initializeGUI();
@@ -334,7 +335,9 @@ public class GameController {
      * @throws PlayerBrokeException if the player goes broke by this activity
      */
     public void takeChanceCard(Player player) throws PlayerBrokeException, GameEndedException {
-        /*Card card = game.drawCardFromDeck();
+        /*
+        todo få metoden til at virke!
+        Card card = game.drawCardFromDeck();
 
         System.out.println("Der er kommenteret en metode ud fordi den smed fejl");
 

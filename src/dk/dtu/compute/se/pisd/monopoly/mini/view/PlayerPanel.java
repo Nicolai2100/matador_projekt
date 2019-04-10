@@ -37,7 +37,8 @@ public class PlayerPanel extends JFrame {
 
         update();
 
-        //Måske noget med en fængselsstatus
+        //todo Måske noget med en fængselsstatus
+        //todo få panelerne til at se bedre ud
     }
 
     public void update() {
