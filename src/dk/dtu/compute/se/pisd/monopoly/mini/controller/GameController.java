@@ -672,43 +672,29 @@ public class GameController {
         return true;
     }
 
-    private boolean sellHouseAction() {
+    private void sellHouseAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at sælge huse?", null, false);
-
-        //Makes a list of all real estate, that has at least one house built on it.
-        ArrayList<RealEstate> potentialProperties = new ArrayList<>();
-        for (Property property : player.getOwnedProperties()) {
-            if (property instanceof RealEstate) {
-                if (((RealEstate) property).getHouseCount() > 0) {
-                    potentialProperties.add((RealEstate) property);
+        boolean continueSelling = true;
+        while (continueSelling) {
+            //Makes a list of all real estate, that has at least one house built on it.
+            ArrayList<RealEstate> propertyOptions = new ArrayList<>();
+            ArrayList<Integer> housePrices = new ArrayList<>();
+            for (Property property : player.getOwnedProperties()) {
+                if (property instanceof RealEstate) {
+                    if (((RealEstate) property).getHouseCount() > 0) {
+                        propertyOptions.add((RealEstate) property);
+                        housePrices.add(((RealEstate) property).getPriceForHouse() / 2);
+                    }
                 }
             }
-        }
 
-        if (potentialProperties.size() > 0) {
-            boolean continueSelling = true;
-            do {
-                String[] propertyNames = new String[potentialProperties.size() + 1];
-                for (int i = 0; i < propertyNames.length - 1; i++) {
-                    propertyNames[i] = potentialProperties.get(i).getName() + ", " + potentialProperties.get(i).getPriceForHouse() / 2 + "kr/hus";
-                }
-                propertyNames[propertyNames.length - 1] = "Stop med at sælge";
-                String propertyString = gui.getUserSelection("Fra hvilken grund ønsker du at sælge huse?", propertyNames);
-
-                if (!propertyString.equals("Stop med at sælge")) {
-                    RealEstate chosenProperty = null;
-                    for (int i = 0; i < propertyNames.length - 1; i++) {
-                        if (propertyString.contains(propertyNames[i])) chosenProperty = potentialProperties.get(i);
-                    }
-                    sellHouse(player, chosenProperty);
-                } else {
-                    continueSelling = false;
-                }
-            } while (continueSelling);
-        } else {
-            gui.showMessage("Du kan ikke sælge huse endnu, da du ikke ejer nogen huse!");
+            RealEstate property = chooseFromOptions(propertyOptions, "Fra hvilken grund ønsker du at sælge huse?", "Stop med at sælge", ", ", housePrices, "kr/hus");
+            if (property == null) {
+                continueSelling = false;
+            } else {
+                sellHouse(player, property);
+            }
         }
-        return true;
     }
 
     /**
