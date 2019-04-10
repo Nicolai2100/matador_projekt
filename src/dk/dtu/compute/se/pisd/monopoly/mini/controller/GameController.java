@@ -726,15 +726,20 @@ public class GameController {
             Player player = null;
             if (i == 0) {
                 player = choosePlayer("Hvem er den ene part i handlen?", null, true);
+                if (player != null && player.isInPrison()) {
+                    gui.showMessage(player.getName() + " er i fængsel, og må derfor ikke handle!");
+                } else if (player != null) {
+                    player1 = player;
+                    i++;
+                }
             } else if (i == 1) {
                 player = choosePlayer("Hvem er den anden part i handlen?", player1, true);
-            }
-            if (player != null && player.isInPrison()) {
-                gui.showMessage(player.getName() + " er i fængsel, og må derfor ikke handle!");
-            } else if (player != null){
-                player1 = player;
-                if (i == 1) choosing = false;
-                i++;
+                if (player != null && player.isInPrison()) {
+                    gui.showMessage(player.getName() + " er i fængsel, og må derfor ikke handle!");
+                } else if (player != null) {
+                    player2 = player;
+                    choosing = false;
+                }
             } else {
                 return;
             }
@@ -742,77 +747,43 @@ public class GameController {
 
         Player[] tradingPlayers = {player1, player2};
         int[] moneyInOffers = new int[2];
-        ArrayList<String>[] propertiesInOffersString = new ArrayList[2];
         ArrayList<Property>[] propertiesInOffers = new ArrayList[2];
-        propertiesInOffersString[0] = new ArrayList<>();
-        propertiesInOffersString[1] = new ArrayList<>();
         propertiesInOffers[0] = new ArrayList<>();
         propertiesInOffers[1] = new ArrayList<>();
 
         //Loop through the two trading players.
         for (int j = 0; j < 2; j++) {
             //Ask what amount of money, the player wants to trade.
-            moneyInOffers[j] = gui.getUserInteger(tradingPlayers[j].getName() + ", hvilket beløb vil du tilføje i handlen?", 0, tradingPlayers[j].getBalance());
-
-            //Construct an array of strings of all the properties, the player owns.
-            //The length is +1, because we need an option to stop adding properties.
-            int numberOfoptions = tradingPlayers[j].getOwnedProperties().size() + 1;
-            String[] propertyOptions = new String[numberOfoptions];
-            i = 0;
-            for (Property property : tradingPlayers[j].getOwnedProperties()) {
-                propertyOptions[i] = property.getName();
-                i++;
-            }
-            //Add option to stop adding properties.
-            propertyOptions[i] = "Stop med at tilføje grunde";
+            moneyInOffers[j] = gui.getUserInteger(tradingPlayers[j] + ", hvilket beløb vil du tilføje i handlen?", 0, tradingPlayers[j].getBalance());
 
             //Keep adding properties to the trade, until the player chooses to stop.
             boolean continueAdding = true;
             while(continueAdding) {
-                String propertyToOffer = gui.getUserSelection(tradingPlayers[j].getName() + ", hvilke grunde vil du tilføje i handlen?", propertyOptions);
-                if (propertyToOffer.equals("Stop med at tilføje grunde")) {
+
+                ArrayList<Property> propertyOptions = new ArrayList<>();
+                for (Property p : tradingPlayers[j].getOwnedProperties()) {
+                    if (!propertiesInOffers[j].contains(p)) propertyOptions.add(p);
+                }
+
+                Property property = chooseFromOptions(propertyOptions, "Hvilken grund vil du tilføje til handlen?", "Stop med at tilføje grunde", null, null, null);
+                if (property == null) {
                     continueAdding = false;
                 } else {
-
-                    //Define the chosen property by finding the property with that name.
-                    Property chosenProperty = null;
-                    for (Property property : tradingPlayers[j].getOwnedProperties()) {
-                        if (propertyToOffer.equals(property.getName())) {
-                            chosenProperty = property;
-                        }
-                    }
-
                     //Check if the chosen property or any property with the same color group has any houses.
                     //If they do, refuse to trade it, and tell the player to sell their houses first.
-                    for (Property property : tradingPlayers[j].getOwnedProperties()) {
-                        if (property instanceof RealEstate && property.getColorGroup() == chosenProperty.getColorGroup()) {
-                            if (((RealEstate) property).getHouseCount() > 0) {
+                    boolean tradeAble = true;
+                    for (Property p : tradingPlayers[j].getOwnedProperties()) {
+                        if (p instanceof RealEstate && p.getColorGroup() == property.getColorGroup()) {
+                            if (((RealEstate) p).getHouseCount() > 0) {
                                 gui.showMessage("Du kan ikke handle med grunde, hvor du har bygget huse i dens farvegruppe.\nSælg din huse i gruppen, før du handler.");
-                                return;
+                                tradeAble = false;
                             }
                         }
                     }
-                    propertiesInOffers[j].add(chosenProperty);
 
-                    //Add the added property to the list of strings of properties added to the trade.
-                    propertiesInOffersString[j].add(propertyToOffer);
-
-                    //Construct a new array, containing the remaining properties.
-                    numberOfoptions--;
-                    propertyOptions = new String[numberOfoptions];
-                    i = 0;
-                    for (Property property : tradingPlayers[j].getOwnedProperties()) {
-                        boolean alreadyAdded = false;
-                        for (Property p : propertiesInOffers[j]) {
-                            if (property == p) alreadyAdded = true;
-                        }
-                        if (!alreadyAdded && !property.getName().equals(propertyToOffer)) {
-                            propertyOptions[i] = property.getName();
-                            i++;
-                        }
+                    if (tradeAble) {
+                        propertiesInOffers[j].add(property);
                     }
-                    //Add the option to stop.
-                    propertyOptions[propertyOptions.length - 1] = "Stop med at tilføje grunde";
                 }
             }
         }
@@ -821,9 +792,9 @@ public class GameController {
         // that each player added to the trade, seperated by commas.
         String[] playerProperties = {"", ""};
         for (i = 0; i < 2; i++) {
-            for (String property : propertiesInOffersString[i]) {
-                playerProperties[i] += property;
-                if (!property.equals(propertiesInOffersString[i].get(propertiesInOffersString[i].size() - 1))) {
+            for (int j = 0; j < propertiesInOffers[i].size(); j++) {
+                playerProperties[i] += propertiesInOffers[i].get(j);
+                if (j != 0) {
                     playerProperties[i] += ", ";
                 }
             }
@@ -993,7 +964,7 @@ public class GameController {
      * cancel and return to menu with no action. Each option may have strings
      * and values added to the end, eg: ", price: 100$/house".
      * @Author Nicolai Wulff, s185036
-     * @param list An Arraylist of options.
+     * @param c A collection of options.
      * @param msg Message to be shown over the dropdown menu.
      * @param stopOption The string to represent the option to cancel, eg: "Cancel".
      * @param addToEnd1 String to be added to end of each option, before a certain value.
@@ -1002,15 +973,16 @@ public class GameController {
      * @param <T> Type of the objects listed.
      * @return The chosen option of type T.
      */
-    private <T> T chooseFromOptions(ArrayList<T> list, String msg, String stopOption, String addToEnd1, ArrayList values, String addToEnd2) {
-        String[] options = new String[list.size() + 1];
+    private <T> T chooseFromOptions(Collection<T> c, String msg, String stopOption, String addToEnd1, ArrayList values, String addToEnd2) {
+        String[] options = new String[c.size() + 1];
+        Iterator iterator = c.iterator();
         for (int i = 0; i < options.length - 1; i++) {
             if (addToEnd1 == null) addToEnd1 = "";
             if (addToEnd2 == null) addToEnd2 = "";
             if (values != null) {
-                options[i] = list.get(i) + addToEnd1 + values.get(i) + addToEnd2;
+                options[i] = iterator.next() + addToEnd1 + values.get(i) + addToEnd2;
             } else {
-                options[i] = list.get(i).toString();
+                options[i] = iterator.next().toString();
             }
         }
         options[options.length - 1] = stopOption;
@@ -1018,7 +990,7 @@ public class GameController {
         String choiceString = gui.getUserSelection(msg, options);
         if (choiceString.equals(stopOption)) return null;
         T choice = null;
-        for (T t : list) {
+        for (T t : c) {
             if (choiceString.contains(t.toString()))
                 choice = t;
         }
