@@ -595,7 +595,7 @@ public class GameController {
      * @param re
      * @Author Nicolai Wulff s185036
      */
-    public void buyHouse(Player player, RealEstate re) {
+    private void buyHouse(Player player, RealEstate re) {
         int lowestHouseCount = 5;
         for (Property property : player.getOwnedProperties()) {
             if (property.getColorGroup() == re.getColorGroup() && ((RealEstate) property).getHouseCount() < lowestHouseCount) {
@@ -618,7 +618,7 @@ public class GameController {
         }
     }
 
-    public void sellHouse(Player player, RealEstate re) {
+    private void sellHouse(Player player, RealEstate re) {
         int highestHouseCount = 0;
         for (Property property : player.getOwnedProperties()) {
             if (property.getColorGroup() == re.getColorGroup() && ((RealEstate) property).getHouseCount() > highestHouseCount) {
@@ -638,250 +638,115 @@ public class GameController {
     /** Asks the player, if he/she wants to build houses, if the player owns any real estate.
      * @Author Nicolai Wulff s185036
      */
-    public boolean buyHouseAction() {
+    private void buyHouseAction() {
+        Player player = choosePlayer("Hvilken spiller ønsker at købe huse?", null, false);
 
-        String[] players = new String[game.getActivePlayers(false).size() + 1];
-        for (int i = 0; i < players.length - 1; i++) {
-            players[i] = game.getPlayers().get(i).getName();
-        }
-        players[players.length - 1] = "Annuller";
+        boolean continueBuying = true;
+        while (continueBuying) {
+            ArrayList<RealEstate> potentialProperties = new ArrayList<>();
+            ArrayList<Integer> housePrices = new ArrayList<>();
+            for (Property property : player.getOwnedProperties()) {
+                if (property instanceof RealEstate && property.getSuperOwned()) {
+                    potentialProperties.add((RealEstate) property);
+                    housePrices.add(((RealEstate) property).getPriceForHouse());
+                }
+            }
 
-        String playerName = gui.getUserSelection("Hvilken spiller ønsker at bygge huse?", players);
-        if (playerName.equals("Annuller")) return false;
-        Player player = null;
-        for (Player p : game.getPlayers()) {
-            if (p.getName().equals(playerName)) {
-                player = p;
+            RealEstate re = chooseFromOptions(potentialProperties, "På hvilken grund vil du købe et hus/hotel?", "Stop med at købe", ", ", housePrices, "kr/hus");
+            if (re == null) {
+                continueBuying = false;
+            } else {
+                buyHouse(player, re);
             }
         }
-        //Makes a list of all superowned real estate owned by the player, if any. Doesn't include mortgaged properties.
-        ArrayList<RealEstate> potentialProperties = new ArrayList<>();
-        for (Property property : player.getOwnedProperties()) {
-            if (property instanceof RealEstate && property.getSuperOwned()) {
-                potentialProperties.add((RealEstate) property);
-            }
-        }
-        //If the player owns superowned real estate, ask if he/she wants to build houses.
-        if (potentialProperties.size() > 0) {
-            boolean continueBuying = true;
-            do {
-                String[] propertyNames = new String[potentialProperties.size() + 1];
-                for (int i = 0; i < propertyNames.length - 1; i++) {
-                    propertyNames[i] = potentialProperties.get(i).getName() + ", " + potentialProperties.get(i).getPriceForHouse() + "kr/hus";
-                }
-                propertyNames[propertyNames.length - 1] = "Stop med at bygge";
-                String propertyString = gui.getUserSelection("On which property, do you wish to build houses?", propertyNames);
-
-                if (!propertyString.equals("Stop med at bygge")) {
-                    RealEstate chosenProperty = null;
-                    for (int i = 0; i < propertyNames.length - 1; i++) {
-                        if (propertyString.contains(propertyNames[i])) chosenProperty = potentialProperties.get(i);
-                    }
-                    buyHouse(player, chosenProperty);
-                } else {
-                    continueBuying = false;
-                }
-            } while (continueBuying);
-        } else {
-            gui.showMessage(player.getName() + " kan ikke bygge huse endnu,\nda man først skal eje alle grunde af én farve.");
-        }
-        return true;
     }
 
-    public boolean sellHouseAction() {
-        String[] players = new String[game.getActivePlayers(false).size() + 1];
-        for (int i = 0; i < players.length - 1; i++) {
-            players[i] = game.getPlayers().get(i).getName();
-        }
-        players[players.length - 1] = "Annuller";
-
-        String playerName = gui.getUserSelection("Hvilken spiller ønsker at sælge huse?", players);
-        if (playerName.equals("Annuller")) return false;
-        Player player = null;
-        for (Player p : game.getPlayers()) {
-            if (p.getName().equals(playerName)) {
-                player = p;
-            }
-        }
-
-        //Makes a list of all real estate, that has at least one house built on it.
-        ArrayList<RealEstate> potentialProperties = new ArrayList<>();
-        for (Property property : player.getOwnedProperties()) {
-            if (property instanceof RealEstate) {
-                if (((RealEstate) property).getHouseCount() > 0) {
-                    potentialProperties.add((RealEstate) property);
-                }
-            }
-        }
-
-        if (potentialProperties.size() > 0) {
-            boolean continueSelling = true;
-            do {
-                String[] propertyNames = new String[potentialProperties.size() + 1];
-                for (int i = 0; i < propertyNames.length - 1; i++) {
-                    propertyNames[i] = potentialProperties.get(i).getName() + ", " + potentialProperties.get(i).getPriceForHouse() / 2 + "kr/hus";
-                }
-                propertyNames[propertyNames.length - 1] = "Stop med at sælge";
-                String propertyString = gui.getUserSelection("Fra hvilken grund ønsker du at sælge huse?", propertyNames);
-
-                if (!propertyString.equals("Stop med at sælge")) {
-                    RealEstate chosenProperty = null;
-                    for (int i = 0; i < propertyNames.length - 1; i++) {
-                        if (propertyString.contains(propertyNames[i])) chosenProperty = potentialProperties.get(i);
+    private void sellHouseAction() {
+        Player player = choosePlayer("Hvilken spiller ønsker at sælge huse?", null, false);
+        boolean continueSelling = true;
+        while (continueSelling) {
+            //Makes a list of all real estate, that has at least one house built on it.
+            ArrayList<RealEstate> propertyOptions = new ArrayList<>();
+            ArrayList<Integer> housePrices = new ArrayList<>();
+            for (Property property : player.getOwnedProperties()) {
+                if (property instanceof RealEstate) {
+                    if (((RealEstate) property).getHouseCount() > 0) {
+                        propertyOptions.add((RealEstate) property);
+                        housePrices.add(((RealEstate) property).getPriceForHouse() / 2);
                     }
-                    sellHouse(player, chosenProperty);
-                } else {
-                    continueSelling = false;
                 }
-            } while (continueSelling);
-        } else {
-            gui.showMessage("Du kan ikke sælge huse endnu, da du ikke ejer nogen huse!");
+            }
+
+            RealEstate re = chooseFromOptions(propertyOptions, "Fra hvilken grund ønsker du at sælge huse?", "Stop med at sælge", ", ", housePrices, "kr/hus");
+            if (re == null) {
+                continueSelling = false;
+            } else {
+                sellHouse(player, re);
+            }
         }
-        return true;
     }
 
     /**
      * @Author Nicolai Wulff, s185036
      */
-    public boolean trade() {
-
-        //Make string array of all players that are not broke (they may be in jail).
-        //Length is +1 because we need an option to cancel and return to menu.
-        String[] playerOptions = new String[game.getActivePlayers(true).size() + 1];
-        int i = 0;
-        for (Player player : game.getActivePlayers(true)) {
-            playerOptions[i] = player.getName();
-            i++;
-        }
-        //Add option to cancel.
-        playerOptions[i] = "Annuller";
-
-        Boolean choosing = true;
-        String player1name = null;
-        String player2name = null;
-        Player player1 = null;
-        Player player2 = null;
-
-        //Keep asking who the first player to trade is. Check if that player is in jail).
-        while (choosing) {
-            player1name = gui.getUserSelection("Hvem er den ene part i handlen?", playerOptions);
-            if (player1name.equals("Annuller")) return false;
-            for (Player player : game.getPlayers()) {
-                if (player.getName().equals(player1name) && player.isInPrison()) {
-                    gui.showMessage(player1name + " er i fængsel, og må derfor ikke handle!");
-                } else if (player.getName().equals(player1name)){
-                    player1 = player;
-                    choosing = false;
-                }
-            }
-        }
-
-        //Construct new array of the active players, minus the one we just selected.
-        playerOptions = new String[playerOptions.length - 1];
-        i = 0;
-        for (Player player : game.getActivePlayers(true)) {
-            if (!player.getName().equals(player1name)) {
-                playerOptions[i] = player.getName();
-                i++;
-            }
-        }
-        playerOptions[i] = "Annuller";
-
-        //Keep asking who the second player to trade is. Check if that player is in jail).
-        choosing = true;
-        while(choosing) {
-            player2name = gui.getUserSelection("Hvem er den anden part i handlen?", playerOptions);
-            if (player2name.equals("Annuller")) return false;
-            for (Player player : game.getPlayers()) {
-                if (player.getName().equals(player2name) && player.isInPrison()) {
-                    gui.showMessage(player2name + " er i fængsel, og må derfor ikke handle!");
-                } else if (player.getName().equals(player2name)){
-                    player2 = player;
-                    choosing = false;
-                }
-            }
-        }
-
-        //Define the players from the strings of playernames, we just selected.
-        //TODO: Each player must have a unique name, otherwise it won't work.
-        for (Player player : game.getPlayers()) {
-            if (player.getName().equals(player1name)) player1 = player;
-            if (player.getName().equals(player2name)) player2 = player;
-        }
-
-        Player[] tradingPlayers = {player1, player2};
+    private void trade() {
+        Player[] tradingPlayers = new Player[2];
         int[] moneyInOffers = new int[2];
-        ArrayList<String>[] propertiesInOffersString = new ArrayList[2];
         ArrayList<Property>[] propertiesInOffers = new ArrayList[2];
-        propertiesInOffersString[0] = new ArrayList<>();
-        propertiesInOffersString[1] = new ArrayList<>();
         propertiesInOffers[0] = new ArrayList<>();
         propertiesInOffers[1] = new ArrayList<>();
+
+        //Keep asking which players wants to trade. Check if each player is in jail).
+        boolean choosing = true;
+        int i = 0;
+        while (choosing) {
+            Player player = null;
+            if (i == 0) player = choosePlayer("Hvem er den ene part i handlen?", null, true);
+            if (i == 1) player = choosePlayer("Hvem er den ene part i handlen?", tradingPlayers[0], true);
+            if (player != null && player.isInPrison()) {
+                gui.showMessage(player.getName() + " er i fængsel, og må derfor ikke handle!");
+            } else if (player != null) {
+                tradingPlayers[i] = player;
+                if (i == 1) choosing = false;
+                i++;
+            } else {
+                return;
+            }
+        }
 
         //Loop through the two trading players.
         for (int j = 0; j < 2; j++) {
             //Ask what amount of money, the player wants to trade.
-            moneyInOffers[j] = gui.getUserInteger(tradingPlayers[j].getName() + ", hvilket beløb vil du tilføje i handlen?", 0, tradingPlayers[j].getBalance());
-
-            //Construct an array of strings of all the properties, the player owns.
-            //The length is +1, because we need an option to stop adding properties.
-            int numberOfoptions = tradingPlayers[j].getOwnedProperties().size() + 1;
-            String[] propertyOptions = new String[numberOfoptions];
-            i = 0;
-            for (Property property : tradingPlayers[j].getOwnedProperties()) {
-                propertyOptions[i] = property.getName();
-                i++;
-            }
-            //Add option to stop adding properties.
-            propertyOptions[i] = "Stop med at tilføje grunde";
+            moneyInOffers[j] = gui.getUserInteger(tradingPlayers[j] + ", hvilket beløb vil du tilføje i handlen?", 0, tradingPlayers[j].getBalance());
 
             //Keep adding properties to the trade, until the player chooses to stop.
             boolean continueAdding = true;
             while(continueAdding) {
-                String propertyToOffer = gui.getUserSelection(tradingPlayers[j].getName() + ", hvilke grunde vil du tilføje i handlen?", propertyOptions);
-                if (propertyToOffer.equals("Stop med at tilføje grunde")) {
+
+                ArrayList<Property> propertyOptions = new ArrayList<>();
+                for (Property p : tradingPlayers[j].getOwnedProperties()) {
+                    if (!propertiesInOffers[j].contains(p)) propertyOptions.add(p);
+                }
+
+                Property property = chooseFromOptions(propertyOptions, "Hvilken grund vil du tilføje til handlen?", "Stop med at tilføje grunde", null, null, null);
+                if (property == null) {
                     continueAdding = false;
                 } else {
-
-                    //Define the chosen property by finding the property with that name.
-                    Property chosenProperty = null;
-                    for (Property property : tradingPlayers[j].getOwnedProperties()) {
-                        if (propertyToOffer.equals(property.getName())) {
-                            chosenProperty = property;
-                        }
-                    }
-
                     //Check if the chosen property or any property with the same color group has any houses.
                     //If they do, refuse to trade it, and tell the player to sell their houses first.
-                    for (Property property : tradingPlayers[j].getOwnedProperties()) {
-                        if (property instanceof RealEstate && property.getColorGroup() == chosenProperty.getColorGroup()) {
-                            if (((RealEstate) property).getHouseCount() > 0) {
+                    boolean tradeAble = true;
+                    for (Property p : tradingPlayers[j].getOwnedProperties()) {
+                        if (p instanceof RealEstate && p.getColorGroup() == property.getColorGroup()) {
+                            if (((RealEstate) p).getHouseCount() > 0) {
                                 gui.showMessage("Du kan ikke handle med grunde, hvor du har bygget huse i dens farvegruppe.\nSælg din huse i gruppen, før du handler.");
-                                return false;
+                                tradeAble = false;
                             }
                         }
                     }
-                    propertiesInOffers[j].add(chosenProperty);
 
-                    //Add the added property to the list of strings of properties added to the trade.
-                    propertiesInOffersString[j].add(propertyToOffer);
-
-                    //Construct a new array, containing the remaining properties.
-                    numberOfoptions--;
-                    propertyOptions = new String[numberOfoptions];
-                    i = 0;
-                    for (Property property : tradingPlayers[j].getOwnedProperties()) {
-                        boolean alreadyAdded = false;
-                        for (Property p : propertiesInOffers[j]) {
-                            if (property == p) alreadyAdded = true;
-                        }
-                        if (!alreadyAdded && !property.getName().equals(propertyToOffer)) {
-                            propertyOptions[i] = property.getName();
-                            i++;
-                        }
+                    if (tradeAble) {
+                        propertiesInOffers[j].add(property);
                     }
-                    //Add the option to stop.
-                    propertyOptions[propertyOptions.length - 1] = "Stop med at tilføje grunde";
                 }
             }
         }
@@ -890,9 +755,9 @@ public class GameController {
         // that each player added to the trade, seperated by commas.
         String[] playerProperties = {"", ""};
         for (i = 0; i < 2; i++) {
-            for (String property : propertiesInOffersString[i]) {
-                playerProperties[i] += property;
-                if (!property.equals(propertiesInOffersString[i].get(propertiesInOffersString[i].size() - 1))) {
+            for (int j = 0; j < propertiesInOffers[i].size(); j++) {
+                playerProperties[i] += propertiesInOffers[i].get(j);
+                if (j != 0) {
                     playerProperties[i] += ", ";
                 }
             }
@@ -910,14 +775,14 @@ public class GameController {
         //If yes, make the actual trade (exchange money and properties).
         if (accept.equals("Ja")) {
             try {
-                payment(player1, moneyInOffers[0], player2);
-                payment(player2, moneyInOffers[1], player1);
+                payment(tradingPlayers[0], moneyInOffers[0], tradingPlayers[1]);
+                payment(tradingPlayers[1], moneyInOffers[1], tradingPlayers[0]);
 
                 for (Property property : propertiesInOffers[0]) {
-                    transferProperty(player1, property, player2);
+                    transferProperty(tradingPlayers[0], property, tradingPlayers[1]);
                 }
                 for (Property property : propertiesInOffers[1]) {
-                    transferProperty(player2, property, player1);
+                    transferProperty(tradingPlayers[1], property, tradingPlayers[0]);
                 }
 
             } catch (PlayerBrokeException e) {
@@ -926,7 +791,6 @@ public class GameController {
                 e.printStackTrace();
             }
         }
-        return true;
     }
 
     /**
@@ -936,28 +800,15 @@ public class GameController {
      * @param receiver
      * @Author Nicolai Wulff, s185036
      */
-    public void transferProperty(Player giver, Property property, Player receiver) {
+    private void transferProperty(Player giver, Property property, Player receiver) {
         property.setOwner(null);
         giver.removeOwnedProperty(property);
         property.setOwner(receiver);
         receiver.addOwnedProperty(property);
     }
 
-    public boolean mortgageAction() {
-        String[] players = new String[game.getActivePlayers(false).size() + 1];
-        for (int i = 0; i < players.length - 1; i++) {
-            players[i] = game.getPlayers().get(i).getName();
-        }
-        players[players.length - 1] = "Annuller";
-
-        String playerName = gui.getUserSelection("Hvilken spiller ønsker at pantsætte grunde?", players);
-        if (playerName.equals("Annuller")) return false;
-        Player player = null;
-        for (Player p : game.getPlayers()) {
-            if (p.getName().equals(playerName)) {
-                player = p;
-            }
-        }
+    private void mortgageAction() {
+        Player player = choosePlayer("Hvilken spiller ønsker at pantsætte?", null, false);
 
         boolean continuePawning = true;
         while (continuePawning) {
@@ -970,64 +821,49 @@ public class GameController {
 
             if (potentialProperties.size() == 0) {
                 gui.showMessage("Du ejer ingen grunde, du kan pantsætte!");
-                return false;
+                return;
             }
 
-            String[] properties = new String[potentialProperties.size() + 1];
-            for (int i = 0; i < properties.length - 1; i++) {
-                properties[i] = potentialProperties.get(i).getName() + ", pantsætningsværdi: " + potentialProperties.get(i).getCost() / 2 + "kr.";
+            ArrayList<Integer> mortgageValues = new ArrayList<>();
+            for (Property p : potentialProperties) mortgageValues.add(p.getCost() / 2);
+            Property property = chooseFromOptions(
+                    potentialProperties,
+                    "Hvilken grund ønsker du at pantsætte?",
+                    "Stop med at pantsætte",
+                    ", pantsætningsværdi: ",
+                    mortgageValues,
+                    " kr.");
+
+            if (property == null) {
+                return;
             }
-            properties[properties.length - 1] = "Stop med at pantsætte";
 
-            String choice = gui.getUserSelection("Hvilken grund ønsker du at pantsætte?", properties);
-            if (choice.equals("Stop med at pantsætte")) {
-                continuePawning = false;
-            } else {
-                for (Property property : player.getOwnedProperties()) {
-                    if (choice.contains(property.getName())) {
-                        if (property instanceof RealEstate) {
-                            boolean ableToMortgage = true;
-                            for (Property p : player.getOwnedProperties()) {
-                                if (p.getColorGroup() == property.getColorGroup() && ((RealEstate) p).getHouseCount() > 0) {
-                                    ableToMortgage = false;
-                                }
-                            }
-
-                            if (!ableToMortgage) {
-                                gui.showMessage("Du skal sælge alle huse i farvegruppen, før du kan pantsætte!");
-                            } else {
-                                mortgage(player, property);
-                            }
-                        } else {
-                            mortgage(player, property);
-                        }
+            if (property instanceof RealEstate) {
+                boolean ableToMortgage = true;
+                for (Property p : player.getOwnedProperties()) {
+                    if (p.getColorGroup() == property.getColorGroup() && ((RealEstate) p).getHouseCount() > 0) {
+                        ableToMortgage = false;
                     }
                 }
+
+                if (!ableToMortgage) {
+                    gui.showMessage("Du skal sælge alle huse i farvegruppen, før du kan pantsætte!");
+                } else {
+                    mortgage(player, property);
+                }
+            } else {
+                mortgage(player, property);
             }
         }
-        return true;
     }
 
-    public void mortgage(Player player, Property property) {
+    private void mortgage(Player player, Property property) {
         property.setMortgaged(true);
         paymentFromBank(player, property.getCost() / 2);
     }
 
-    public boolean unmortgageAction() {
-        String[] players = new String[game.getActivePlayers(false).size() + 1];
-        for (int i = 0; i < players.length - 1; i++) {
-            players[i] = game.getPlayers().get(i).getName();
-        }
-        players[players.length - 1] = "Annuller";
-
-        String playerName = gui.getUserSelection("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", players);
-        if (playerName.equals("Annuller")) return false;
-        Player player = null;
-        for (Player p : game.getPlayers()) {
-            if (p.getName().equals(playerName)) {
-                player = p;
-            }
-        }
+    private void unmortgageAction() {
+        Player player = choosePlayer("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", null, false);
 
         boolean continuePawning = true;
         while (continuePawning) {
@@ -1040,30 +876,24 @@ public class GameController {
 
             if (potentialProperties.size() == 0) {
                 gui.showMessage("Du har ingen pantsatte grunde!");
-                return false;
+                return;
             }
 
-            String[] properties = new String[potentialProperties.size() + 1];
-            for (int i = 0; i < properties.length - 1; i++) {
-                properties[i] = potentialProperties.get(i).getName() + ", pantsætningsgæld: " + potentialProperties.get(i).getCost() / 2 + "kr.";
-            }
-            properties[properties.length - 1] = "Tilbage til hovedmenuen";
-
-            String choice = gui.getUserSelection("Hvilken pantsat grund vil du tilbagebetale?", properties);
-            if (choice.equals("Tilbage til hovedmenuen")) {
-                continuePawning = false;
-            } else {
-                for (Property property : player.getOwnedProperties()) {
-                    if (choice.contains(property.getName())) {
-                        unmortgage(player, property);
-                    }
-                }
-            }
+            ArrayList<Integer> debts = new ArrayList<>();
+            for (Property p : potentialProperties) debts.add(p.getCost() / 2);
+            Property property = chooseFromOptions(
+                    potentialProperties,
+                    "Hvilken pantsat grund vil du tilbagebetale?",
+                    "Tilbage til hovedmenu",
+                    ", pantsætningsgæld: ",
+                    debts,
+                    " kr.");
+            if (property == null) return;
+            unmortgage(player, property);
         }
-        return true;
     }
 
-    public void unmortgage(Player player, Property property) {
+    private void unmortgage(Player player, Property property) {
         try {
             paymentToBank(player, property.getCost() / 2);
             property.setMortgaged(false);
@@ -1072,6 +902,62 @@ public class GameController {
         } catch (GameEndedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Use to choose an active player from a dropdown menu in the gui.
+     * May exclude a specific player from the list and may exclude players in prison.
+     * @Author Nicolai Wulff, s185036
+     * @param msg Message over dropdown menu.
+     * @param excludedPlayer Exlude a specific player.
+     * @param mayBeInPrison If true, include players in prison. If false, exclude players in prison.
+     * @return the chosen player.
+     */
+    private Player choosePlayer(String msg, Player excludedPlayer, boolean mayBeInPrison) {
+        //Make list of active players, that either may be or may not be in prison (depending on mayBeInPrison).
+        ArrayList<Player> playerList = new ArrayList<>();
+        for (Player player : game.getActivePlayers(mayBeInPrison)) {
+            if (player != excludedPlayer) playerList.add(player);
+        }
+        return chooseFromOptions(playerList, msg, "Annuller", null, null, null);
+    }
+
+    /** Method with generic return type used to show a dropdown menu in the gui
+     * with a certain list of options. The last option in the list is used to
+     * cancel and return to menu with no action. Each option may have strings
+     * and values added to the end, eg: ", price: 100$/house".
+     * @Author Nicolai Wulff, s185036
+     * @param c A collection of options.
+     * @param msg Message to be shown over the dropdown menu.
+     * @param stopOption The string to represent the option to cancel, eg: "Cancel".
+     * @param addToEnd1 String to be added to end of each option, before a certain value.
+     * @param values Values to be added to end of each option.
+     * @param addToEnd2 String to be added to end of each option, after a certain value.
+     * @param <T> Type of the objects listed.
+     * @return The chosen option of type T.
+     */
+    private <T> T chooseFromOptions(Collection<T> c, String msg, String stopOption, String addToEnd1, ArrayList values, String addToEnd2) {
+        String[] options = new String[c.size() + 1];
+        Iterator iterator = c.iterator();
+        for (int i = 0; i < options.length - 1; i++) {
+            if (addToEnd1 == null) addToEnd1 = "";
+            if (addToEnd2 == null) addToEnd2 = "";
+            if (values != null) {
+                options[i] = iterator.next() + addToEnd1 + values.get(i) + addToEnd2;
+            } else {
+                options[i] = iterator.next().toString();
+            }
+        }
+        options[options.length - 1] = stopOption;
+
+        String choiceString = gui.getUserSelection(msg, options);
+        if (choiceString.equals(stopOption)) return null;
+        T choice = null;
+        for (T t : c) {
+            if (choiceString.contains(t.toString()))
+                choice = t;
+        }
+        return choice;
     }
 
     public void showMessage(String message) {
