@@ -714,7 +714,7 @@ public class GameController {
     /**
      * @Author Nicolai Wulff, s185036
      */
-    private boolean trade() {
+    private void trade() {
 
         Player player1 = null;
         Player player2 = null;
@@ -736,7 +736,7 @@ public class GameController {
                 if (i == 1) choosing = false;
                 i++;
             } else {
-                return false;
+                return;
             }
         }
 
@@ -788,7 +788,7 @@ public class GameController {
                         if (property instanceof RealEstate && property.getColorGroup() == chosenProperty.getColorGroup()) {
                             if (((RealEstate) property).getHouseCount() > 0) {
                                 gui.showMessage("Du kan ikke handle med grunde, hvor du har bygget huse i dens farvegruppe.\nSælg din huse i gruppen, før du handler.");
-                                return false;
+                                return;
                             }
                         }
                     }
@@ -857,7 +857,6 @@ public class GameController {
                 e.printStackTrace();
             }
         }
-        return true;
     }
 
     /**
@@ -874,7 +873,7 @@ public class GameController {
         receiver.addOwnedProperty(property);
     }
 
-    private boolean mortgageAction() {
+    private void mortgageAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at pantsætte?", null, false);
 
         boolean continuePawning = true;
@@ -888,7 +887,7 @@ public class GameController {
 
             if (potentialProperties.size() == 0) {
                 gui.showMessage("Du ejer ingen grunde, du kan pantsætte!");
-                return false;
+                return;
             }
 
             ArrayList<Integer> mortgageValues = new ArrayList<>();
@@ -902,7 +901,7 @@ public class GameController {
                     " kr.");
 
             if (property == null) {
-                return false;
+                return;
             }
 
             if (property instanceof RealEstate) {
@@ -921,43 +920,7 @@ public class GameController {
             } else {
                 mortgage(player, property);
             }
-
-
-            /*
-            String[] properties = new String[potentialProperties.size() + 1];
-            for (int i = 0; i < properties.length - 1; i++) {
-                properties[i] = potentialProperties.get(i).getName() + ", pantsætningsværdi: " + potentialProperties.get(i).getCost() / 2 + "kr.";
-            }
-            properties[properties.length - 1] = "Stop med at pantsætte";
-
-            String choice = gui.getUserSelection("Hvilken grund ønsker du at pantsætte?", properties);
-            if (choice.equals("Stop med at pantsætte")) {
-                continuePawning = false;
-            } else {
-                for (Property property : player.getOwnedProperties()) {
-                    if (choice.contains(property.getName())) {
-                        if (property instanceof RealEstate) {
-                            boolean ableToMortgage = true;
-                            for (Property p : player.getOwnedProperties()) {
-                                if (p.getColorGroup() == property.getColorGroup() && ((RealEstate) p).getHouseCount() > 0) {
-                                    ableToMortgage = false;
-                                }
-                            }
-
-                            if (!ableToMortgage) {
-                                gui.showMessage("Du skal sælge alle huse i farvegruppen, før du kan pantsætte!");
-                            } else {
-                                mortgage(player, property);
-                            }
-                        } else {
-                            mortgage(player, property);
-                        }
-                    }
-                }
-            }
-            */
         }
-        return true;
     }
 
     private void mortgage(Player player, Property property) {
@@ -965,7 +928,7 @@ public class GameController {
         paymentFromBank(player, property.getCost() / 2);
     }
 
-    private boolean unmortgageAction() {
+    private void unmortgageAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", null, false);
 
         boolean continuePawning = true;
@@ -979,7 +942,7 @@ public class GameController {
 
             if (potentialProperties.size() == 0) {
                 gui.showMessage("Du har ingen pantsatte grunde!");
-                return false;
+                return;
             }
 
             ArrayList<Integer> debts = new ArrayList<>();
@@ -991,10 +954,9 @@ public class GameController {
                     ", pantsætningsgæld: ",
                     debts,
                     " kr.");
-            if (property == null) return false;
+            if (property == null) return;
             unmortgage(player, property);
         }
-        return true;
     }
 
     private void unmortgage(Player player, Property property) {
