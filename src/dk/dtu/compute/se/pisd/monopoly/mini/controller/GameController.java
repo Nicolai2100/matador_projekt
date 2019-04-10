@@ -715,41 +715,29 @@ public class GameController {
      * @Author Nicolai Wulff, s185036
      */
     private void trade() {
-
-        Player player1 = null;
-        Player player2 = null;
+        Player[] tradingPlayers = new Player[2];
+        int[] moneyInOffers = new int[2];
+        ArrayList<Property>[] propertiesInOffers = new ArrayList[2];
+        propertiesInOffers[0] = new ArrayList<>();
+        propertiesInOffers[1] = new ArrayList<>();
 
         //Keep asking which players wants to trade. Check if each player is in jail).
         boolean choosing = true;
         int i = 0;
         while (choosing) {
             Player player = null;
-            if (i == 0) {
-                player = choosePlayer("Hvem er den ene part i handlen?", null, true);
-                if (player != null && player.isInPrison()) {
-                    gui.showMessage(player.getName() + " er i fængsel, og må derfor ikke handle!");
-                } else if (player != null) {
-                    player1 = player;
-                    i++;
-                }
-            } else if (i == 1) {
-                player = choosePlayer("Hvem er den anden part i handlen?", player1, true);
-                if (player != null && player.isInPrison()) {
-                    gui.showMessage(player.getName() + " er i fængsel, og må derfor ikke handle!");
-                } else if (player != null) {
-                    player2 = player;
-                    choosing = false;
-                }
+            if (i == 0) player = choosePlayer("Hvem er den ene part i handlen?", null, true);
+            if (i == 1) player = choosePlayer("Hvem er den ene part i handlen?", tradingPlayers[0], true);
+            if (player != null && player.isInPrison()) {
+                gui.showMessage(player.getName() + " er i fængsel, og må derfor ikke handle!");
+            } else if (player != null) {
+                tradingPlayers[i] = player;
+                if (i == 1) choosing = false;
+                i++;
             } else {
                 return;
             }
         }
-
-        Player[] tradingPlayers = {player1, player2};
-        int[] moneyInOffers = new int[2];
-        ArrayList<Property>[] propertiesInOffers = new ArrayList[2];
-        propertiesInOffers[0] = new ArrayList<>();
-        propertiesInOffers[1] = new ArrayList<>();
 
         //Loop through the two trading players.
         for (int j = 0; j < 2; j++) {
@@ -812,14 +800,14 @@ public class GameController {
         //If yes, make the actual trade (exchange money and properties).
         if (accept.equals("Ja")) {
             try {
-                payment(player1, moneyInOffers[0], player2);
-                payment(player2, moneyInOffers[1], player1);
+                payment(tradingPlayers[0], moneyInOffers[0], tradingPlayers[1]);
+                payment(tradingPlayers[1], moneyInOffers[1], tradingPlayers[0]);
 
                 for (Property property : propertiesInOffers[0]) {
-                    transferProperty(player1, property, player2);
+                    transferProperty(tradingPlayers[0], property, tradingPlayers[1]);
                 }
                 for (Property property : propertiesInOffers[1]) {
-                    transferProperty(player2, property, player1);
+                    transferProperty(tradingPlayers[1], property, tradingPlayers[0]);
                 }
 
             } catch (PlayerBrokeException e) {
