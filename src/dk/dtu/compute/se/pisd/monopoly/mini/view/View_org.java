@@ -17,16 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class implements a view on the Monopoly game based
- * on the original Matador GUI; it serves as a kind of
- * adapter to the Matador GUI. This class realizes the
- * MVC-principle on top of the Matador GUI. In particular,
- * the view implements an observer of the model in the
- * sense of the MVC-principle, which updates the GUI when
- * the state of the game (model) changes.
  *
- * @author Ekkart Kindler, ekki@dtu.dk
- * Sørg for at udvide klassen View, så at dens metode
+ * Dette er den oprindelige View klasse - bare for overblikkets skyld - skal slettes senere
  */
 public class View_org implements Observer {
 

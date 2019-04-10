@@ -13,9 +13,7 @@ import gui_fields.GUI_Car.Type;
 import gui_main.GUI;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static gui_fields.GUI_Car.Type.*;
@@ -43,7 +41,6 @@ public class View implements Observer {
     private Map<Space, GUI_Field> space2GuiField = new HashMap<Space, GUI_Field>();
     private Map<Player, PlayerPanel> player2PlayerPanel = new HashMap<Player, PlayerPanel>();
     private boolean disposed = false;
-
 
     /**
      * Constructor for the view of a game based on a game and an already
@@ -84,16 +81,10 @@ public class View implements Observer {
             }
             if (subject instanceof Game) {
                 createPlayers();
-                System.out.println("snap");
             }
         }
-
-        // TODO update other subjects in the GUI
-        //      in particular properties (sold, houses, ...)
-
-        //update(Subject subject) opdaterer grunde og viser deres ejere
-        //med at indramme grunde med ejerens farve og også vise antalet af huse.
     }
+
     public void updateProperty(Property property) {
         GUI_Field gui_field = this.space2GuiField.get(property);
         if (gui_field instanceof GUI_Ownable) {
@@ -112,7 +103,7 @@ public class View implements Observer {
             street.setHouses(((RealEstate) property).getHouseCount());
         }
 
-        if(property.getOwner() != null) {
+        if (property.getOwner() != null) {
             player2PlayerPanel.get(property.getOwner()).update();
         }
     }
@@ -166,6 +157,9 @@ public class View implements Observer {
         }
     }
 
+    /**
+     * Nicolai L
+     */
     public void createPlayers() {
         CarColor carColor = new CarColor();
         for (Player player : game.getPlayers()) {
@@ -187,7 +181,7 @@ public class View implements Observer {
      */
     public void loadPlayers() {
         for (Player player : game.getPlayers()) {
-            GUI_Car car = new GUI_Car(player.getColor(),Color.black,Type.valueOf(player.getToken()), Pattern.FILL);
+            GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.valueOf(player.getToken()), Pattern.FILL);
             GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
             player2GuiPlayer.put(player, guiPlayer);
             gui.addPlayer(guiPlayer);
@@ -197,6 +191,11 @@ public class View implements Observer {
         }
     }
 
+    /**
+     * Nicolai L
+     *
+     * @param player
+     */
     public void enterNamePlayer(Player player) {
         while (true) {
             String input = gui.getUserString("indtast navn");
@@ -212,6 +211,12 @@ public class View implements Observer {
         }
     }
 
+    /**
+     * Nicola L
+     *
+     * @param player
+     * @return
+     */
     public GUI_Car chosePlayerCar(Player player) {
         String carChoice = gui.getUserSelection("Choose car", "Car", "Ufo", "Tractor", "Racecar");
         GUI_Car car;
@@ -225,6 +230,13 @@ public class View implements Observer {
         return car;
     }
 
+    /**
+     * Nicolai L
+     *
+     * @param carColorObj
+     * @param player
+     * @return
+     */
     public Color chooseCarColor(CarColor carColorObj, Player player) {
         String[] chooseColorStrings = carColorObj.setColorsToChooseFrom().split(" ");
         String carColorS;

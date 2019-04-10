@@ -331,14 +331,14 @@ public class GameController {
 
         System.out.println("Der er kommenteret en metode ud fordi den smed fejl");
 
-/*        gui.displayChanceCard(card.getText());
+        gui.displayChanceCard(card.getText());
         gui.showMessage("Player " + player.getName() + " draws a chance card.");
 
         try {
             card.doAction(this, player);
         } finally {
             gui.displayChanceCard("done");
-        }*/
+        }
     }
 
     /**
