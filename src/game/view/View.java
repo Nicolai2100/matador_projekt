@@ -183,7 +183,7 @@ public class View implements Observer {
     }
 
     /**
-     * @author Jeppe s170196, Nicolai s185020
+     * @author Jeppe s170196, Nicolai s185020, Nicolai W s185036
      */
     public void loadPlayers() {
         for (Player player : game.getPlayers()) {
@@ -194,6 +194,9 @@ public class View implements Observer {
             player2position.put(player, player.getCurrentPosition().getIndex());
             player.attach(this);
             updatePlayer(player);
+            for (Property p : player.getOwnedProperties()) {
+                updateProperty(p);
+            }
         }
     }
 

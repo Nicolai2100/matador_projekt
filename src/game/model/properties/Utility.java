@@ -23,6 +23,7 @@ public class Utility extends Property {
         notifyChange();
     }
 
+    //TODO: Skal denne metode ikke fjernes? Der kan jo ikke bygges huse på utilities.
     public void setHouseCount(int houseCount) {
         computeRent();
         notifyChange();
