@@ -74,6 +74,16 @@ public class MiniMonopoly {
 	 */
 	public static void main(String[] args) {
 		Game game = JSONUtility.createGame();
+
+		//midlertidigt bare så det virker
+		ArrayList<Card> temp = new ArrayList<>();
+		CardReceiveMoneyFromBank card = new CardReceiveMoneyFromBank();
+		card.setText("You receive 100$ from the bank.");
+		card.setAmount(100);
+		temp.add(card);
+		game.setCardDeck(temp);
+		//
+
 		game.shuffleCardDeck();
 
 		createPlayers(game);
