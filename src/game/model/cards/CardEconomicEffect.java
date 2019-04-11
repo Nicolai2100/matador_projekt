@@ -80,5 +80,4 @@ public class CardEconomicEffect extends Card {
 			super.doAction(controller, player);
 		}
 	}
-	
 }

@@ -14,27 +14,14 @@ import game.model.exceptions.PlayerBrokeException;
  * @author s185039
  *
  */
+
 public class CardMove extends Card {
-
-	public int getUntargetedAmount() {
-		return untargetedAmount;
-	}
-
-	public void setUntargetedAmount(int untargetedAmount) {
-		this.untargetedAmount = untargetedAmount;
-	}
-
-	public boolean isToPrison() {
-		return toPrison;
-	}
-
-	public void setToPrison(boolean toPrison) {
-		this.toPrison = toPrison;
-	}
 
 	private int untargetedAmount;
 	private boolean toPrison;
 	private Space target;
+
+	//TODO contructorer
 
 	/** 
 	 * Returns the target space to which this card directs the player to go.
