@@ -22,25 +22,6 @@ import java.util.List;
 public class MiniMonopoly {
 	
 	/**
-	 * Creates the initial static situation of a Monopoly game. Note
-	 * that the players are not created here, and the chance cards
-	 * are not shuffled here.
-	 *
-	 * @return the initial game board and (not shuffled) deck of chance cards 
-	 */
-
-	public static Game createGame() {
-
-		Game game = new Game();
-		game = JSONUtility.createGame();
-
-		//TODO hvis mappen ikke eksisterer skal den laves (eller skal den bare være der?)
-		//TODO shuffle
-
-		return game;
-	}
-
-	/**
 	 * This method will be called before the game is started to create
 	 * the participating players.
 	 */
@@ -92,7 +73,7 @@ public class MiniMonopoly {
 	 * @param args not used
 	 */
 	public static void main(String[] args) {
-		Game game = createGame();
+		Game game = JSONUtility.createGame();
 		game.shuffleCardDeck();
 
 		createPlayers(game);

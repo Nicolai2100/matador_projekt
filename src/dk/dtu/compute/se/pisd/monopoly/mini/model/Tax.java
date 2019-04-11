@@ -10,7 +10,7 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeExceptio
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public class Tax extends Space {
+public class Tax extends Space { //TODO make the two kinds of tax spaces?
 
 	@Override
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {

@@ -17,7 +17,7 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeExceptio
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public class Space extends Subject {
+public abstract class Space extends Subject {
 	
 	private String name;
 	

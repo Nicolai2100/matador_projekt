@@ -26,12 +26,6 @@ public class Game extends Subject {
 	
 	private Player current;
 
-
-
-
-
-
-
 	/**
 	 * Returns a list of all the games spaces.
 	 * 

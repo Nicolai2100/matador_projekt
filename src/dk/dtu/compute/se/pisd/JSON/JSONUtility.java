@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import dk.dtu.compute.se.pisd.designpatterns.Subject;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 /**
  * Main-method creates data for JSON-file,
@@ -29,11 +27,11 @@ public class JSONUtility {
     public static void main(String[] args) throws IOException {
 
         //creating data for the game's spaces
-        ArrayList<Space> spaces = new ArrayList<>(); //TODO ændr priserne til de rigtige på GUI'en
+        Game game = new Game();
 
-        Space go = new Space();
+        Space go = new NeutralSpace();
         go.setName("Start");
-        //spaces.add(go);
+        game.addSpace(go);
 
         Space roedovrevej = new RealEstate();
         roedovrevej.setName("Rødovrevej");
@@ -41,11 +39,11 @@ public class JSONUtility {
         ((RealEstate) roedovrevej).setRent(50);
         ((RealEstate) roedovrevej).setColorGroup(ColorGroup.lightblue);
         ((RealEstate) roedovrevej).setPriceForHouse(1000);
-        spaces.add(roedovrevej);
+        game.addSpace(roedovrevej);
 
         Space chance = new Chance(); //colorgroup?
         chance.setName("chance");
-        spaces.add(chance);
+        game.addSpace(chance);
 
         Space hvidovrevej = new RealEstate();
         hvidovrevej.setName("Hvidovrevej");
@@ -53,11 +51,11 @@ public class JSONUtility {
         ((RealEstate) hvidovrevej).setRent(50);
         ((RealEstate) hvidovrevej).setColorGroup(ColorGroup.lightblue);
         ((RealEstate) hvidovrevej).setPriceForHouse(1000);
-        spaces.add(hvidovrevej);
+        game.addSpace(hvidovrevej);
 
         Space indkomstskat = new Tax();
         indkomstskat.setName("Indkomstskat");
-        spaces.add(indkomstskat);
+        game.addSpace(indkomstskat);
 
         Space oeresund = new Utility();
         //TODO ændr alle utilities til enten Ship eller Brewery (som kan have begyndelsespris sat fra start)
@@ -65,7 +63,7 @@ public class JSONUtility {
         ((Utility) oeresund).setCost(4000);
         ((Utility) oeresund).setRent(500);
         ((Utility) oeresund).setColorGroup(ColorGroup.navy);
-        spaces.add(oeresund);
+        game.addSpace(oeresund);
 
         Space roskildevej = new RealEstate();
         roskildevej.setName("Roskildevej");
@@ -73,9 +71,9 @@ public class JSONUtility {
         ((RealEstate) roskildevej).setRent(100);
         ((RealEstate) roskildevej).setColorGroup(ColorGroup.pink);
         ((RealEstate) roskildevej).setPriceForHouse(1000);
-        spaces.add(roskildevej);
+        game.addSpace(roskildevej);
 
-        //spaces.add(chance); //virker dette?
+        game.addSpace(chance); //virker dette?
 
         Space valbyLanggade = new RealEstate();
         valbyLanggade.setName("Valby Langgade");
@@ -83,7 +81,7 @@ public class JSONUtility {
         ((RealEstate) valbyLanggade).setRent(100);
         ((RealEstate) valbyLanggade).setColorGroup(ColorGroup.pink);
         ((RealEstate) valbyLanggade).setPriceForHouse(1000);
-        spaces.add(valbyLanggade);
+        game.addSpace(valbyLanggade);
 
         Space allegade = new RealEstate();
         allegade.setName("Allégade");
@@ -91,11 +89,11 @@ public class JSONUtility {
         ((RealEstate) allegade).setRent(150);
         ((RealEstate) allegade).setColorGroup(ColorGroup.pink);
         ((RealEstate) valbyLanggade).setPriceForHouse(1000);
-        spaces.add(valbyLanggade);
+        game.addSpace(valbyLanggade);
 
-        Space faengsel = new Space();
+        Space faengsel = new NeutralSpace();
         faengsel.setName("I fængsel/På besøg");
-        //spaces.add(faengsel);
+        game.addSpace(faengsel);
 
         Space frederiksbergAlle = new RealEstate();
         frederiksbergAlle.setName("Fredriksberg Allé");
@@ -103,14 +101,14 @@ public class JSONUtility {
         ((RealEstate) frederiksbergAlle).setRent(200);
         ((RealEstate) frederiksbergAlle).setColorGroup(ColorGroup.green);
         ((RealEstate) frederiksbergAlle).setPriceForHouse(2000);
-        spaces.add(frederiksbergAlle);
+        game.addSpace(frederiksbergAlle);
 
         Space tuborg = new Utility();
         tuborg.setName("Tuborg");
         ((Utility) tuborg).setCost(3000);
         ((Utility) tuborg).setRent(0);
         ((Utility) tuborg).setColorGroup(ColorGroup.darkgreen);
-        spaces.add(tuborg);
+        game.addSpace(tuborg);
 
         Space bulowsvej = new RealEstate();
         bulowsvej.setName("Bülowsvej");
@@ -118,7 +116,7 @@ public class JSONUtility {
         ((RealEstate) bulowsvej).setRent(200);
         ((RealEstate) bulowsvej).setColorGroup(ColorGroup.green);
         ((RealEstate) bulowsvej).setPriceForHouse(2000);
-        spaces.add(bulowsvej);
+        game.addSpace(bulowsvej);
 
         Space gammelkongevej = new RealEstate();
         gammelkongevej.setName("Gammelkongevej");
@@ -126,14 +124,14 @@ public class JSONUtility {
         ((RealEstate) gammelkongevej).setRent(250);
         ((RealEstate) gammelkongevej).setColorGroup(ColorGroup.green);
         ((RealEstate) gammelkongevej).setPriceForHouse(2000);
-        spaces.add(gammelkongevej);
+        game.addSpace(gammelkongevej);
 
         Space dfds = new Utility();
         dfds.setName("D.F.D.S");
         ((Utility) dfds).setCost(4000);
         ((Utility) dfds).setRent(500);
         ((Utility) dfds).setColorGroup(ColorGroup.navy);
-        spaces.add(dfds);
+        game.addSpace(dfds);
 
         Space bernstorffsvej = new RealEstate();
         bernstorffsvej.setName("Bernstorffsvej");
@@ -141,9 +139,9 @@ public class JSONUtility {
         ((RealEstate) bernstorffsvej).setRent(300);
         ((RealEstate) bernstorffsvej).setColorGroup(ColorGroup.darkgrey);
         ((RealEstate) bernstorffsvej).setPriceForHouse(2000);
-        spaces.add(bernstorffsvej);
+        game.addSpace(bernstorffsvej);
 
-        //spaces.add(chance);
+        game.addSpace(chance);
 
         Space hellerupvej = new RealEstate();
         hellerupvej.setName("Hellerupvej");
@@ -151,7 +149,7 @@ public class JSONUtility {
         ((RealEstate) hellerupvej).setRent(300);
         ((RealEstate) hellerupvej).setColorGroup(ColorGroup.darkgrey);
         ((RealEstate) hellerupvej).setPriceForHouse(2000);
-        spaces.add(hellerupvej);
+        game.addSpace(hellerupvej);
 
         Space strandvej = new RealEstate();
         strandvej.setName("Strandvej");
@@ -159,11 +157,11 @@ public class JSONUtility {
         ((RealEstate) strandvej).setRent(350);
         ((RealEstate) strandvej).setColorGroup(ColorGroup.darkgrey);
         ((RealEstate) strandvej).setPriceForHouse(2000);
-        spaces.add(strandvej);
+        game.addSpace(strandvej);
 
-        Space parkering = new Space();
+        Space parkering = new NeutralSpace();
         parkering.setName("Helle");
-        //spaces.add(parkering);
+        game.addSpace(parkering);
 
         Space trianglen = new RealEstate();
         trianglen.setName("Trianglen");
@@ -171,9 +169,9 @@ public class JSONUtility {
         ((RealEstate) trianglen).setRent(350);
         ((RealEstate) trianglen).setColorGroup(ColorGroup.red);
         ((RealEstate) trianglen).setPriceForHouse(3000);
-        spaces.add(trianglen);
+        game.addSpace(trianglen);
 
-        //spaces.add(chance);
+        game.addSpace(chance);
 
         Space oesterbrogade = new RealEstate();
         oesterbrogade.setName("Østerbrogade");
@@ -181,7 +179,7 @@ public class JSONUtility {
         ((RealEstate) oesterbrogade).setRent(350);
         ((RealEstate) oesterbrogade).setColorGroup(ColorGroup.red);
         ((RealEstate) oesterbrogade).setPriceForHouse(3000);
-        spaces.add(oesterbrogade);
+        game.addSpace(oesterbrogade);
 
         Space gronningen = new RealEstate();
         gronningen.setName("Grønningen");
@@ -189,14 +187,14 @@ public class JSONUtility {
         ((RealEstate) gronningen).setRent(400);
         ((RealEstate) gronningen).setColorGroup(ColorGroup.red);
         ((RealEstate) gronningen).setPriceForHouse(3000);
-        spaces.add(gronningen);
+        game.addSpace(gronningen);
 
         Space oes = new Utility();
         oes.setName("Ø.S.");
         ((Utility) oes).setCost(4000);
         ((Utility) oes).setCost(500);
         ((Utility) oes).setColorGroup(ColorGroup.navy);
-        spaces.add(oes);
+        game.addSpace(oes);
 
         Space bredgade = new RealEstate();
         bredgade.setName("Bredgade");
@@ -204,7 +202,7 @@ public class JSONUtility {
         ((RealEstate) bredgade).setRent(450);
         ((RealEstate) bredgade).setColorGroup(ColorGroup.white);
         ((RealEstate) bredgade).setPriceForHouse(3000);
-        spaces.add(bredgade);
+        game.addSpace(bredgade);
 
         Space kgsnytorv = new RealEstate();
         kgsnytorv.setName("Kgs. Nytorv");
@@ -212,14 +210,14 @@ public class JSONUtility {
         ((RealEstate) kgsnytorv).setRent(450);
         ((RealEstate) kgsnytorv).setColorGroup(ColorGroup.white);
         ((RealEstate) kgsnytorv).setPriceForHouse(3000);
-        spaces.add(kgsnytorv);
+        game.addSpace(kgsnytorv);
 
         Space carlsberg = new Utility();
         carlsberg.setName("Carlsberg");
         ((Utility) carlsberg).setCost(3000);
         ((Utility) carlsberg).setRent(0);
         ((Utility) carlsberg).setColorGroup(ColorGroup.darkgreen);
-        spaces.add(carlsberg);
+        game.addSpace(carlsberg);
 
         Space oestergade = new RealEstate();
         oestergade.setName("Østergade");
@@ -227,11 +225,11 @@ public class JSONUtility {
         ((RealEstate) oestergade).setRent(500);
         ((RealEstate) oestergade).setColorGroup(ColorGroup.white);
         ((RealEstate) oestergade).setPriceForHouse(3000);
-        spaces.add(oestergade);
+        game.addSpace(oestergade);
 
-        Space ifaengsel = new Space();
+        Space ifaengsel = new NeutralSpace();
         ifaengsel.setName("I fængsel");
-        //spaces.add(ifaengsel);
+        game.addSpace(ifaengsel);
 
         Space amagertorv = new RealEstate();
         amagertorv.setName("Amagertorv");
@@ -239,7 +237,7 @@ public class JSONUtility {
         ((RealEstate) amagertorv).setRent(550);
         ((RealEstate) amagertorv).setColorGroup(ColorGroup.yellow);
         ((RealEstate) amagertorv).setPriceForHouse(4000);
-        spaces.add(amagertorv);
+        game.addSpace(amagertorv);
 
         Space vimmelskaftet = new RealEstate();
         vimmelskaftet.setName("Vimmelskaftet");
@@ -247,24 +245,24 @@ public class JSONUtility {
         ((RealEstate) vimmelskaftet).setRent(550);
         ((RealEstate) vimmelskaftet).setColorGroup(ColorGroup.yellow);
         ((RealEstate) vimmelskaftet).setPriceForHouse(4000);
-        spaces.add(vimmelskaftet);
+        game.addSpace(vimmelskaftet);
 
-        //spaces.add(chance);
+        game.addSpace(chance);
 
         Space nygade = new RealEstate();
         nygade.setName("Nygade");
         ((RealEstate) nygade).setCost(6400);
         ((RealEstate) nygade).setRent(600);
         ((RealEstate) nygade).setColorGroup(ColorGroup.yellow);
-        spaces.add(nygade);
+        game.addSpace(nygade);
 
         Space bornholm = new Utility();
         bornholm.setName("Bornholm");
         ((Utility) bornholm).setCost(4000);
         ((Utility) bornholm).setRent(500);
-        spaces.add(bornholm);
+        game.addSpace(bornholm);
 
-        //spaces.add(chance);
+        game.addSpace(chance);
 
         Space frederiksberggade = new RealEstate();
         frederiksberggade.setName("Frederiksberggade");
@@ -272,11 +270,11 @@ public class JSONUtility {
         ((RealEstate) frederiksberggade).setRent(700);
         ((RealEstate) frederiksberggade).setColorGroup(ColorGroup.purple);
         ((RealEstate) frederiksberggade).setPriceForHouse(4000);
-        spaces.add(frederiksberggade);
+        game.addSpace(frederiksberggade);
 
-        Space ekstraskat = new Space();
+        Space ekstraskat = new Tax();
         ekstraskat.setName("Ekstraordinær statsskat");
-        //spaces.add(ekstraskat);
+        game.addSpace(ekstraskat);
 
         Space raadhuspladsen = new RealEstate();
         raadhuspladsen.setName("Rådhuspladsen");
@@ -284,10 +282,8 @@ public class JSONUtility {
         ((RealEstate) raadhuspladsen).setRent(1000);
         ((RealEstate) raadhuspladsen).setColorGroup(ColorGroup.purple);
         ((RealEstate) raadhuspladsen).setPriceForHouse(4000);
-        spaces.add(raadhuspladsen);
+        game.addSpace(raadhuspladsen);
 
-        Game game = new Game();
-        game.setSpaces(spaces);
 
         //JSON-GSON operations
         Path path = Paths.get("resources/");
@@ -307,6 +303,10 @@ public class JSONUtility {
 
     }
 
+    /**
+     * Load a Game-object from a corresponding JSON-file.
+     * @return Fully configured Game-object. Should return an empty game-object if something goes wrong.
+     */
     public static Game createGame() {
         Game game = new Game();
 
@@ -314,12 +314,16 @@ public class JSONUtility {
 
             FileReader fileReader = new FileReader("resources\\game.json");
 
-            Gson gson = new Gson();
+            GsonBuilder builder = new GsonBuilder().setPrettyPrinting()
+                    .registerTypeAdapter(Space.class, new Adapter<Space>());
+
+            Gson gson = builder.create();
 
             JsonReader reader = gson.newJsonReader(fileReader);
 
             game = gson.fromJson(reader, Game.class);
 
+            reader.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
