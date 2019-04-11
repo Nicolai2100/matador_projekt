@@ -73,6 +73,8 @@ public class JSONUtility {
         ((RealEstate) roskildevej).setPriceForHouse(1000);
         game.addSpace(roskildevej);
 
+        chance = new Chance();
+        chance.setName("chance");
         game.addSpace(chance); //virker dette?
 
         Space valbyLanggade = new RealEstate();
@@ -89,7 +91,7 @@ public class JSONUtility {
         ((RealEstate) allegade).setRent(150);
         ((RealEstate) allegade).setColorGroup(ColorGroup.pink);
         ((RealEstate) valbyLanggade).setPriceForHouse(1000);
-        game.addSpace(valbyLanggade);
+        game.addSpace(allegade);
 
         Space faengsel = new NeutralSpace();
         faengsel.setName("I fængsel/På besøg");
@@ -141,6 +143,8 @@ public class JSONUtility {
         ((RealEstate) bernstorffsvej).setPriceForHouse(2000);
         game.addSpace(bernstorffsvej);
 
+        chance = new Chance();
+        chance.setName("chance");
         game.addSpace(chance);
 
         Space hellerupvej = new RealEstate();
@@ -171,6 +175,8 @@ public class JSONUtility {
         ((RealEstate) trianglen).setPriceForHouse(3000);
         game.addSpace(trianglen);
 
+        chance = new Chance();
+        chance.setName("chance");
         game.addSpace(chance);
 
         Space oesterbrogade = new RealEstate();
@@ -247,6 +253,8 @@ public class JSONUtility {
         ((RealEstate) vimmelskaftet).setPriceForHouse(4000);
         game.addSpace(vimmelskaftet);
 
+        chance = new Chance();
+        chance.setName("chance");
         game.addSpace(chance);
 
         Space nygade = new RealEstate();
@@ -262,6 +270,8 @@ public class JSONUtility {
         ((Utility) bornholm).setRent(500);
         game.addSpace(bornholm);
 
+        chance = new Chance();
+        chance.setName("chance");
         game.addSpace(chance);
 
         Space frederiksberggade = new RealEstate();
@@ -286,10 +296,10 @@ public class JSONUtility {
 
 
         //JSON-GSON operations
-        Path path = Paths.get("resources/");
+        Path path = Paths.get("resources");
         Files.createDirectory(path);
 
-        FileWriter fileWriter = new FileWriter(path+ "\\game.json");
+        FileWriter fileWriter = new FileWriter(path + "/game.json");
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting()
                 .registerTypeAdapter(Space.class, new Adapter<Space>());
 
@@ -312,7 +322,7 @@ public class JSONUtility {
 
         try {
 
-            FileReader fileReader = new FileReader("resources\\game.json");
+            FileReader fileReader = new FileReader("resources/game.json");
 
             GsonBuilder builder = new GsonBuilder().setPrettyPrinting()
                     .registerTypeAdapter(Space.class, new Adapter<Space>());
