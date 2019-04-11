@@ -1,4 +1,4 @@
-package dk.dtu.compute.se.pisd.JSON;
+package json;
 
 import java.lang.reflect.Type;
 

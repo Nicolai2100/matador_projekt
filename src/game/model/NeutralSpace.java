@@ -1,8 +1,9 @@
-package dk.dtu.compute.se.pisd.monopoly.mini.model;
+package game.model;
 
-import dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
+
+import game.controller.GameController;
+import game.model.exceptions.GameEndedException;
+import game.model.exceptions.PlayerBrokeException;
 
 /**
  * Represents a space that has no action associated with it.

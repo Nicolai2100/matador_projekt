@@ -1,12 +1,12 @@
-package dk.dtu.compute.se.pisd.JSON;
+package json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
+import game.model.*;
+import game.model.properties.RealEstate;
+import game.model.properties.Utility;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
