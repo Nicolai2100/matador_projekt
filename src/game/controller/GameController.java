@@ -640,7 +640,7 @@ public class GameController {
      */
     private void buyHouseAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at købe huse?", null, false);
-
+        if (player == null) return;
         boolean continueBuying = true;
         while (continueBuying) {
             ArrayList<RealEstate> potentialProperties = new ArrayList<>();
@@ -677,6 +677,7 @@ public class GameController {
 
     private void sellHouseAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at sælge huse?", null, false);
+        if (player == null) return;
         boolean continueSelling = true;
         while (continueSelling) {
             //Makes a list of all real estate, that has at least one house built on it.
@@ -835,7 +836,7 @@ public class GameController {
 
     private void mortgageAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at pantsætte?", null, false);
-
+        if (player == null) return;
         boolean continuePawning = true;
         while (continuePawning) {
             ArrayList<Property> potentialProperties = new ArrayList<>();
@@ -890,7 +891,7 @@ public class GameController {
 
     private void unmortgageAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", null, false);
-
+        if (player == null) return;
         boolean continuePawning = true;
         while (continuePawning) {
             ArrayList<Property> potentialProperties = new ArrayList<>();

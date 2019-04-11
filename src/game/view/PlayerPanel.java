@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 /**
- * @Malte og Nicolai L
+ * @Malte, Nicolai L og Nicolai W
  */
 public class PlayerPanel extends JFrame {
     private Game game;
@@ -23,7 +23,7 @@ public class PlayerPanel extends JFrame {
     public PlayerPanel(Game game, Player player) {
         this.game = game;
         this.player = player;
-        dimension = new Dimension(72, 100);
+        dimension = new Dimension(72, 120);
         dimension2 = new Dimension(90, 20);
 
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -31,7 +31,7 @@ public class PlayerPanel extends JFrame {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         this.setContentPane(mainPanel);
         this.setLocation(710, game.getPlayers().indexOf(player) * 210);
-        //this.setSize(800, 120);
+        this.setSize(dimension);
         this.validate();
         this.setVisible(true);
 
