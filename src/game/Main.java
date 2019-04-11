@@ -4,7 +4,7 @@ import json.JSONUtility;
 import game.controller.GameController;
 import game.model.Card;
 import game.model.Game;
-import game.model.cards.CardReceiveMoneyFromBank;
+import game.model.cards.CardEconomicEffect;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public class Main {
 
         //midlertidigt bare så det virker
         ArrayList<Card> temp = new ArrayList<>();
-        CardReceiveMoneyFromBank card = new CardReceiveMoneyFromBank();
+        CardEconomicEffect card = new CardEconomicEffect();
         card.setText("You receive 100$ from the bank.");
         card.setAmount(100);
         temp.add(card);

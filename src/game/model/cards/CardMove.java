@@ -11,10 +11,29 @@ import game.model.exceptions.PlayerBrokeException;
  * A card that directs the player to a move to a specific space (location) of the game.
  * 
  * @author Ekkart Kindler, ekki@dtu.dk
- * 
+ * @author s185039
+ *
  */
 public class CardMove extends Card {
-	
+
+	public int getUntargetedAmount() {
+		return untargetedAmount;
+	}
+
+	public void setUntargetedAmount(int untargetedAmount) {
+		this.untargetedAmount = untargetedAmount;
+	}
+
+	public boolean isToPrison() {
+		return toPrison;
+	}
+
+	public void setToPrison(boolean toPrison) {
+		this.toPrison = toPrison;
+	}
+
+	private int untargetedAmount;
+	private boolean toPrison;
 	private Space target;
 
 	/** 
@@ -38,7 +57,15 @@ public class CardMove extends Card {
 	@Override
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
 		try {
-			controller.moveToSpace(player, target);	
+			if (untargetedAmount != 0) {
+				int targetIndex = player.getCurrentPosition().getIndex() + untargetedAmount;
+				//TODO kortet kender ikke brættet...
+			} else if (toPrison) {
+				player.setCurrentPosition(target);
+				player.setInPrison(true);
+			} else {
+				controller.moveToSpace(player, target);
+			}
 		} finally {
 			// Make sure that the card is returned to the deck even when
 			// an Exception should occur!

@@ -235,7 +235,7 @@ public class Player extends Subject {
      * @return a list of all cards owned by the player
      */
     public List<Card> getOwnedCards() {
-        return Collections.unmodifiableList(ownedCards);
+        return ownedCards;
     }
 
     /**

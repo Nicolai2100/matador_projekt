@@ -6,43 +6,28 @@ import game.model.Player;
 import game.model.exceptions.GameEndedException;
 import game.model.exceptions.PlayerBrokeException;
 
+import java.util.List;
+
 /**
- * A card that directs the bank to pay a specific amount to the player.
- * 
+ * A get-out-of-jail-card that a player obtains
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author s185039
  *
  */
-public class CardReceiveMoneyFromBank extends Card {
-	
-	private int amount;
-
-	/**
-	 * Returns the amount this card directs the bank to pay to the player.
-	 *  
-	 * @return the amount
-	 */
-	public int getAmount() {
-		return amount;
-	}
-
-	/**
-	 * Sets the amount this card directs the bank to pay to the player.
-	 * 
-	 * @param amount the new amount
-	 */
-	public void setAmount(int amount) {
-		this.amount = amount;
-	}
+public class CardGetOutOfJail extends Card {
 
 	@Override
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
+
 		try {
-			controller.paymentFromBank(player, amount);
+			List<Card> ownedcards = player.getOwnedCards();
+			ownedcards.add(this);
+			player.setOwnedCards(ownedcards);
 		} finally {
 			// Make sure that the card is returned to the deck even when
 			// an Exception should occur!
 			super.doAction(controller, player);
 		}
 	}
-	
 }
