@@ -10,7 +10,7 @@ import game.model.exceptions.PlayerBrokeException;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public class Tax extends Space {
+public class Tax extends Space { //TODO make the two kinds of tax spaces?
 
 	@Override
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {

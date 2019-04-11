@@ -17,7 +17,7 @@ import game.model.exceptions.PlayerBrokeException;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public class Space extends Subject {
+public abstract class Space extends Subject {
 	
 	private String name;
 	
