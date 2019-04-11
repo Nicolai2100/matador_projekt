@@ -123,7 +123,7 @@ public class PlayerPanel extends JFrame {
             pawnedLabelMaker(jPanel, property);
         }
 
-        mainPanel.setPreferredSize(new Dimension(maltesMap.size() * 72, 100));
+        mainPanel.setPreferredSize(new Dimension(maltesMap.size() * 72 + 72, 100));
         this.pack();
         this.revalidate();
         this.repaint();
