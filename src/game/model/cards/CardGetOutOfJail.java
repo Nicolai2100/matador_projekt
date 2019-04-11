@@ -6,8 +6,6 @@ import game.model.Player;
 import game.model.exceptions.GameEndedException;
 import game.model.exceptions.PlayerBrokeException;
 
-import java.util.List;
-
 /**
  * A get-out-of-jail-card that a player obtains
  *
@@ -21,9 +19,7 @@ public class CardGetOutOfJail extends Card {
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
 
 		try {
-			List<Card> ownedcards = player.getOwnedCards();
-			ownedcards.add(this);
-			player.setOwnedCards(ownedcards);
+			player.addCard(this);
 		} finally {
 			// Make sure that the card is returned to the deck even when
 			// an Exception should occur!

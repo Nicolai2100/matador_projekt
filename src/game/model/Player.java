@@ -235,7 +235,7 @@ public class Player extends Subject {
      * @return a list of all cards owned by the player
      */
     public List<Card> getOwnedCards() {
-        return ownedCards;
+        return Collections.unmodifiableList(ownedCards);
     }
 
     /**
@@ -246,6 +246,15 @@ public class Player extends Subject {
      */
     public void setOwnedCards(List<Card> ownedCards) {
         this.ownedCards = new ArrayList<Card>(ownedCards);
+        notifyChange();
+    }
+
+    /**
+     * Adds a card to the player's list of owned cards.
+     * @param card the added card
+     */
+    public void addCard (Card card) {
+        ownedCards.add(card);
         notifyChange();
     }
 
