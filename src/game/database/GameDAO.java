@@ -216,7 +216,6 @@ public class GameDAO implements IGameDAO {
                 if (propertyRS.getString("type").equals("utility")) {
                     Utility utility = (Utility) listOfSpaces.get(propertyRS.getInt("posonboard"));
 
-                    utility.setHouseCount(propertyRS.getInt("numofhouses"));
                     utility.setSuperOwned(propertyRS.getBoolean("superowned"));
 
                     if (propertyRS.getInt("playerid") != -1) {
@@ -235,6 +234,8 @@ public class GameDAO implements IGameDAO {
                         realEstate.setOwner(game.getPlayers().get(propertyRS.getInt("playerid")));
                         realEstate.getOwner().addOwnedProperty(realEstate);
                     }
+
+                    realEstate.setHouseCount(propertyRS.getInt("numofhouses"));
 
                     listOfSpaces.set(propertyRS.getInt("posonboard"), realEstate);
                 }
