@@ -1,5 +1,6 @@
 package game.controller;
 
+import game.Test.GameStub;
 import game.database.GameDAO;
 import game.model.*;
 import game.model.exceptions.GameEndedException;
@@ -39,6 +40,7 @@ import java.util.*;
 public class GameController {
 
     private Game game;
+    private GameStub gameStub;
     private GUI gui;
     private GameDAO gameDb;
 
@@ -56,6 +58,12 @@ public class GameController {
         this.game = game;
         gui = new GUI();
         gameDb = new GameDAO();
+    }
+    // Til tests
+    public GameController(GameStub game) {
+        super();
+        this.gameStub = game;
+        gui = new GUI();
     }
 
     /**

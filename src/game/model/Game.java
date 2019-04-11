@@ -217,44 +217,5 @@ public class Game extends Subject {
             addPlayer(player);
 
         }
-
-   /*
-        Test players
-        // be loaded from a database
-        Player p = new Player();
-        p.setName("Player 1");
-        p.setCurrentPosition(getSpaces().get(0));
-        p.setColor(Color.RED);
-        addPlayer(p);
-
-        p = new Player();
-        p.setName("Player 2");
-        p.setCurrentPosition(getSpaces().get(0));
-        p.setColor(Color.YELLOW);
-        addPlayer(p);
-
-		p = new Player();
-		p.setName("Player 3");
-		p.setCurrentPosition(getSpaces().get(0));
-		p.setColor(Color.GREEN);
-		addPlayer(p);
-
-		p = new Player();
-		p.setName("Player 4");
-		p.setCurrentPosition(getSpaces().get(0));
-		p.setColor(Color.BLACK);
-		addPlayer(p);
-
-		p = new Player();
-		p.setName("Player 5");
-		p.setCurrentPosition(game.getSpaces().get(0));
-		p.setColor(Color.BLUE);
-		game.addPlayer(p);
-
-		p = new Player();
-		p.setName("Player 6");
-		p.setCurrentPosition(game.getSpaces().get(0));
-		p.setColor(Color.cyan);
-		game.addPlayer(p);*/
     }
 }
