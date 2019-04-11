@@ -645,14 +645,28 @@ public class GameController {
         while (continueBuying) {
             ArrayList<RealEstate> potentialProperties = new ArrayList<>();
             ArrayList<Integer> housePrices = new ArrayList<>();
+            ArrayList<String> houseOrHotel = new ArrayList<>();
             for (Property property : player.getOwnedProperties()) {
                 if (property instanceof RealEstate && property.getSuperOwned()) {
-                    potentialProperties.add((RealEstate) property);
-                    housePrices.add(((RealEstate) property).getPriceForHouse());
+                    if (((RealEstate) property).getHouseCount() < 5) {
+                        potentialProperties.add((RealEstate) property);
+                        housePrices.add(((RealEstate) property).getPriceForHouse());
+                        if (((RealEstate) property).getHouseCount() < 4) {
+                            houseOrHotel.add("kr/hus");
+                        } else if (((RealEstate) property).getHouseCount() == 4) {
+                            houseOrHotel.add("kr/hotel");
+                        }
+                    }
                 }
             }
 
-            RealEstate re = chooseFromOptions(potentialProperties, "På hvilken grund vil du købe et hus/hotel?", "Stop med at købe", ", ", housePrices, "kr/hus");
+            RealEstate re = chooseFromOptions(
+                    potentialProperties,
+                    "På hvilken grund vil du købe et hus/hotel?",
+                    "Stop med at købe",
+                    ", ",
+                    housePrices,
+                    houseOrHotel);
             if (re == null) {
                 continueBuying = false;
             } else {
@@ -668,16 +682,28 @@ public class GameController {
             //Makes a list of all real estate, that has at least one house built on it.
             ArrayList<RealEstate> propertyOptions = new ArrayList<>();
             ArrayList<Integer> housePrices = new ArrayList<>();
+            ArrayList<String> houseOrHotel = new ArrayList<>();
             for (Property property : player.getOwnedProperties()) {
                 if (property instanceof RealEstate) {
                     if (((RealEstate) property).getHouseCount() > 0) {
                         propertyOptions.add((RealEstate) property);
                         housePrices.add(((RealEstate) property).getPriceForHouse() / 2);
+                        if (((RealEstate) property).getHouseCount() < 5) {
+                            houseOrHotel.add("kr/hus");
+                        } else if (((RealEstate) property).getHouseCount() == 5) {
+                            houseOrHotel.add("kr/hotel");
+                        }
                     }
                 }
             }
 
-            RealEstate re = chooseFromOptions(propertyOptions, "Fra hvilken grund ønsker du at sælge huse?", "Stop med at sælge", ", ", housePrices, "kr/hus");
+            RealEstate re = chooseFromOptions(
+                    propertyOptions,
+                    "Fra hvilken grund ønsker du at sælge huse?",
+                    "Stop med at sælge",
+                    ", ",
+                    housePrices,
+                    houseOrHotel);
             if (re == null) {
                 continueSelling = false;
             } else {
@@ -932,18 +958,22 @@ public class GameController {
      * @param stopOption The string to represent the option to cancel, eg: "Cancel".
      * @param addToEnd1 String to be added to end of each option, before a certain value.
      * @param values Values to be added to end of each option.
-     * @param addToEnd2 String to be added to end of each option, after a certain value.
+     * @param addToEnd2 String or Arraylist with values to be added to end of each option, after a certain value.
+     *                  If it's a string, the same string will be added to each option.
+     *                  If it's an arraylist (of the same size as the collection, c) each element will be added
+     *                  to the end of the element of the collection with the same index.
      * @param <T> Type of the objects listed.
      * @return The chosen option of type T.
      */
-    private <T> T chooseFromOptions(Collection<T> c, String msg, String stopOption, String addToEnd1, ArrayList values, String addToEnd2) {
+    private <T> T chooseFromOptions(Collection<T> c, String msg, String stopOption, String addToEnd1, ArrayList values, Object addToEnd2) {
         String[] options = new String[c.size() + 1];
         Iterator iterator = c.iterator();
         for (int i = 0; i < options.length - 1; i++) {
             if (addToEnd1 == null) addToEnd1 = "";
-            if (addToEnd2 == null) addToEnd2 = "";
-            if (values != null) {
+            if (values != null && addToEnd2 instanceof String) {
                 options[i] = iterator.next() + addToEnd1 + values.get(i) + addToEnd2;
+            } else if (values != null && addToEnd2 instanceof ArrayList) {
+                options[i] = iterator.next() + addToEnd1 + values.get(i) + ((ArrayList) addToEnd2).get(i);
             } else {
                 options[i] = iterator.next().toString();
             }
