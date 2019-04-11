@@ -960,6 +960,11 @@ public class GameController {
         return choice;
     }
 
+    /**
+     * Used by Space objects to display a message in the gui,
+     * instead of letting them access the gui.
+     * @param message
+     */
     public void showMessage(String message) {
         gui.showMessage(message);
     }

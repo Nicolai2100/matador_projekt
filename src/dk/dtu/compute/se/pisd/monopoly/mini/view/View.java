@@ -100,7 +100,13 @@ public class View implements Observer {
         }
         if (property instanceof RealEstate) {
             GUI_Street street = (GUI_Street) gui_field;
-            street.setHouses(((RealEstate) property).getHouseCount());
+            street.setHotel(false);
+            if (((RealEstate) property).getHouseCount() > 0 && ((RealEstate) property).getHouseCount() < 5){
+                street.setHouses(((RealEstate) property).getHouseCount());
+            } else if (((RealEstate) property).getHouseCount() == 5) {
+                street.setHotel(true);
+            }
+
         }
 
         if (property.getOwner() != null) {
