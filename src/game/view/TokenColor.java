@@ -2,14 +2,16 @@ package game.view;
 
 import java.awt.*;
 import java.util.HashMap;
-//todo Nicolai L - implementer 6 mulige farver
 
-public class CarColor {
+/**
+ * Nicolai L
+ */
+public class TokenColor {
     private HashMap<String, Color> colorMap;
     private List stringList;
 
 
-    public CarColor() {
+    public TokenColor() {
         instaColorMap();
         instaStringList();
     }
@@ -34,10 +36,12 @@ public class CarColor {
 
     private void instaColorMap() {
         colorMap = new HashMap<>();
-        colorMap.put("Grey", Color.DARK_GRAY);
+        colorMap.put("Grey", Color.GRAY);
         colorMap.put("Green", Color.GREEN);
-        colorMap.put("Blue", Color.BLUE);
+        colorMap.put("Blue", Color.BLUE.brighter());
         colorMap.put("Magenta", Color.MAGENTA);
+        colorMap.put("Red", Color.RED);
+        colorMap.put("Yellow", Color.yellow.brighter());
     }
 
     private void instaStringList() {
@@ -46,5 +50,7 @@ public class CarColor {
         stringList.add("Green");
         stringList.add("Blue");
         stringList.add("Magenta");
+        stringList.add("Red");
+        stringList.add("Yellow");
     }
 }

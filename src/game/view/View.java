@@ -101,7 +101,7 @@ public class View implements Observer {
         if (property instanceof RealEstate) {
             GUI_Street street = (GUI_Street) gui_field;
             street.setHotel(false);
-            if (((RealEstate) property).getHouseCount() > 0 && ((RealEstate) property).getHouseCount() < 5){
+            if (((RealEstate) property).getHouseCount() > 0 && ((RealEstate) property).getHouseCount() < 5) {
                 street.setHouses(((RealEstate) property).getHouseCount());
             } else if (((RealEstate) property).getHouseCount() == 5) {
                 street.setHotel(true);
@@ -167,10 +167,10 @@ public class View implements Observer {
      * Nicolai L
      */
     public void createPlayers() {
-        CarColor carColor = new CarColor();
+        TokenColor tokenColor = new TokenColor();
         for (Player player : game.getPlayers()) {
             enterNamePlayer(player);
-            Color userColor = chooseCarColor(carColor, player);
+            Color userColor = chooseCarColor(tokenColor, player);
             player.setColor(userColor);
             GUI_Car car = chosePlayerCar(player);
             GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
@@ -242,17 +242,21 @@ public class View implements Observer {
     /**
      * Nicolai L
      *
-     * @param carColorObj
+     * @param tokenColorObj
      * @param player
      * @return
      */
-    public Color chooseCarColor(CarColor carColorObj, Player player) {
-        String[] chooseColorStrings = carColorObj.setColorsToChooseFrom().split(" ");
+    public Color chooseCarColor(TokenColor tokenColorObj, Player player) {
+        String[] chooseColorStrings = tokenColorObj.setColorsToChooseFrom().split(" ");
         String carColorS;
 
         for (int i = 0; i < chooseColorStrings.length; i++) {
         }
-        if (chooseColorStrings.length == 4) {
+        if (chooseColorStrings.length == 6) {
+            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3], chooseColorStrings[4], chooseColorStrings[5]);
+        } else if (chooseColorStrings.length == 5) {
+            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3], chooseColorStrings[4]);
+        } else if (chooseColorStrings.length == 4) {
             carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3]);
         } else if (chooseColorStrings.length == 3) {
             carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2]);
@@ -262,7 +266,7 @@ public class View implements Observer {
             gui.showMessage(player.getName() + "'s color is " + chooseColorStrings[0]);
             carColorS = chooseColorStrings[0];
         }
-        Color carColorChoice = carColorObj.colorChosen(carColorS);
+        Color carColorChoice = tokenColorObj.colorChosen(carColorS);
 
         return carColorChoice;
     }

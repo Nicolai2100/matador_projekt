@@ -76,8 +76,7 @@ public class GameController {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             game.shuffleCardDeck();
-            //todo Nicolai L - mulighed for at oprette 6 spillere
-            int numOfPlayers = gui.getUserInteger("Hvor mange spillere?", 3,4);
+            int numOfPlayers = gui.getUserInteger("Hvor mange spillere?", 3,6);
             game.createPlayers(numOfPlayers);
             initializeGUI();
             view.createPlayers();
