@@ -78,27 +78,33 @@ public class GameController {
     }
 
     /**
-     * Nicolai L
+     * @author Nicolai L, Nicolai W
      */
     public void playOrLoadGame() {
-        String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil");
+        String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil", "Afslut");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             game.shuffleCardDeck();
-            int numOfPlayers = gui.getUserInteger("Hvor mange spillere?", 3,6);
-            game.createPlayers(numOfPlayers);
-            initializeGUI();
-            view.createPlayers();
-            play();
+            ArrayList<Integer> options = new ArrayList<>(Arrays.asList(3, 4, 5, 6));
+            Integer numOfPlayers = chooseFromOptions(options, "Hvor mange spillere?", "Annuller", null, null, null);
+            if (numOfPlayers != null) {
+                game.createPlayers(numOfPlayers);
+                initializeGUI();
+                view.createPlayers();
+                play();
+            }
+        } else if (userSelection.equals("Afslut")) {
+            System.exit(0);
         } else {
-            List<String> games = gameDb.getGamesList();
-            String[] gamesArray = games.toArray(new String[games.size()]);
-            String userGameSelection = gui.getUserSelection("Vælg spil:", gamesArray);
-            game = gameDb.loadGame(game, userGameSelection);
-            game.shuffleCardDeck();
-            initializeGUI();
-            view.loadPlayers();
-            play();
+            String gameSelection = chooseFromOptions(gameDb.getGamesList(), "Vælg spil:", "Annuller", null, null, null);
+            if (gameSelection != null) {
+                game = gameDb.loadGame(game, gameSelection);
+                game.shuffleCardDeck();
+                initializeGUI();
+                view.loadPlayers();
+                play();
+            }
         }
+        playOrLoadGame();
     }
 
     /**
@@ -153,6 +159,11 @@ public class GameController {
         dispose();
     }
 
+    /**
+     * @param player
+     * @param startOfTurn
+     * @author Nicolai Wulff, s185036
+     */
     public void showTurnMenu(Player player, Boolean startOfTurn) {
         boolean continueChoosing = true;
         while (continueChoosing) {
@@ -167,13 +178,13 @@ public class GameController {
             if (choice.equals("Byg huse")) {
                 buyHouseAction();
             } else if (choice.equals("Handel")) {
-                trade();
+                trade(null);
             } else if (choice.equals("Sælg huse")) {
-                sellHouseAction();
+                sellHouseAction(null);
             } else if (choice.equals("Pantsættelser")) {
                 String input = gui.getUserButtonPressed("Vælg:", "Pantsætte", "Indfri gæld", "Tilbage til menu");
                 if (input.equals("Pantsætte")) {
-                    mortgageAction();
+                    mortgageAction(null);
                 } else if (input.equals("Indfri gæld")) {
                     unmortgageAction();
                 }
@@ -253,12 +264,8 @@ public class GameController {
         boolean castDouble;
         int doublesCount = 0;
         do {
-            // TODO right now the dice are limited to the numbers 1, 2 and 3
-            // for making the game faster. Eventually, this should be set
-            // to 1 - 6 again (to this end, the constants 3.0 below should
-            // be set to 6.0 again.
-            int die1 = (int) (1 + 3.0 * Math.random());
-            int die2 = (int) (1 + 3.0 * Math.random());
+            int die1 = (int) (1 + 6.0 * Math.random());
+            int die2 = (int) (1 + 6.0 * Math.random());
             castDouble = (die1 == die2);
             gui.setDice(die1, die2);
 
@@ -379,9 +386,32 @@ public class GameController {
      *
      * @param player the player
      * @param amount the amount the player should have available after the act
+     * @author Nicolai Wulff s185036
      */
     public void obtainCash(Player player, int amount) {
-        // TODO implement
+        boolean tryToObtain = true;
+        while (tryToObtain) {
+            String choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok likvide midler til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Betal", "Erklær dig konkurs");
+            if (choice.equals("Sælg huse")) {
+                sellHouseAction(player);
+            } else if (choice.equals("Pantsæt grunde")) {
+                mortgageAction(player);
+            } else if (choice.equals("Handle")) {
+                trade(player);
+            } else if(choice.equals("Betal")) {
+                if (player.getBalance() < amount) {
+                    gui.showMessage("Du har stadig ikke råd til at betale!");
+                } else {
+                    tryToObtain = false;
+                }
+            } else {
+                if (player.getBalance() > amount) {
+                    gui.showMessage("Du kan ikke erklære dig konkurs, da du har råd til at betale.");
+                } else {
+                    tryToObtain = false;
+                }
+            }
+        }
     }
 
     /**
@@ -625,6 +655,11 @@ public class GameController {
         }
     }
 
+    /**
+     * @param player
+     * @param re
+     * @author Nicolai Wulff s185036
+     */
     private void sellHouse(Player player, RealEstate re) {
         int highestHouseCount = 0;
         for (Property property : player.getOwnedProperties()) {
@@ -682,8 +717,11 @@ public class GameController {
         }
     }
 
-    private void sellHouseAction() {
-        Player player = choosePlayer("Hvilken spiller ønsker at sælge huse?", null, false);
+    /**
+     * @author Nicolai Wulff s185036
+     */
+    private void sellHouseAction(Player player) {
+        if (player == null) player = choosePlayer("Hvilken spiller ønsker at sælge huse?", null, false);
         if (player == null) return;
         boolean continueSelling = true;
         while (continueSelling) {
@@ -721,10 +759,11 @@ public class GameController {
     }
 
     /**
-     * @Author Nicolai Wulff, s185036
+     * @author Nicolai Wulff, s185036
      */
-    private void trade() {
+    private void trade(Player firstParty) {
         Player[] tradingPlayers = new Player[2];
+        tradingPlayers[0] = firstParty;
         int[] moneyInOffers = new int[2];
         ArrayList<Property>[] propertiesInOffers = new ArrayList[2];
         propertiesInOffers[0] = new ArrayList<>();
@@ -735,8 +774,9 @@ public class GameController {
         int i = 0;
         while (choosing) {
             Player player = null;
-            if (i == 0) player = choosePlayer("Hvem er den ene part i handlen?", null, true);
-            if (i == 1) player = choosePlayer("Hvem er den ene part i handlen?", tradingPlayers[0], true);
+            if (firstParty != null) i++;
+            if (i == 0 && firstParty == null) player = choosePlayer("Hvem er den ene part i handlen?", null, true);
+            if (i == 1) player = choosePlayer("Hvem er den anden part i handlen?", tradingPlayers[0], true);
             if (player != null && player.isInPrison()) {
                 gui.showMessage(player.getName() + " er i fængsel, og må derfor ikke handle!");
             } else if (player != null) {
@@ -832,7 +872,7 @@ public class GameController {
      * @param giver
      * @param property
      * @param receiver
-     * @Author Nicolai Wulff, s185036
+     * @author Nicolai Wulff s185036
      */
     private void transferProperty(Player giver, Property property, Player receiver) {
         property.setOwner(null);
@@ -841,8 +881,8 @@ public class GameController {
         receiver.addOwnedProperty(property);
     }
 
-    private void mortgageAction() {
-        Player player = choosePlayer("Hvilken spiller ønsker at pantsætte?", null, false);
+    private void mortgageAction(Player player) {
+        if (player == null) player = choosePlayer("Hvilken spiller ønsker at pantsætte?", null, false);
         if (player == null) return;
         boolean continuePawning = true;
         while (continuePawning) {
@@ -891,11 +931,19 @@ public class GameController {
         }
     }
 
+    /**
+     * @param player
+     * @param property
+     * @author Nicolai Wulff s185036
+     */
     private void mortgage(Player player, Property property) {
         property.setMortgaged(true);
         paymentFromBank(player, property.getCost() / 2);
     }
 
+    /**
+     * Nicolai Wulff s185036
+     */
     private void unmortgageAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", null, false);
         if (player == null) return;
@@ -927,6 +975,11 @@ public class GameController {
         }
     }
 
+    /**
+     * @param player
+     * @param property
+     * @author Nicolai Wulff s185036
+     */
     private void unmortgage(Player player, Property property) {
         try {
             paymentToBank(player, property.getCost() / 2);
@@ -941,11 +994,11 @@ public class GameController {
     /**
      * Use to choose an active player from a dropdown menu in the gui.
      * May exclude a specific player from the list and may exclude players in prison.
-     * @Author Nicolai Wulff, s185036
      * @param msg Message over dropdown menu.
      * @param excludedPlayer Exlude a specific player.
      * @param mayBeInPrison If true, include players in prison. If false, exclude players in prison.
      * @return the chosen player.
+     * @author Nicolai Wulff s185036
      */
     private Player choosePlayer(String msg, Player excludedPlayer, boolean mayBeInPrison) {
         //Make list of active players, that either may be or may not be in prison (depending on mayBeInPrison).
@@ -960,7 +1013,6 @@ public class GameController {
      * with a certain list of options. The last option in the list is used to
      * cancel and return to menu with no action. Each option may have strings
      * and values added to the end, eg: ", price: 100$/house".
-     * @Author Nicolai Wulff, s185036
      * @param c A collection of options.
      * @param msg Message to be shown over the dropdown menu.
      * @param stopOption The string to represent the option to cancel, eg: "Cancel".
@@ -972,6 +1024,7 @@ public class GameController {
      *                  to the end of the element of the collection with the same index.
      * @param <T> Type of the objects listed.
      * @return The chosen option of type T.
+     * @author Nicolai Wulff s185036
      */
     private <T> T chooseFromOptions(Collection<T> c, String msg, String stopOption, String addToEnd1, ArrayList values, Object addToEnd2) {
         String[] options = new String[c.size() + 1];
