@@ -104,7 +104,6 @@ public class GameDAO implements IGameDAO {
                 insertPLayers.clearParameters();
 
                 for (Space space : player.getOwnedProperties()) {
-                    long diagnose = System.currentTimeMillis();
                     if (space instanceof Property) {
                         insertProperties.setInt(1, space.getIndex());
                         if (space instanceof RealEstate) {
@@ -127,8 +126,6 @@ public class GameDAO implements IGameDAO {
                         insertProperties.executeUpdate();
                         insertProperties.clearParameters();
 
-                        long tid = System.currentTimeMillis() - diagnose;
-                        System.out.println("Tid det tog at gemme " + space.getName() + " i databasen:" + tid + "ms");
                     }
 
                 }
@@ -141,7 +138,7 @@ public class GameDAO implements IGameDAO {
             e.printStackTrace();
         }
 
-        System.out.println("Tid det tog at gemme spillet i databasen:" + (System.currentTimeMillis() - performance) + "ms");
+        System.out.println("Tid det tog at gemme spillet i databasen: " + (System.currentTimeMillis() - performance) + "ms");
     }
 
     /**
