@@ -572,17 +572,19 @@ public class GameController {
                 if (!p.equals(highBidder)) {
 
                     currentBid = highBid == 0 ? gui.getUserInteger(p + ", hvad vil du byde?", 0, p.getBalance())
-                            : gui.getUserInteger(p + ", hvad vil du byde?. Højeste bud er: " + highBid + " af " + highBidder, 0, p.getBalance());
+                            : gui.getUserInteger(p + ", hvad vil du byde?. Højeste bud er: " + highBid + "kr af " + highBidder, 0, p.getBalance());
 
                     if (currentBid > highBid) {
                         highBid = currentBid;
                         highBidder = p;
                     } else {
+                        gui.showMessage(p + "du har ikke budt over og udgår derfor af auktionen.");
                         bidders.remove(p);
                     }
                 }
             }
         }
+        gui.showMessage("Første.. Anden.. Tredje.. " + highBidder + " vinder auktionen og køber " + property + " for " + highBid + "kr.");
         try {
             paymentToBank(highBidder, highBid);
             property.setOwner(highBidder);
