@@ -392,7 +392,7 @@ public class GameController {
         boolean tryToObtain = true;
         while (tryToObtain) {
 
-            if (player.getOwnedProperties().size() == 0 && player.getBalance() < amount) {
+            if (player.getOwnedProperties().size() == 0 && player.getBalance() < amount && required) {
                 gui.showMessage(player + ", du har desværre intet tilbage, du kan sælge, og må derfor erklæres konkurs.");
                 return;
             }
@@ -401,7 +401,7 @@ public class GameController {
             if (required) {
                 choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Betal", "Erklær dig konkurs");
             } else {
-                choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Betal", "Opgiv at betale");
+                choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Køb", "Opgiv at købe");
             }
 
             if (choice.equals("Sælg huse")) {
@@ -410,9 +410,11 @@ public class GameController {
                 mortgageAction(player);
             } else if (choice.equals("Handle")) {
                 trade(player);
-            } else if(choice.equals("Betal")) {
-                if (player.getBalance() < amount) {
+            } else if(choice.equals("Betal") || choice.equals("Køb")) {
+                if (player.getBalance() < amount && choice.equals("Betal")) {
                     gui.showMessage("Du har stadig ikke råd til at betale!");
+                } else if (player.getBalance() < amount && choice.equals("Køb")) {
+                    gui.showMessage("Du har stadig ikke råd til at købe!");
                 } else {
                     tryToObtain = false;
                 }
@@ -452,18 +454,20 @@ public class GameController {
      * @throws PlayerBrokeException when the player chooses to buy but could not afford it
      */
     public void offerToBuy(Property property, Player player) throws PlayerBrokeException, GameEndedException {
-        // TODO We might also allow the player to obtainCash before
-        // the actual offer, to see whether he can free enough cash
-        // for the sale.
 
-        String choice = gui.getUserSelection(
-                "Player " + player.getName() +
-                        ": Do you want to buy " + property.getName() +
-                        " for " + property.getCost() + "$?",
-                "yes",
-                "no");
+        if (player.getBalance() < property.getCost()) {
+            String choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke penge nok til at købe " + property + ". Vil du forsøge at finde pengene ved at sælge, handle eller pantsætte noget?", "Ja", "Nej");
+            if (choice.equals("Ja")) {
+                obtainCash(player, property.getCost(), false);
+            }
+        }
 
-        if (choice.equals("yes")) {
+        String choice = "Nej";
+        if (player.getBalance() > property.getCost()) {
+            choice = gui.getUserSelection(player + ", ønsker du at købe " + property + " for " + property.getCost() + "kr?", "Ja", "Nej");
+        }
+
+        if (choice.equals("Ja")) {
             try {
                 paymentToBank(player, property.getCost());
             } catch (PlayerBrokeException e) {
@@ -560,13 +564,15 @@ public class GameController {
         bidders.addAll(game.getPlayers());
         Collections.shuffle(bidders);
 
+        gui.showMessage("Der vil nu blive afholdt en auktion for at købe " + property + ". Grunden er vurderet til " + property.getCost() + "kr. Man udgår af auktionen ved at byde under højeste bud.");
+
         while (bidders.size() != 1) {
             for (int i = 0; i < bidders.size(); i++) {
                 Player p = bidders.get(i);
                 if (!p.equals(highBidder)) {
 
-                    currentBid = highBid == 0 ? gui.getUserInteger(p.getName() + ":\nPlace bid", 0, p.getBalance())
-                            : gui.getUserInteger(p.getName() + ":\nPlace bid. Current high bid: " + highBid + " by " + highBidder.getName(), 0, p.getBalance());
+                    currentBid = highBid == 0 ? gui.getUserInteger(p + ", hvad vil du byde?", 0, p.getBalance())
+                            : gui.getUserInteger(p + ", hvad vil du byde?. Højeste bud er: " + highBid + " af " + highBidder, 0, p.getBalance());
 
                     if (currentBid > highBid) {
                         highBid = currentBid;
