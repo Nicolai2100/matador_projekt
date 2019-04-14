@@ -233,8 +233,8 @@ public class JSONUtility {
         ((RealEstate) oestergade).setPriceForHouse(3000);
         game.addSpace(oestergade);
 
-        Space ifaengsel = new NeutralSpace();
-        ifaengsel.setName("I fængsel");
+        Space ifaengsel = new GoToJail();
+        ifaengsel.setName("Gå i fængsel");
         game.addSpace(ifaengsel);
 
         Space amagertorv = new RealEstate();

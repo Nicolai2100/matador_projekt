@@ -132,7 +132,7 @@ public class GameController {
                 try {
                     showTurnMenu(player, true);
                     this.makeMove(player);
-                    showTurnMenu(player, false);
+                    //showTurnMenu(player, false);
                 } catch (PlayerBrokeException e) {
                 } catch (GameEndedException w) {
                     gui.showMessage(w.getMessage());
@@ -162,7 +162,7 @@ public class GameController {
             String choice = null;
 
             if (startOfTurn) {
-                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil");
+                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Alle spillere kan købe/sælge/handle. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil");
             } else {
                 choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "'s tur. Hvad skal der ske?" , "Slut turen", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
             }
