@@ -564,7 +564,7 @@ public class GameController {
         bidders.addAll(game.getPlayers());
         Collections.shuffle(bidders);
 
-        gui.showMessage("Der vil nu blive afholdt en auktion for at købe " + property + ". Grunden er vurderet til " + property.getCost() + "kr. Man udgår af auktionen ved at byde under højeste bud.");
+        gui.showMessage("Der vil nu blive afholdt en auktion for at købe " + property + ". Grunden er vurderet til " + property.getCost() + "kr. Man udgår af auktionen ved ikke at byde over.");
 
         while (bidders.size() != 1) {
             for (int i = 0; i < bidders.size(); i++) {
@@ -583,10 +583,10 @@ public class GameController {
                 }
             }
         }
-        property.setCost(highBid);
         try {
-            offerToBuy(property, bidders.get(0));
-            bidders.clear();
+            paymentToBank(highBidder, highBid);
+            property.setOwner(highBidder);
+            highBidder.addOwnedProperty(property);
         } catch (PlayerBrokeException e) {
             e.printStackTrace();
         }
