@@ -162,7 +162,7 @@ public class GameController {
             String choice = null;
 
             if (startOfTurn) {
-                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Alle spillere må købe/sælge/handle. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil");
+                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil");
             } else {
                 choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "'s tur. Hvad skal der ske?" , "Slut turen", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
             }
@@ -679,15 +679,17 @@ public class GameController {
             gui.showMessage("Du kan ikke bygge mere på denne grund!");
         } else if (re.getHouseCount() > lowestHouseCount){
             gui.showMessage("Du skal bygge jævnt!");
-        } else {
+        } else if (player.getBalance() >= re.getPriceForHouse()){
             try {
                 paymentToBank(player, re.getPriceForHouse());
                 re.setHouseCount(re.getHouseCount() + 1);
             } catch (PlayerBrokeException e){
-                gui.showMessage(player.getName() + " har ikke råd til at bygge et hus på denne grund.");
+                e.printStackTrace();
             } catch (GameEndedException e) {
                 e.printStackTrace();
             }
+        } else {
+            gui.showMessage(player.getName() + ", du har ikke råd til at bygge et hus/hotel på denne grund.");
         }
     }
 
@@ -1017,14 +1019,19 @@ public class GameController {
      * @author Nicolai Wulff s185036
      */
     private void unmortgage(Player player, Property property) {
-        try {
-            paymentToBank(player, property.getCost() / 2);
-            property.setMortgaged(false);
-        } catch (PlayerBrokeException e) {
-            e.printStackTrace();
-        } catch (GameEndedException e) {
-            e.printStackTrace();
+        if (player.getBalance() >= property.getCost() / 2 ) {
+            try {
+                paymentToBank(player, property.getCost() / 2);
+                property.setMortgaged(false);
+            } catch (PlayerBrokeException e) {
+                e.printStackTrace();
+            } catch (GameEndedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            gui.showMessage(player + ", du har ikke råd til at indfri din gæld i denne pantsættelse.");
         }
+
     }
 
     /**
