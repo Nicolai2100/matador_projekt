@@ -388,10 +388,22 @@ public class GameController {
      * @param amount the amount the player should have available after the act
      * @author Nicolai Wulff s185036
      */
-    public void obtainCash(Player player, int amount) {
+    public void obtainCash(Player player, int amount, boolean required) {
         boolean tryToObtain = true;
         while (tryToObtain) {
-            String choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok likvide midler til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Betal", "Erklær dig konkurs");
+
+            if (player.getOwnedProperties().size() == 0 && player.getBalance() < amount) {
+                gui.showMessage(player + ", du har desværre intet tilbage, du kan sælge, og må derfor erklæres konkurs.");
+                return;
+            }
+
+            String choice;
+            if (required) {
+                choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Betal", "Erklær dig konkurs");
+            } else {
+                choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Betal", "Opgiv at betale");
+            }
+
             if (choice.equals("Sælg huse")) {
                 sellHouseAction(player);
             } else if (choice.equals("Pantsæt grunde")) {
@@ -404,12 +416,27 @@ public class GameController {
                 } else {
                     tryToObtain = false;
                 }
-            } else {
+            } else if (choice.equals("Erklær dig konkurs")) {
                 if (player.getBalance() > amount) {
                     gui.showMessage("Du kan ikke erklære dig konkurs, da du har råd til at betale.");
-                } else {
-                    tryToObtain = false;
+                } else if (player.getOwnedPropertiesNotMortgaged().size() > 0) {
+                    boolean ownsHouses = false;
+                    for (Property property : player.getOwnedPropertiesNotMortgaged()) {
+                        if (property instanceof RealEstate) {
+                            if (((RealEstate) property).getHouseCount() > 0) ownsHouses = true;
+                        }
+                    }
+                    if (ownsHouses) {
+                        gui.showMessage("Du har stadig huse/hoteller, du kan sælge!");
+                    } else {
+                        gui.showMessage("Du har stadig grunde, du kan pantsætte eller handle med!");
+                    }
+                } else if (player.getOwnedProperties().size() > 0 && player.getOwnedPropertiesNotMortgaged().size() == 0) {
+                    String choice2 = gui.getUserButtonPressed("Er du sikker på, du ikke vil forsøge at sælge dine pantsatte grunde til andre spillere?", "Ja", "Nej");
+                    if (choice2.equals("Ja")) tryToObtain = false;
                 }
+            } else {
+                tryToObtain = false;
             }
         }
     }
@@ -471,7 +498,7 @@ public class GameController {
      */
     public void payment(Player payer, int amount, Player receiver) throws PlayerBrokeException, GameEndedException {
         if (payer.getBalance() < amount) {
-            obtainCash(payer, amount);
+            obtainCash(payer, amount, true);
             if (payer.getBalance() < amount) {
                 playerBrokeTo(payer, receiver);
                 if (gameEnds())
@@ -506,7 +533,7 @@ public class GameController {
      */
     public void paymentToBank(Player player, int amount) throws PlayerBrokeException, GameEndedException {
         if (amount > player.getBalance()) {
-            obtainCash(player, amount);
+            obtainCash(player, amount, true);
             if (amount > player.getBalance()) {
                 playerBrokeToBank(player);
                 if (gameEnds())

@@ -24,7 +24,7 @@ public class Player extends Subject {
 
     private Space currentPosition;
 
-    private int balance = 50000;
+    private int balance = 2000;
 
     private boolean inPrison = false;
 
@@ -152,6 +152,14 @@ public class Player extends Subject {
     public void setOwnedProperties(Set<Property> ownedProperties) {
         this.ownedProperties = new HashSet<Property>(ownedProperties);
         notifyChange();
+    }
+
+    public Set<Property> getOwnedPropertiesNotMortgaged() {
+        Set<Property> properties = new HashSet<>();
+        for (Property property : ownedProperties) {
+            if (!property.getMortgaged()) properties.add(property);
+        }
+        return Collections.unmodifiableSet(properties);
     }
 
     /**
