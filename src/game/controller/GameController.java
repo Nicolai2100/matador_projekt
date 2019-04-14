@@ -388,17 +388,19 @@ public class GameController {
      * @param amount the amount the player should have available after the act
      * @author Nicolai Wulff s185036
      */
-    public void obtainCash(Player player, int amount, boolean required) {
+    public boolean obtainCash(Player player, int amount, boolean beforePurchase) {
         boolean tryToObtain = true;
         while (tryToObtain) {
 
-            if (player.getOwnedProperties().size() == 0 && player.getBalance() < amount && required) {
+            //Check if the player has anything left to sell. If not, and the player still can't pay,
+            //declare the player bankrupt.
+            if (player.getOwnedProperties().size() == 0 && player.getBalance() < amount && !beforePurchase) {
                 gui.showMessage(player + ", du har desværre intet tilbage, du kan sælge, og må derfor erklæres konkurs.");
-                return;
+                return false;
             }
 
-            String choice = "";
-            if (required) {
+            String choice;
+            if (!beforePurchase) {
                 if (player.getBalance() < amount) {
                     choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Erklær dig konkurs");
                 } else {
@@ -406,40 +408,49 @@ public class GameController {
                 }
             } else {
                 if (player.getBalance() < amount) {
-                    choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Opgiv at købe");
+                    choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at købe grunden for " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Annuller købet");
                 } else {
-                    //TODO: Check om man kan fortryde.
-                    choice = gui.getUserButtonPressed(player + ", du har nu råd til at købe grunden for " + amount + "kr. Du kan nu fortsætte med at sælge/handle eller gå til betaling.", "Sælg huse", "Pantsæt grunde", "Handle", "Fortsæt");
+                    choice = gui.getUserButtonPressed(player + ", du har nu råd til at købe grunden for " + amount + "kr. Du kan nu fortsætte med at sælge/handle eller gå til betaling.", "Sælg huse", "Pantsæt grunde", "Handle", "Køb", "Annuller købet");
                 }
             }
 
-            if (choice.equals("Sælg huse")) {
-                sellHouseAction(player);
-            } else if (choice.equals("Pantsæt grunde")) {
-                mortgageAction(player);
-            } else if (choice.equals("Handle")) {
-                trade(player);
-            } else if (choice.equals("Erklær dig konkurs")) {
-                if (player.getOwnedPropertiesNotMortgaged().size() > 0) {
-                    boolean ownsHouses = false;
-                    for (Property property : player.getOwnedPropertiesNotMortgaged()) {
-                        if (property instanceof RealEstate) {
-                            if (((RealEstate) property).getHouseCount() > 0) ownsHouses = true;
+            switch (choice) {
+                case "Sælg huse" :
+                    sellHouseAction(player);
+                    break;
+                case "Pantsæt grunde" :
+                    mortgageAction(player);
+                    break;
+                case "Handle" :
+                    trade(player);
+                    break;
+                case "Erklær dig konkurs":
+                    if (player.getOwnedPropertiesNotMortgaged().size() > 0) {
+                        boolean ownsHouses = false;
+                        for (Property property : player.getOwnedPropertiesNotMortgaged()) {
+                            if (property instanceof RealEstate) {
+                                if (((RealEstate) property).getHouseCount() > 0) ownsHouses = true;
+                            }
                         }
-                    }
-                    if (ownsHouses) {
-                        gui.showMessage("Du har stadig huse/hoteller, du kan sælge!");
+                        gui.showMessage(ownsHouses ? "Du har stadig huse/hoteller, du kan sælge!" : "Du har stadig grunde, du kan pantsætte eller handle med!");
+                    } else if (player.getOwnedProperties().size() > 0 && player.getOwnedPropertiesNotMortgaged().size() == 0) {
+                        String choice2 = gui.getUserButtonPressed("Er du sikker på, du ikke vil forsøge at sælge dine pantsatte grunde til andre spillere?", "Ja", "Nej");
+                        if (choice2.equals("Ja")) {
+                            return false;
+                        }
                     } else {
-                        gui.showMessage("Du har stadig grunde, du kan pantsætte eller handle med!");
+                        return false;
                     }
-                } else if (player.getOwnedProperties().size() > 0 && player.getOwnedPropertiesNotMortgaged().size() == 0) {
-                    String choice2 = gui.getUserButtonPressed("Er du sikker på, du ikke vil forsøge at sælge dine pantsatte grunde til andre spillere?", "Ja", "Nej");
-                    if (choice2.equals("Ja")) tryToObtain = false;
-                }
-            } else {
-                tryToObtain = false;
+                    break;
+                case "Annuller købet" :
+                    return false;
+                case "Betal" :
+                    return true;
+                case "Køb" :
+                    return true;
             }
         }
+        return true;
     }
 
     /**
@@ -454,15 +465,17 @@ public class GameController {
      */
     public void offerToBuy(Property property, Player player) throws PlayerBrokeException, GameEndedException {
 
-        String choice;
+        String choice = "";
+        boolean proceedPurchase = true;
         if (player.getBalance() < property.getCost()) {
             choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke penge nok til at købe " + property + ". Vil du forsøge at finde pengene ved at sælge, handle eller pantsætte noget?", "Ja", "Nej");
             if (choice.equals("Ja")) {
-                obtainCash(player, property.getCost(), false);
+                proceedPurchase = obtainCash(player, property.getCost(), true);
             }
-        } else {
-            choice = gui.getUserSelection(player + ", ønsker du at købe " + property + " for " + property.getCost() + "kr?", "Ja", "Nej");
         }
+
+        choice = "";
+        if (proceedPurchase) choice = gui.getUserSelection(player + ", ønsker du at købe " + property + " for " + property.getCost() + "kr?", "Ja", "Nej");
 
         if (choice.equals("Ja")) {
             try {
@@ -499,7 +512,7 @@ public class GameController {
      */
     public void payment(Player payer, int amount, Player receiver) throws PlayerBrokeException, GameEndedException {
         if (payer.getBalance() < amount) {
-            obtainCash(payer, amount, true);
+            obtainCash(payer, amount, false);
             if (payer.getBalance() < amount) {
                 playerBrokeTo(payer, receiver);
                 if (gameEnds())
@@ -507,7 +520,7 @@ public class GameController {
                 throw new PlayerBrokeException(payer);
             }
         }
-        gui.showMessage("Player " + payer.getName() + " pays " + amount + "$ to player " + receiver.getName() + ".");
+        gui.showMessage(payer + " betaler " + amount + "kr til " + receiver + ".");
         payer.payMoney(amount);
         receiver.receiveMoney(amount);
     }
@@ -534,7 +547,7 @@ public class GameController {
      */
     public void paymentToBank(Player player, int amount) throws PlayerBrokeException, GameEndedException {
         if (amount > player.getBalance()) {
-            obtainCash(player, amount, true);
+            obtainCash(player, amount, false);
             if (amount > player.getBalance()) {
                 playerBrokeToBank(player);
                 if (gameEnds())
@@ -542,7 +555,7 @@ public class GameController {
                 throw new PlayerBrokeException(player);
             }
         }
-        gui.showMessage("Player " + player.getName() + " pays " + amount + "$ to the bank.");
+        gui.showMessage(player + " betaler " + amount + "kr til banken.");
         player.payMoney(amount);
     }
 
@@ -575,7 +588,7 @@ public class GameController {
                         highBid = currentBid;
                         highBidder = p;
                     } else {
-                        gui.showMessage(p + "du har ikke budt over og udgår derfor af auktionen.");
+                        gui.showMessage(p + " har ikke budt over og udgår derfor af auktionen.");
                         bidders.remove(p);
                     }
                 }
@@ -617,8 +630,7 @@ public class GameController {
             game.returnCardToDeck(brokePlayer.getOwnedCards().get(0));
         }
 
-        gui.showMessage("Player " + brokePlayer.getName() + "went broke and transfered all"
-                + "assets to " + benificiary.getName());
+        gui.showMessage(brokePlayer + " er gået konkurs og overfører hele konkursboet til " + benificiary);
     }
     /**
      * Action handling the situation when a player is broke to the bank.
@@ -637,7 +649,7 @@ public class GameController {
         }
         player.removeAllProperties();
 
-        gui.showMessage("Player " + player.getName() + " went broke");
+        gui.showMessage(player + " er gået konkurs.");
 
         while (!player.getOwnedCards().isEmpty()) {
             game.returnCardToDeck(player.getOwnedCards().get(0));
