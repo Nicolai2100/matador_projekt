@@ -146,14 +146,6 @@ public class GameController {
 
             current = (current + 1) % players.size();
             game.setCurrentPlayer(players.get(current));
-            /* Commented out, because I think it's not neccesary.
-            if (current == 0) {
-                String selection = gui.getUserButtonPressed("En runde er slut. Vil I fortsætte spillet?", "Ja", "Nej");
-                if (selection.equals("Nej")) {
-                    terminated = true;
-                }
-            }
-            */
         }
 
         dispose();
@@ -233,9 +225,7 @@ public class GameController {
             }
         }
         if (countActive == 1) {
-            gui.showMessage(
-                    "Player " + winner.getName() +
-                            " has won with " + winner.getBalance() + "$.");
+            gui.showMessage("Tillykke, " + winner.getName() + "! Du har vundet spillet med en balance på " + winner.getBalance() + "kr!");
             returnBool = true;
         } else if (countActive < 1) {
             // This can actually happen in very rare conditions and only
@@ -243,7 +233,7 @@ public class GameController {
             // in an auction in the same round when the last but one player went
             // bankrupt)
             gui.showMessage(
-                    "All players are broke.");
+                    "Spillet er slut uden en vinder, da alle spillere er gået konkurs!");
             returnBool = false;
         }
         return returnBool;
@@ -271,16 +261,16 @@ public class GameController {
 
             if (player.isInPrison() && castDouble) {
                 player.setInPrison(false);
-                gui.showMessage("Player " + player.getName() + " leaves prison now since he cast a double!");
+                gui.showMessage( player + " har kastet to ens, og bliver derfor løsladt fra fængslet!");
             } else if (player.isInPrison()) {
-                gui.showMessage("Player " + player.getName() + " stays in prison since he did not cast a double!");
+                gui.showMessage(player + " forbliver i fængsel, da han/hun ikke slog to ens.");
             }
             // TODO note that the player could also pay to get out of prison,
             //      which is not yet implemented
             if (castDouble) {
                 doublesCount++;
                 if (doublesCount > 2) {
-                    gui.showMessage("Player " + player.getName() + " has cast the third double and goes to jail!");
+                    gui.showMessage(player + " har kastet to ens tre gange i træk og ryger derfor i fængsel!");
                     gotoJail(player);
                     return;
                 }
@@ -465,12 +455,14 @@ public class GameController {
      */
     public void offerToBuy(Property property, Player player) throws PlayerBrokeException, GameEndedException {
 
-        String choice = "";
+        String choice;
         boolean proceedPurchase = true;
         if (player.getBalance() < property.getCost()) {
             choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke penge nok til at købe " + property + ". Vil du forsøge at finde pengene ved at sælge, handle eller pantsætte noget?", "Ja", "Nej");
             if (choice.equals("Ja")) {
                 proceedPurchase = obtainCash(player, property.getCost(), true);
+            } else {
+                proceedPurchase = false;
             }
         }
 
