@@ -268,6 +268,7 @@ public class JSONUtility {
         bornholm.setName("Bornholm");
         ((Utility) bornholm).setCost(4000);
         ((Utility) bornholm).setRent(500);
+        ((Utility) bornholm).setColorGroup(ColorGroup.navy);
         game.addSpace(bornholm);
 
         chance = new Chance();

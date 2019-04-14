@@ -284,7 +284,7 @@ public class GameController {
                 Space space = spaces.get(newPos);
                 moveToSpace(player, space);
                 if (castDouble) {
-                    gui.showMessage("Player " + player.getName() + " cast a double and gets to make another move.");
+                    gui.showMessage( player + " har kastet to ens og får derfor en ekstra tur.");
                     showTurnMenu(player, true);
                 }
             }
@@ -309,10 +309,10 @@ public class GameController {
             // Note that this assumes that the game has more than 12 spaces here!
             // TODO: the amount of 2000$ should not be a fixed constant here (could also
             //       be configured in the Game class.
-            gui.showMessage("Player " + player.getName() + " receives 2000$ for passing Go!");
+            gui.showMessage(player + " modtager 2000kr for at passere start!");
             this.paymentFromBank(player, 2000);
         }
-        gui.showMessage("Player " + player.getName() + " arrives at " + space.getIndex() + ": " + space.getName() + ".");
+        gui.showMessage(player + " ankommer til " + space + ".");
 
         // Execute the action associated with the respective space. Note
         // that this is delegated to the field, which implements this action
