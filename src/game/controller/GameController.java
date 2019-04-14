@@ -399,11 +399,18 @@ public class GameController {
 
             String choice = "";
             if (required) {
-                if (player.getBalance() < amount) choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Erklær dig konkurs");
-                if (player.getBalance() >= amount) choice = gui.getUserButtonPressed(player + ", du har nu råd til at betale " + amount + "kr. Du kan nu fortsætte med at sælge/handle eller gå til betaling.", "Sælg huse", "Pantsæt grunde", "Handle", "Betal");
+                if (player.getBalance() < amount) {
+                    choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Erklær dig konkurs");
+                } else {
+                    choice = gui.getUserButtonPressed(player + ", du har nu råd til at betale " + amount + "kr. Du kan nu fortsætte med at sælge/handle eller gå til betaling.", "Sælg huse", "Pantsæt grunde", "Handle", "Betal");
+                }
             } else {
-                if (player.getBalance() < amount) choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Opgiv at købe");
-                if (player.getBalance() >= amount) choice = gui.getUserButtonPressed(player + ", du har nu råd til at købe grunden for " + amount + "kr. Du kan nu fortsætte med at sælge/handle eller gå til betaling.", "Sælg huse", "Pantsæt grunde", "Handle", "Køb", "Fortryd købet");
+                if (player.getBalance() < amount) {
+                    choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Opgiv at købe");
+                } else {
+                    //TODO: Check om man kan fortryde.
+                    choice = gui.getUserButtonPressed(player + ", du har nu råd til at købe grunden for " + amount + "kr. Du kan nu fortsætte med at sælge/handle eller gå til betaling.", "Sælg huse", "Pantsæt grunde", "Handle", "Fortsæt");
+                }
             }
 
             if (choice.equals("Sælg huse")) {
@@ -412,18 +419,8 @@ public class GameController {
                 mortgageAction(player);
             } else if (choice.equals("Handle")) {
                 trade(player);
-            } else if(choice.equals("Betal") || choice.equals("Køb")) {
-                if (player.getBalance() < amount && choice.equals("Betal")) {
-                    gui.showMessage("Du har stadig ikke råd til at betale!");
-                } else if (player.getBalance() < amount && choice.equals("Køb")) {
-                    gui.showMessage("Du har stadig ikke råd til at købe!");
-                } else {
-                    tryToObtain = false;
-                }
             } else if (choice.equals("Erklær dig konkurs")) {
-                if (player.getBalance() > amount) {
-                    gui.showMessage("Du kan ikke erklære dig konkurs, da du har råd til at betale.");
-                } else if (player.getOwnedPropertiesNotMortgaged().size() > 0) {
+                if (player.getOwnedPropertiesNotMortgaged().size() > 0) {
                     boolean ownsHouses = false;
                     for (Property property : player.getOwnedPropertiesNotMortgaged()) {
                         if (property instanceof RealEstate) {
@@ -457,15 +454,13 @@ public class GameController {
      */
     public void offerToBuy(Property property, Player player) throws PlayerBrokeException, GameEndedException {
 
+        String choice;
         if (player.getBalance() < property.getCost()) {
-            String choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke penge nok til at købe " + property + ". Vil du forsøge at finde pengene ved at sælge, handle eller pantsætte noget?", "Ja", "Nej");
+            choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke penge nok til at købe " + property + ". Vil du forsøge at finde pengene ved at sælge, handle eller pantsætte noget?", "Ja", "Nej");
             if (choice.equals("Ja")) {
                 obtainCash(player, property.getCost(), false);
             }
-        }
-
-        String choice = "Nej";
-        if (player.getBalance() > property.getCost()) {
+        } else {
             choice = gui.getUserSelection(player + ", ønsker du at købe " + property + " for " + property.getCost() + "kr?", "Ja", "Nej");
         }
 
