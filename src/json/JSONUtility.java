@@ -8,10 +8,7 @@ import game.model.*;
 import game.model.properties.RealEstate;
 import game.model.properties.Utility;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +21,7 @@ import java.nio.file.Paths;
  */
 
 public class JSONUtility {
-    public static void main(String[] args) throws IOException {
+    public void createData() throws IOException {
 
         //creating data for the game's spaces
         Game game = new Game();
@@ -318,15 +315,27 @@ public class JSONUtility {
      * Load a Game-object from a corresponding JSON-file.
      * @return Fully configured Game-object. Should return an empty game-object if something goes wrong.
      */
-    public static Game createGame() {
+    public Game createGame() {
+
+
+        File temp = new File("src/resources/game.json");
+        if (temp.exists()) {
+            try {
+                temp.delete();
+                temp = new File("src/resources");
+                temp.delete();
+                createData();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         Game game = new Game();
 
         try {
-
             FileReader fileReader = new FileReader("src/resources/game.json");
 
-            GsonBuilder builder = new GsonBuilder().setPrettyPrinting()
-                    .registerTypeAdapter(Space.class, new Adapter<Space>());
+            GsonBuilder builder = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(Space.class, new Adapter<Space>());
 
             Gson gson = builder.create();
 
