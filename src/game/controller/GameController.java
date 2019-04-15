@@ -57,6 +57,8 @@ public class GameController {
         super();
         this.game = game;
         gui = new GUI();
+        view = new View(game, gui);
+        //view.addPlayers();
         gameDb = new GameDAO();
     }
     // Til tests
@@ -88,7 +90,8 @@ public class GameController {
             Integer numOfPlayers = chooseFromOptions(options, "Hvor mange spillere?", "Annuller", null, null, null);
             if (numOfPlayers != null) {
                 game.createPlayers(numOfPlayers);
-                initializeGUI();
+                view.addPlayers();
+                //initializeGUI();
                 view.createPlayers();
                 play();
             }
