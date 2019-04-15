@@ -97,6 +97,8 @@ public class View implements Observer {
                 gui_ownable.setBorder(null);
                 gui_ownable.setOwnerName(null);
             }
+
+            gui_ownable.setRent(property.getRent() + "");
         }
         if (property instanceof RealEstate) {
             GUI_Street street = (GUI_Street) gui_field;
@@ -106,7 +108,44 @@ public class View implements Observer {
             } else if (((RealEstate) property).getHouseCount() == 5) {
                 street.setHotel(true);
             }
+            String line1 = "Leje af grund:";
+            String line2 = " m/1 hus:";
+            String line3 = " 2 huse:";
+            String line4 = " 3 huse:";
+            String line5 = " 4 huse:";
+            String line6 = " hotel:";
+            String line7 = " Pris pr. hus/hotel:";
+            String[] lines = {line1, line2, line3, line4, line5, line6, line7};
+            String kr = "kr.";
 
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < 7; i++) {
+                sb.append(lines[i]);
+                if (i == 6) {
+                    String s = ((RealEstate) property).getPriceForHouse() + "";
+                    for (int j = 0; j < 21 - s.length() - lines[i].length(); j++) {
+                        sb.append("_");
+                    }
+                    sb.append(s);
+                } else {
+                    String s = property.getRentLevels()[i] + "";
+                    for (int j = 0; j < 21 - s.length() - lines[i].length(); j++) {
+                        sb.append("_");
+                    }
+                    sb.append(s);
+                }
+                sb.append(kr);
+            }
+
+            street.setDescription(sb + "");
+
+            /*street.setDescription("Leje af grund: " + property.getRentLevels()[0] + "kr."
+                    + "\nm/1 hus: " + property.getRentLevels()[1] + "kr."
+                    + "\n2 huse: " + property.getRentLevels()[2] + "kr."
+                    + "\n3 huse: " + property.getRentLevels()[3] + "kr."
+                    + "\n4 huse: " + property.getRentLevels()[4] + "kr."
+                    + "\nhotel: " + property.getRentLevels()[5] + "kr."
+                    + "\nHvert hus/hotel koster: " + ((RealEstate) property).getPriceForHouse() + "kr.");*/
         }
 
         if (property.getOwner() != null) {
