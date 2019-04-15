@@ -17,9 +17,17 @@ public class RealEstate extends Property{
 	public RealEstate(){
     }
 
+    @Override
     public void computeRent(){
         //calculerer den nye leje
-        this.setRent(this.getRent() + houseCount * priceForHouse);
+        if (this.getSuperOwned() && houseCount == 0) {
+            this.setRent(this.getRentLevels()[0] * 2);
+        } else if (houseCount > 0 && houseCount <= 5) {
+            this.setRent(this.getRentLevels()[houseCount]);
+        } else {
+            this.setRent(this.getRentLevels()[0]);
+        }
+        //this.setRent(this.getRent() + houseCount * priceForHouse);
         notifyChange();
     }
 
@@ -39,6 +47,12 @@ public class RealEstate extends Property{
         this.houseCount = houseCount;
         computeRent();
         notifyChange();
+    }
+
+    @Override
+    public void setRentLevels(int[] rentLevels) {
+        if (rentLevels.length != 6) throw new IllegalArgumentException();
+        super.setRentLevels(rentLevels);
     }
 
     /*Udvid klassen for grund (RealEstate) med private attributer
