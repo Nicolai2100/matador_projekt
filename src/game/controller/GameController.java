@@ -57,8 +57,7 @@ public class GameController {
         super();
         this.game = game;
         gui = new GUI();
-        view = new View(game, gui);
-        //view.addPlayers();
+        initializeGUI();
         gameDb = new GameDAO();
     }
     // Til tests
@@ -69,14 +68,48 @@ public class GameController {
     }
 
     /**
-     * This method will initialize the GUI. It should be called after
-     * the players of the game are created. As of now, the initialization
+     * This method will initialize the GUI by adding descriptions to all properties. As of now, the initialization
      * assumes that the spaces of the game fit to the fields of the GUI;
      * this could eventually be changed, by creating the GUI fields
      * based on the underlying game's spaces (fields).
      */
     public void initializeGUI() {
-        this.view = new View(game, gui);
+        //this.view = new View(game, gui);
+        int i = 0;
+        for (Space space : game.getSpaces()) {
+            if (space instanceof RealEstate) {
+                String line1 = "Leje af grund:";
+                String line2 = " m/1 hus:";
+                String line3 = " 2 huse:";
+                String line4 = " 3 huse:";
+                String line5 = " 4 huse:";
+                String line6 = " hotel:";
+                String line7 = " Pris pr. hus/hotel:";
+                String[] lines = {line1, line2, line3, line4, line5, line6, line7};
+                String kr = "kr.";
+
+                StringBuffer sb = new StringBuffer();
+                for (int j = 0; j < 7; j++) {
+                    sb.append(lines[j]);
+                    if (j == 6) {
+                        String s = ((RealEstate) space).getPriceForHouse() + "";
+                        for (int k = 0; k < 21 - s.length() - lines[j].length(); k++) {
+                            sb.append("_");
+                        }
+                        sb.append(s);
+                    } else {
+                        String s = ((RealEstate) space).getRentLevels()[j] + "";
+                        for (int k = 0; k < 21 - s.length() - lines[j].length(); k++) {
+                            sb.append("_");
+                        }
+                        sb.append(s);
+                    }
+                    sb.append(kr);
+                }
+                gui.getFields()[i].setDescription(sb + "");
+            }
+            i++;
+        }
     }
 
     /**
@@ -90,7 +123,7 @@ public class GameController {
             Integer numOfPlayers = chooseFromOptions(options, "Hvor mange spillere?", "Annuller", null, null, null);
             if (numOfPlayers != null) {
                 game.createPlayers(numOfPlayers);
-                view.addPlayers();
+                view = new View(game, gui);
                 //initializeGUI();
                 view.createPlayers();
                 play();
@@ -102,7 +135,7 @@ public class GameController {
             if (gameSelection != null) {
                 game = gameDb.loadGame(game, gameSelection);
                 game.shuffleCardDeck();
-                initializeGUI();
+                view = new View(game, gui);
                 view.loadPlayers();
                 play();
             }

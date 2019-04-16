@@ -55,6 +55,11 @@ public class View implements Observer {
 
         GUI_Field[] guiFields = gui.getFields();
 
+        for (Player player : game.getPlayers()) {
+            PlayerPanel playerPanel = new PlayerPanel(game, player);
+            player2PlayerPanel.put(player, playerPanel);
+        }
+
         int i = 0;
         for (Space space : game.getSpaces()) {
             // TODO, here we assume that the games fields fit to the GUI's fields;
@@ -62,48 +67,7 @@ public class View implements Observer {
             // fields
             space2GuiField.put(space, guiFields[i]);
             space.attach(this);
-
-            if (space instanceof RealEstate) {
-                String line1 = "Leje af grund:";
-                String line2 = " m/1 hus:";
-                String line3 = " 2 huse:";
-                String line4 = " 3 huse:";
-                String line5 = " 4 huse:";
-                String line6 = " hotel:";
-                String line7 = " Pris pr. hus/hotel:";
-                String[] lines = {line1, line2, line3, line4, line5, line6, line7};
-                String kr = "kr.";
-
-                StringBuffer sb = new StringBuffer();
-                for (int j = 0; j < 7; j++) {
-                    sb.append(lines[j]);
-                    if (j == 6) {
-                        String s = ((RealEstate) space).getPriceForHouse() + "";
-                        for (int k = 0; k < 21 - s.length() - lines[j].length(); k++) {
-                            sb.append("_");
-                        }
-                        sb.append(s);
-                    } else {
-                        String s = ((RealEstate) space).getRentLevels()[j] + "";
-                        for (int k = 0; k < 21 - s.length() - lines[j].length(); k++) {
-                            sb.append("_");
-                        }
-                        sb.append(s);
-                    }
-                    sb.append(kr);
-                }
-
-                guiFields[i].setDescription(sb + "");
-            }
             i++;
-        }
-    }
-
-    //midlertidigt
-    public void addPlayers() {
-        for (Player player : game.getPlayers()) {
-            PlayerPanel playerPanel = new PlayerPanel(game, player);
-            player2PlayerPanel.put(player, playerPanel);
         }
     }
 
@@ -146,14 +110,6 @@ public class View implements Observer {
             } else if (((RealEstate) property).getHouseCount() == 5) {
                 street.setHotel(true);
             }
-
-            /*street.setDescription("Leje af grund: " + property.getRentLevels()[0] + "kr."
-                    + "\nm/1 hus: " + property.getRentLevels()[1] + "kr."
-                    + "\n2 huse: " + property.getRentLevels()[2] + "kr."
-                    + "\n3 huse: " + property.getRentLevels()[3] + "kr."
-                    + "\n4 huse: " + property.getRentLevels()[4] + "kr."
-                    + "\nhotel: " + property.getRentLevels()[5] + "kr."
-                    + "\nHvert hus/hotel koster: " + ((RealEstate) property).getPriceForHouse() + "kr.");*/
         }
 
         if (property.getOwner() != null) {
