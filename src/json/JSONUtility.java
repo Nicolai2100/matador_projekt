@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import game.model.*;
+import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
 import game.model.properties.Utility;
@@ -110,10 +111,11 @@ public class JSONUtility {
         frederiksbergAlle.setPriceForHouse(2000);
         game.addSpace(frederiksbergAlle);
 
-        Utility tuborg = new Utility();
+        Brewery tuborg = new Brewery();
         tuborg.setName("Tuborg");
         tuborg.setCost(3000);
-        tuborg.setRent(0);
+        rentLevels = new int[]{100, 200};
+        tuborg.setRentLevels(rentLevels);
         tuborg.setColorGroup(ColorGroup.darkgreen);
         game.addSpace(tuborg);
 
@@ -235,10 +237,11 @@ public class JSONUtility {
         kgsnytorv.setPriceForHouse(3000);
         game.addSpace(kgsnytorv);
 
-        Utility carlsberg = new Utility();
+        Brewery carlsberg = new Brewery();
         carlsberg.setName("Carlsberg");
         carlsberg.setCost(3000);
-        carlsberg.setRent(0);
+        rentLevels = new int[]{100, 200};
+        carlsberg.setRentLevels(rentLevels);
         carlsberg.setColorGroup(ColorGroup.darkgreen);
         game.addSpace(carlsberg);
 

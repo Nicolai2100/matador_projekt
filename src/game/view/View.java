@@ -6,6 +6,7 @@ import game.model.Game;
 import game.model.Player;
 import game.model.Property;
 import game.model.Space;
+import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Utility;
 import gui_fields.*;
@@ -111,7 +112,11 @@ public class View implements Observer {
             } else if (((RealEstate) property).getHouseCount() == 5) {
                 street.setHotel(true);
             }
-            street.setRent(property.getRent() + "");
+            //street.setRent(property.getRent() + "");
+        }
+
+        if (property instanceof Brewery) {
+            ((GUI_Ownable) gui_field).setRent(property.getRent() + " gange øjnene.");
         }
 
         if (property.getOwner() != null) {

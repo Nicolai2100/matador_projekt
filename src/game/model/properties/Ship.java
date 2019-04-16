@@ -1,7 +1,5 @@
 package game.model.properties;
 
-import game.model.Property;
-
 public class Ship extends Utility {
 
     @Override

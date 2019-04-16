@@ -5,6 +5,7 @@ import game.database.GameDAO;
 import game.model.*;
 import game.model.exceptions.GameEndedException;
 import game.model.exceptions.PlayerBrokeException;
+import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
 import game.view.View;
@@ -44,6 +45,7 @@ public class GameController {
     private GameStub gameStub;
     private GUI gui;
     private GameDAO gameDb;
+    private int sumOfDies;
 
     private View view;
 
@@ -124,6 +126,8 @@ public class GameController {
                     sb.append(s);
                     sb.append(kr);
                 }
+            } else if (space instanceof Brewery) {
+                sb.append("Hvis 1 virksomhed ejes, betales 100 gange så meget, som øjnene viser. Hvis både Tuborg og Carlsberg ejes, betales 200 gange så meget, som øjnene viser.");
             }
             gui.getFields()[i].setDescription(sb + "");
             i++;
@@ -310,6 +314,7 @@ public class GameController {
         do {
             int die1 = (int) (1 + 6.0 * Math.random());
             int die2 = (int) (1 + 6.0 * Math.random());
+            sumOfDies = die1 + die2;
             castDouble = (die1 == die2);
             gui.setDice(die1, die2);
 
@@ -1155,5 +1160,9 @@ public class GameController {
      */
     public void showMessage(String message) {
         gui.showMessage(message);
+    }
+
+    public int getSumOfDies() {
+        return sumOfDies;
     }
 }
