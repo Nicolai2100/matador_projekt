@@ -2,6 +2,7 @@ package game.view;
 
 import designpattern.Observer;
 import designpattern.Subject;
+import game.controller.GameController;
 import game.model.Game;
 import game.model.Player;
 import game.model.Property;

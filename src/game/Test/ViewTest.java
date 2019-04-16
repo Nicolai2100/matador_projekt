@@ -1,5 +1,6 @@
 package game.Test;
 
+import game.controller.GameController;
 import game.model.Game;
 import game.view.View;
 import gui_main.GUI;

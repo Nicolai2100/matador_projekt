@@ -77,65 +77,32 @@ public class GameController {
      * based on the underlying game's spaces (fields).
      */
     public void initializeGUI() {
-        //this.view = new View(game, gui);
         int i = 0;
         for (Space space : game.getSpaces()) {
-            StringBuffer sb = new StringBuffer();
-            if (space instanceof RealEstate) {
-                String line1 = "Leje af grund:";
-                String line2 = " m/1 hus:";
-                String line3 = " 2 huse:";
-                String line4 = " 3 huse:";
-                String line5 = " 4 huse:";
-                String line6 = " hotel:";
-                String line7 = " Pris pr. hus/hotel:";
-                String[] lines = {line1, line2, line3, line4, line5, line6, line7};
-                String kr = "kr.";
-
-                for (int j = 0; j < 7; j++) {
-                    sb.append(lines[j]);
-                    if (j == 6) {
-                        String s = ((RealEstate) space).getPriceForHouse() + "";
-                        for (int k = 0; k < 21 - s.length() - lines[j].length(); k++) {
-                            sb.append("_");
-                        }
-                        sb.append(s);
-                    } else {
-                        String s = ((RealEstate) space).getRentLevels()[j] + "";
-                        if (space.getIndex() < 10) {
-                            for (int k = 0; k < 22 - s.length() - lines[j].length(); k++) {
-                                sb.append("_");
-                            }
-                        } else {
-                            for (int k = 0; k < 21 - s.length() - lines[j].length(); k++) {
-                                sb.append("_");
-                            }
-                        }
-                        sb.append(s);
-                    }
-                    sb.append(kr);
-                }
-            } else if (space instanceof Ship) {
-                String line1 = " Leje:";
-                String line2 = " 2 rederier:";
-                String line3 = " 3 rederier:";
-                String line4 = " 4 rederier:";
-                String[] lines = {line1, line2, line3, line4};
-                String kr = "kr.";
-
-                for (int j = 0; j < 4; j++) {
-                    sb.append(lines[j]);
-                    String s = ((Ship) space).getRentLevels()[j] + "";
-                    for (int k = 0; k < 23 - s.length() - lines[j].length(); k++) {
-                        sb.append("_");
-                    }
-                    sb.append(s);
-                    sb.append(kr);
-                }
-            } else if (space instanceof Brewery) {
-                sb.append("Hvis 1 virksomhed ejes, betales 100 gange så meget, som øjnene viser. Hvis både Tuborg og Carlsberg ejes, betales 200 gange så meget, som øjnene viser.");
+            Property property = null;
+            if (space instanceof Property) {
+                property = (Property) space;
             }
-            gui.getFields()[i].setDescription(sb + "");
+            String description = "";
+            if (property instanceof RealEstate) {
+                description = "<table width=\"170\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
+                        + "<tr><td>Leje af grund:</td><td align=\"right\">" + property.getRentLevels()[0] + "kr.</td></tr>"
+                        + "<tr><td>m/1 hus:</td><td align=\"right\">" + property.getRentLevels()[1] + "kr.</td></tr>"
+                        + "<tr><td>2 huse:</td><td align=\"right\">" + property.getRentLevels()[2] + "kr.</td></tr>"
+                        + "<tr><td>3 huse:</td><td align=\"right\">" + property.getRentLevels()[3] + "kr.</td></tr>"
+                        + "<tr><td>4 huse:</td><td align=\"right\">" + property.getRentLevels()[4] + "kr.</td></tr>"
+                        + "<tr><td>hotel:</td><td align=\"right\">" + property.getRentLevels()[5] + "kr.</td></tr>"
+                        + "<tr><td>pr. hus/hotel:</td><td align=\"right\">" + ((RealEstate) space).getPriceForHouse() + "kr.</td></tr></table>";
+            } else if (space instanceof Ship) {
+                description = "<table width=\"170\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
+                        + "<tr><td>Leje:</td><td align=\"right\">" + property.getRentLevels()[0] + "kr.</td></tr>"
+                        + "<tr><td>2 rederier:</td><td align=\"right\">" + property.getRentLevels()[1] + "kr.</td></tr>"
+                        + "<tr><td>3 rederier:</td><td align=\"right\">" + property.getRentLevels()[2] + "kr.</td></tr>"
+                        + "<tr><td>4 rederier:</td><td align=\"right\">" + property.getRentLevels()[3] + "kr.</td></tr></table>";
+            } else if (space instanceof Brewery) {
+                description = ("Hvis 1 virksomhed ejes, betales 100 gange så meget, som øjnene viser. Hvis både Tuborg og Carlsberg ejes, betales 200 gange så meget, som øjnene viser.");
+            }
+            gui.getFields()[i].setDescription(description);
             i++;
         }
     }
@@ -152,7 +119,6 @@ public class GameController {
             if (numOfPlayers != null) {
                 game.createPlayers(numOfPlayers);
                 view = new View(game, gui);
-                //initializeGUI();
                 view.createPlayers();
                 play();
             }

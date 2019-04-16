@@ -1,5 +1,6 @@
 package game.view;
 
+import game.controller.GameController;
 import game.model.*;
 import gui_main.GUI;
 
@@ -171,19 +172,14 @@ public class PlayerPanel extends JFrame implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         JLabel jl = ((JLabel) e.getSource());
-        Space space = null;
+        Property property = null;
         for (Space s : game.getSpaces()) {
-            if (s.getName().equals(jl.getText())) space = s;
+            if (s.getName().equals(jl.getText())) property = (Property) s;
         }
-        if (space instanceof Property) {
-            gui.displayChanceCard("<center><strong>" + space.getName() + "</strong></center>"
-                    + gui.getFields()[space.getIndex()].getDescription()
-                    + "<br><center>Pris: " + ((Property) space).getCost() + "kr."
-                    + "<br>Pantsæt. værdi: " + ((Property) space).getCost() / 2 + "kr.</center>");
-        } else {
-            gui.displayChanceCard("<center><strong>" + space.getName() + "</strong></center>"
-                    + gui.getFields()[space.getIndex()].getDescription());
-        }
+        gui.displayChanceCard("<div align=\"center\"><b>" + property.getName() + "</b></div>"
+            + gui.getFields()[property.getIndex()].getDescription()
+            + "<div align=\"center\">Pris: " + property.getCost() + "kr."
+            + "<br>Pantsæt. værdi: " + property.getCost() / 2 + "kr.</div>");
     }
 
     @Override
