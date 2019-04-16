@@ -6,6 +6,7 @@ import game.model.*;
 import game.model.exceptions.GameEndedException;
 import game.model.exceptions.PlayerBrokeException;
 import game.model.properties.RealEstate;
+import game.model.properties.Ship;
 import game.view.View;
 import gui_main.GUI;
 
@@ -77,6 +78,7 @@ public class GameController {
         //this.view = new View(game, gui);
         int i = 0;
         for (Space space : game.getSpaces()) {
+            StringBuffer sb = new StringBuffer();
             if (space instanceof RealEstate) {
                 String line1 = "Leje af grund:";
                 String line2 = " m/1 hus:";
@@ -88,7 +90,6 @@ public class GameController {
                 String[] lines = {line1, line2, line3, line4, line5, line6, line7};
                 String kr = "kr.";
 
-                StringBuffer sb = new StringBuffer();
                 for (int j = 0; j < 7; j++) {
                     sb.append(lines[j]);
                     if (j == 6) {
@@ -106,8 +107,25 @@ public class GameController {
                     }
                     sb.append(kr);
                 }
-                gui.getFields()[i].setDescription(sb + "");
+            } else if (space instanceof Ship) {
+                String line1 = " Leje:";
+                String line2 = " 2 rederier:";
+                String line3 = " 3 rederier:";
+                String line4 = " 4 rederier:";
+                String[] lines = {line1, line2, line3, line4};
+                String kr = "kr.";
+
+                for (int j = 0; j < 4; j++) {
+                    sb.append(lines[j]);
+                    String s = ((Ship) space).getRentLevels()[j] + "";
+                    for (int k = 0; k < 23 - s.length() - lines[j].length(); k++) {
+                        sb.append("_");
+                    }
+                    sb.append(s);
+                    sb.append(kr);
+                }
             }
+            gui.getFields()[i].setDescription(sb + "");
             i++;
         }
     }

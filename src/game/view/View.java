@@ -7,6 +7,7 @@ import game.model.Player;
 import game.model.Property;
 import game.model.Space;
 import game.model.properties.RealEstate;
+import game.model.properties.Utility;
 import gui_fields.*;
 import gui_fields.GUI_Car.Pattern;
 import gui_fields.GUI_Car.Type;
@@ -110,6 +111,7 @@ public class View implements Observer {
             } else if (((RealEstate) property).getHouseCount() == 5) {
                 street.setHotel(true);
             }
+            street.setRent(property.getRent() + "");
         }
 
         if (property.getOwner() != null) {

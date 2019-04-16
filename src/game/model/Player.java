@@ -1,6 +1,8 @@
 package game.model;
 
 import designpattern.Subject;
+import game.model.properties.Ship;
+import game.model.properties.Utility;
 
 import java.awt.*;
 import java.util.List;
@@ -170,6 +172,7 @@ public class Player extends Subject {
     public void addOwnedProperty(Property property) {
         ownedProperties.add(property);
         checkIsSuperOwned(property);
+        checkRentLevel();
         notifyChange();
     }
 
@@ -217,6 +220,14 @@ public class Player extends Subject {
             }
             //todo meddelelse til bruger om at han nu kan bygge huse!!!
         }
+    }
+
+    public void checkRentLevel() {
+        ArrayList<Ship> ships = new ArrayList<>();
+        for (Property p : ownedProperties) {
+            if (p instanceof Ship) ships.add((Ship) p);
+        }
+        for (Ship ship : ships) ship.setCurrentRentLevel(ships.size() - 1);
     }
 
     /**

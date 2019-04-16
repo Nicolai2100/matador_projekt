@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import game.model.*;
 import game.model.properties.RealEstate;
+import game.model.properties.Ship;
 import game.model.properties.Utility;
 
 import java.io.*;
@@ -56,11 +57,12 @@ public class JSONUtility {
         indkomstskat.setName("Indkomstskat");
         game.addSpace(indkomstskat);
 
-        Utility oeresund = new Utility();
+        Ship oeresund = new Ship();
         //TODO ændr alle utilities til enten Ship eller Brewery (som kan have begyndelsespris sat fra start)
         oeresund.setName("Øresund");
         oeresund.setCost(4000);
-        oeresund.setRent(500);
+        rentLevels = new int[]{500, 1000, 2000, 4000};
+        oeresund.setRentLevels(rentLevels);
         oeresund.setColorGroup(ColorGroup.navy);
         game.addSpace(oeresund);
 
@@ -133,10 +135,11 @@ public class JSONUtility {
         gammelkongevej.setPriceForHouse(2000);
         game.addSpace(gammelkongevej);
 
-        Utility dfds = new Utility();
+        Ship dfds = new Ship();
         dfds.setName("D.F.D.S");
         dfds.setCost(4000);
-        dfds.setRent(500);
+        rentLevels = new int[]{500, 1000, 2000, 4000};
+        dfds.setRentLevels(rentLevels);
         dfds.setColorGroup(ColorGroup.navy);
         game.addSpace(dfds);
 
@@ -206,10 +209,11 @@ public class JSONUtility {
         gronningen.setPriceForHouse(3000);
         game.addSpace(gronningen);
 
-        Utility oes = new Utility();
+        Ship oes = new Ship();
         oes.setName("Ø.S.");
         oes.setCost(4000);
-        oes.setCost(500);
+        rentLevels = new int[]{500, 1000, 2000, 4000};
+        oes.setRentLevels(rentLevels);
         oes.setColorGroup(ColorGroup.navy);
         game.addSpace(oes);
 
@@ -282,10 +286,11 @@ public class JSONUtility {
         nygade.setColorGroup(ColorGroup.yellow);
         game.addSpace(nygade);
 
-        Utility bornholm = new Utility();
+        Ship bornholm = new Ship();
         bornholm.setName("Bornholm");
         bornholm.setCost(4000);
-        bornholm.setRent(500);
+        rentLevels = new int[]{500, 1000, 2000, 4000};
+        bornholm.setRentLevels(rentLevels);
         bornholm.setColorGroup(ColorGroup.navy);
         game.addSpace(bornholm);
 
