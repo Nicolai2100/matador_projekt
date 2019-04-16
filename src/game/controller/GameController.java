@@ -102,8 +102,14 @@ public class GameController {
                         sb.append(s);
                     } else {
                         String s = ((RealEstate) space).getRentLevels()[j] + "";
-                        for (int k = 0; k < 21 - s.length() - lines[j].length(); k++) {
-                            sb.append("_");
+                        if (space.getIndex() < 10) {
+                            for (int k = 0; k < 22 - s.length() - lines[j].length(); k++) {
+                                sb.append("_");
+                            }
+                        } else {
+                            for (int k = 0; k < 21 - s.length() - lines[j].length(); k++) {
+                                sb.append("_");
+                            }
                         }
                         sb.append(s);
                     }
