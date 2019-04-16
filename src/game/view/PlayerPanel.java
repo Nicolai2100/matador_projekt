@@ -1,10 +1,14 @@
 package game.view;
 
 import game.model.*;
+import gui_main.GUI;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.font.TextAttribute;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,16 +16,19 @@ import java.util.Map;
 /**
  * @Malte, Nicolai L og Nicolai W
  */
-public class PlayerPanel extends JFrame {
+public class PlayerPanel extends JFrame implements MouseListener {
     private Game game;
+    private GUI gui;
     private Player player;
     private JPanel mainPanel;
     private Dimension dimension;
     private Dimension dimension2;
     private Map<ColorGroup, JPanel> maltesMap;
+    private Map<JLabel, ColorGroup> nicolaisMap;
 
-    public PlayerPanel(Game game, Player player) {
+    public PlayerPanel(Game game, Player player, GUI gui) {
         this.game = game;
+        this.gui = gui;
         this.player = player;
         dimension = new Dimension(72, 120);
         dimension2 = new Dimension(90, 20);
@@ -44,6 +51,7 @@ public class PlayerPanel extends JFrame {
     public void update() {
         mainPanel.removeAll();
         maltesMap = new HashMap<>();
+        nicolaisMap = new HashMap<>();
 
         JPanel playerPanel = new JPanel();
         playerPanel.setBackground(Color.WHITE);
@@ -145,6 +153,8 @@ public class PlayerPanel extends JFrame {
     public void labelMaker(JPanel jPanel, Property property) {
         if (!property.getMortgaged()) {
             JLabel jLabel = new JLabel(property.getName());
+            nicolaisMap.put(jLabel, property.getColorGroup());
+            jLabel.addMouseListener(this);
             jPanel.add(jLabel);
         }
     }
@@ -152,7 +162,59 @@ public class PlayerPanel extends JFrame {
     public void pawnedLabelMaker(JPanel jPanel, Property property) {
         if (property.getMortgaged()) {
             JLabel jLabel = new JLabel(property.getName());
+            nicolaisMap.put(jLabel, property.getColorGroup());
+            jLabel.addMouseListener(this);
             jPanel.add(jLabel);
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        JLabel jl = ((JLabel) e.getSource());
+        Space space = null;
+        for (Space s : game.getSpaces()) {
+            if (s.getName().equals(jl.getText())) space = s;
+        }
+        if (space instanceof Property) {
+            gui.displayChanceCard("<center><strong>" + space.getName() + "</strong></center>"
+                    + gui.getFields()[space.getIndex()].getDescription()
+                    + "<br><center>Pris: " + ((Property) space).getCost() + "kr."
+                    + "<br>Pantsæt. værdi: " + ((Property) space).getCost() / 2 + "kr.</center>");
+        } else {
+            gui.displayChanceCard("<center><strong>" + space.getName() + "</strong></center>"
+                    + gui.getFields()[space.getIndex()].getDescription());
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        //System.out.println("mouse pressed");
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        //System.out.println("mouse released");
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        JLabel jl = ((JLabel) e.getSource());
+        jl.setBackground(Color.white);
+        jl.setOpaque(true);
+        Font font = jl.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        jl.setFont(font.deriveFont(attributes));
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        JLabel jl = ((JLabel) e.getSource());
+        //jl.setOpaque(false);
+        jl.setBackground(ColorGroup.colorGroupTransformer(nicolaisMap.get(jl)));
+        Font font = jl.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, -1);
+        jl.setFont(font.deriveFont(attributes));
     }
 }

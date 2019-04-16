@@ -58,7 +58,7 @@ public class View implements Observer {
         GUI_Field[] guiFields = gui.getFields();
 
         for (Player player : game.getPlayers()) {
-            PlayerPanel playerPanel = new PlayerPanel(game, player);
+            PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
             player2PlayerPanel.put(player, playerPanel);
         }
 
@@ -279,5 +279,9 @@ public class View implements Observer {
         Color carColorChoice = tokenColorObj.colorChosen(carColorS);
 
         return carColorChoice;
+    }
+
+    public Map<Space, GUI_Field> getSpace2GuiField() {
+        return space2GuiField;
     }
 }

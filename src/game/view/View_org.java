@@ -43,7 +43,7 @@ public class View_org implements Observer {
         this.gui = gui;
 
         for (Player player : game.getPlayers()) {
-            PlayerPanel playerPanel = new PlayerPanel(game, player);
+            PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
             player2PlayerPanel.put(player, playerPanel);
         }
 
