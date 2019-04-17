@@ -193,7 +193,7 @@ public class GameController {
     public void showTurnMenu(Player player, Boolean startOfTurn) {
         boolean continueChoosing = true;
         while (continueChoosing) {
-            String choice = null;
+            String choice;
 
             if (startOfTurn) {
                 choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?" , "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil", "Kør");
