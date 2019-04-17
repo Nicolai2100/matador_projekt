@@ -19,6 +19,9 @@ public class Property extends Space {
     private Player owner;
     private ColorGroup colorGroup;
 
+    public Property() {
+    }
+
     public void computeRent() {
 
     }

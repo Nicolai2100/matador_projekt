@@ -230,15 +230,7 @@ public class GameController {
         } else {
             gameDb.updateGame(game);
         }
-        try {
-            File f = new File("saved.wav");
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioIn);
-            clip.start();
-        } catch (Exception e) {
-
-        }
+        playSound("saved.wav");
         gui.showMessage("Spillet blev gemt!");
     }
 
@@ -328,15 +320,7 @@ public class GameController {
                 List<Space> spaces = game.getSpaces();
                 int newPos = (pos + die1 + die2) % spaces.size();
                 Space space = spaces.get(newPos);
-                try {
-                    File f = new File("engine.wav");
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-                    clip.start();
-                } catch (Exception e) {
-
-                }
+                playSound("engine.wav");
                 moveToSpace(player, space);
                 if (castDouble) {
                     gui.showMessage( player + " har kastet to ens og får derfor en ekstra tur.");
@@ -364,15 +348,7 @@ public class GameController {
             // Note that this assumes that the game has more than 12 spaces here!
             // TODO: the amount of 2000$ should not be a fixed constant here (could also
             //       be configured in the Game class.
-            try {
-                File f = new File("yougotmoney.wav");
-                AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioIn);
-                clip.start();
-            } catch (Exception e) {
-
-            }
+            playSound("yougotmoney.wav");
             gui.showMessage(player + " modtager 2000kr for at passere start!");
             this.paymentFromBank(player, 2000);
         }
@@ -392,15 +368,7 @@ public class GameController {
         // Field #10 is in the default game board of Monopoly the field
         // representing the prison.
         // TODO the 10 should not be hard coded
-        try {
-            File f = new File("imprisoned.wav");
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioIn);
-            clip.start();
-        } catch (Exception e) {
-
-        }
+        playSound("imprisoned.wav");
         player.setCurrentPosition(game.getSpaces().get(10));
         player.setInPrison(true);
     }
@@ -556,15 +524,7 @@ public class GameController {
             }
             property.setOwner(player);
             player.addOwnedProperty(property);
-            try {
-                File f = new File("purchase.wav");
-                AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioIn);
-                clip.start();
-            } catch (Exception e) {
-
-            }
+            playSound("purchase.wav");
             return;
         }
 
@@ -765,15 +725,7 @@ public class GameController {
             try {
                 paymentToBank(player, re.getPriceForHouse());
                 re.setHouseCount(re.getHouseCount() + 1);
-                try {
-                    File f = new File("purchase.wav");
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-                    clip.start();
-                } catch (Exception e) {
-
-                }
+                playSound("purchase.wav");
             } catch (PlayerBrokeException e){
                 e.printStackTrace();
             } catch (GameEndedException e) {
@@ -1196,5 +1148,17 @@ public class GameController {
 
     public int getSumOfDies() {
         return sumOfDies;
+    }
+
+    public void playSound(String filePath) {
+        try {
+            File f = new File(filePath);
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

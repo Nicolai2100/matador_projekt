@@ -2,6 +2,7 @@ package game.model;
 
 import designpattern.Subject;
 import game.model.properties.Brewery;
+import game.model.properties.RealEstate;
 import game.model.properties.Ship;
 import game.model.properties.Utility;
 
@@ -229,6 +230,7 @@ public class Player extends Subject {
         for (Property p : ownedProperties) {
             if (p instanceof Ship) ships.add((Ship) p);
             if (p instanceof Brewery) breweries.add((Brewery) p);
+            if (p instanceof RealEstate) p.computeRent();
         }
         for (Ship ship : ships) ship.setCurrentRentLevel(ships.size() - 1);
         for (Brewery brewery : breweries) brewery.setCurrentRentLevel(breweries.size() - 1);
