@@ -326,7 +326,7 @@ public class JSONUtility {
 
         //JSON-GSON operations
         Path path = Paths.get("src/resources");
-        Files.createDirectory(path);
+        //Files.createDirectory(path);
 
         FileWriter fileWriter = new FileWriter(path + "/game.json");
         GsonBuilder builder = new GsonBuilder().setPrettyPrinting()
@@ -352,8 +352,6 @@ public class JSONUtility {
         File temp = new File("src/resources/game.json");
         if (temp.exists()) {
             try {
-                temp.delete();
-                temp = new File("src/resources");
                 temp.delete();
                 createData();
             } catch (IOException e) {

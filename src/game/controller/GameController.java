@@ -1150,9 +1150,9 @@ public class GameController {
         return sumOfDies;
     }
 
-    public void playSound(String filePath) {
+    public void playSound(String fileName) {
         try {
-            File f = new File(filePath);
+            File f = new File("src/resources/sounds/" + fileName);
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);

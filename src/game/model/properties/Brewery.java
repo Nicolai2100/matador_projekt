@@ -20,6 +20,7 @@ public class Brewery extends Utility {
 
     @Override
     public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
+        controller.playSound("cheers.wav");
         if (this.getOwner() == null) {
             controller.offerToBuy(this, player);
         } else if (!this.getOwner().equals(player) && !this.getMortgaged() && !this.getOwner().isInPrison()) {
