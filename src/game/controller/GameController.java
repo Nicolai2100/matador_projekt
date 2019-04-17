@@ -11,6 +11,12 @@ import game.model.properties.Ship;
 import game.view.View;
 import gui_main.GUI;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -224,6 +230,15 @@ public class GameController {
         } else {
             gameDb.updateGame(game);
         }
+        try {
+            File f = new File("saved.wav");
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (Exception e) {
+
+        }
         gui.showMessage("Spillet blev gemt!");
     }
 
@@ -313,6 +328,15 @@ public class GameController {
                 List<Space> spaces = game.getSpaces();
                 int newPos = (pos + die1 + die2) % spaces.size();
                 Space space = spaces.get(newPos);
+                try {
+                    File f = new File("engine.wav");
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+                    clip.start();
+                } catch (Exception e) {
+
+                }
                 moveToSpace(player, space);
                 if (castDouble) {
                     gui.showMessage( player + " har kastet to ens og får derfor en ekstra tur.");
@@ -340,6 +364,15 @@ public class GameController {
             // Note that this assumes that the game has more than 12 spaces here!
             // TODO: the amount of 2000$ should not be a fixed constant here (could also
             //       be configured in the Game class.
+            try {
+                File f = new File("yougotmoney.wav");
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioIn);
+                clip.start();
+            } catch (Exception e) {
+
+            }
             gui.showMessage(player + " modtager 2000kr for at passere start!");
             this.paymentFromBank(player, 2000);
         }
@@ -359,6 +392,15 @@ public class GameController {
         // Field #10 is in the default game board of Monopoly the field
         // representing the prison.
         // TODO the 10 should not be hard coded
+        try {
+            File f = new File("imprisoned.wav");
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (Exception e) {
+
+        }
         player.setCurrentPosition(game.getSpaces().get(10));
         player.setInPrison(true);
     }
@@ -514,6 +556,15 @@ public class GameController {
             }
             property.setOwner(player);
             player.addOwnedProperty(property);
+            try {
+                File f = new File("purchase.wav");
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioIn);
+                clip.start();
+            } catch (Exception e) {
+
+            }
             return;
         }
 
@@ -714,6 +765,15 @@ public class GameController {
             try {
                 paymentToBank(player, re.getPriceForHouse());
                 re.setHouseCount(re.getHouseCount() + 1);
+                try {
+                    File f = new File("purchase.wav");
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+                    clip.start();
+                } catch (Exception e) {
+
+                }
             } catch (PlayerBrokeException e){
                 e.printStackTrace();
             } catch (GameEndedException e) {

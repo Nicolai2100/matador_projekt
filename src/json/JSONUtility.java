@@ -359,6 +359,12 @@ public class JSONUtility {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            try {
+                createData();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         Game game = new Game();
