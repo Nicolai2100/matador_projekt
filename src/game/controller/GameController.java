@@ -201,23 +201,30 @@ public class GameController {
                 choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "'s tur. Hvad skal der ske?" , "Slut turen", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
             }
 
-            if (choice.equals("Byg huse")) {
-                buyHouseAction();
-            } else if (choice.equals("Handel")) {
-                trade(null);
-            } else if (choice.equals("Sælg huse")) {
-                sellHouseAction(null);
-            } else if (choice.equals("Pantsættelser")) {
-                String input = gui.getUserButtonPressed("Vælg:", "Pantsætte", "Indfri gæld", "Tilbage til menu");
-                if (input.equals("Pantsætte")) {
-                    mortgageAction(null);
-                } else if (input.equals("Indfri gæld")) {
-                    unmortgageAction();
-                }
-            } else if (choice.equals("Gem spil")) {
-                saveGame();
-            } else {
-                continueChoosing = false;
+            switch (choice) {
+                case "Byg huse":
+                    buyHouseAction();
+                    break;
+                case "Handel":
+                    trade(null);
+                    break;
+                case "Sælg huse":
+                    sellHouseAction(null);
+                    break;
+                case "Pantsættelser":
+                    String input = gui.getUserButtonPressed("Vælg:", "Pantsætte", "Indfri gæld", "Tilbage til menu");
+                    if (input.equals("Pantsætte")) {
+                        mortgageAction(null);
+                    } else if (input.equals("Indfri gæld")) {
+                        unmortgageAction();
+                    }
+                    break;
+                case "Gem spil":
+                    saveGame();
+                    break;
+                default:
+                    continueChoosing = false;
+                    break;
             }
         }
     }
@@ -626,6 +633,17 @@ public class GameController {
             }
         }
 
+        Clip clip = null;
+        try {
+            File f = new File("src/resources/sounds/auction.wav");
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+            clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         int highBid = 0;
         Player highBidder = null;
 
@@ -659,11 +677,13 @@ public class GameController {
         } while (bidders.size() > 1);
 
         if (bidders.size() == 0) {
+            clip.stop();
             gui.showMessage("Ingen spillere har budt på " + property + ", og den er derfor stadig til salg.");
             return;
         }
 
-        playSound("purchase.wav");
+        clip.stop();
+        playSound("auctionsold.wav");
         gui.showMessage("Første.. Anden.. Tredje.. " + highBidder + " vinder auktionen og køber " + property + " for " + highBid + "kr.");
         try {
             paymentToBank(highBidder, highBid);
