@@ -28,7 +28,7 @@ public class Player extends Subject {
 
     private Space currentPosition;
 
-    private int balance = 50000;
+    private int balance = 100;
 
     private boolean inPrison = false;
 

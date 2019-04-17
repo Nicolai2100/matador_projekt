@@ -260,6 +260,7 @@ public class GameController {
             }
         }
         if (countActive == 1) {
+            playSound("applause.wav");
             gui.showMessage("Tillykke, " + winner.getName() + "! Du har vundet spillet med en balance på " + winner.getBalance() + "kr!");
             returnBool = true;
         } else if (countActive < 1) {
@@ -599,33 +600,70 @@ public class GameController {
      */
     public void auction(Property property) throws GameEndedException {
         List<Player> bidders = new ArrayList<>();
-        int currentBid;
-        int highBid = 0;
-        Player highBidder = new Player();
-
-        bidders.addAll(game.getPlayers());
         Collections.shuffle(bidders);
+        for (Player p : game.getActivePlayers(false)) {
+            if (p.getBalance() > 0) {
+                bidders.add(p);
+            }
+        }
 
-        gui.showMessage("Der vil nu blive afholdt en auktion for at købe " + property + ". Grunden er vurderet til " + property.getCost() + "kr. Man udgår af auktionen ved ikke at byde over.");
+        if (bidders.size() == 0) {
+            gui.showMessage("Der kan ikke afholdes en auktion for salget af " + property + ", da ingen spillere kan deltage. ");
+            return;
+        }
 
-        while (bidders.size() != 1) {
-            for (int i = 0; i < bidders.size(); i++) {
-                Player p = bidders.get(i);
-                if (!p.equals(highBidder)) {
+        gui.showMessage("Der vil nu blive afholdt en auktion for at købe " + property + ". Grunden er vurderet til " + property.getCost() + "kr. Man udgår af auktionen ved at byde 0kr eller ikke at byde over højeste bud.");
 
-                    currentBid = highBid == 0 ? gui.getUserInteger(p + ", hvad vil du byde?", 0, p.getBalance())
-                            : gui.getUserInteger(p + ", hvad vil du byde?. Højeste bud er: " + highBid + "kr af " + highBidder, 0, p.getBalance());
-
-                    if (currentBid > highBid) {
-                        highBid = currentBid;
-                        highBidder = p;
-                    } else {
-                        gui.showMessage(p + " har ikke budt over og udgår derfor af auktionen.");
-                        bidders.remove(p);
-                    }
+        if (bidders.size() == 1) {
+            gui.showMessage(bidders.get(0) + ", du er en eneste, der kan deltage i auktionen. Du får derfor lov til selv at bestemme, hvad du vil betale for " + property + ".");
+        } else {
+            for (Player p : game.getActivePlayers(true)) {
+                if (p.isInPrison()) {
+                    gui.showMessage(p + " kan ikke deltage i auktionen, da han/hun er i fængsel.");
+                } else if (p.getBalance() == 0) {
+                    gui.showMessage(p + " kan ikke deltage i auktionen, da han/hun ikke har nogen penge.");
                 }
             }
         }
+
+        int highBid = 0;
+        Player highBidder = null;
+
+        do {
+            ArrayList<Player> toBeRemoved = new ArrayList<>();
+            for (Player bidder : bidders) {
+                if (highBidder == bidder) continue;
+                int bid = -1;
+                while (!(bid >= 0 && bid <= bidder.getBalance())) {
+                    if (highBid == 0) {
+                        bid = gui.getUserInteger(bidder + ", hvad vil du byde?", 0, bidder.getBalance());
+                    } else {
+                        bid = gui.getUserInteger(bidder + ", hvad vil du byde?. Højeste bud er: " + highBid + "kr af " + highBidder, 0, bidder.getBalance());
+                    }
+
+                    if (bid < 0 || bid > bidder.getBalance()) {
+                        gui.showMessage("Ugyldigt bud! Prøv igen.");
+                    } else if (bid > highBid) {
+                        highBid = bid;
+                        highBidder = bidder;
+                    } else if (bid == 0) {
+                        gui.showMessage(bidder + " har budt 0kr og udgår derfor af auktionen.");
+                        toBeRemoved.add(bidder);
+                    } else {
+                        gui.showMessage(bidder + " har ikke budt over og udgår derfor af auktionen.");
+                        toBeRemoved.add(bidder);
+                    }
+                }
+            }
+            bidders.removeAll(toBeRemoved);
+        } while (bidders.size() > 1);
+
+        if (bidders.size() == 0) {
+            gui.showMessage("Ingen spillere har budt på " + property + ", og den er derfor stadig til salg.");
+            return;
+        }
+
+        playSound("purchase.wav");
         gui.showMessage("Første.. Anden.. Tredje.. " + highBidder + " vinder auktionen og køber " + property + " for " + highBid + "kr.");
         try {
             paymentToBank(highBidder, highBid);
@@ -662,6 +700,7 @@ public class GameController {
             game.returnCardToDeck(brokePlayer.getOwnedCards().get(0));
         }
 
+        playSound("trombones.wav");
         gui.showMessage(brokePlayer + " er gået konkurs og overfører hele konkursboet til " + benificiary);
     }
     /**
@@ -681,6 +720,7 @@ public class GameController {
         }
         player.removeAllProperties();
 
+        playSound("trombones.wav");
         gui.showMessage(player + " er gået konkurs.");
 
         while (!player.getOwnedCards().isEmpty()) {
@@ -871,6 +911,7 @@ public class GameController {
         for (int j = 0; j < 2; j++) {
             //Ask what amount of money, the player wants to trade.
             moneyInOffers[j] = gui.getUserInteger(tradingPlayers[j] + ", hvilket beløb vil du tilføje i handlen?", 0, tradingPlayers[j].getBalance());
+            if (moneyInOffers[j] < 0) moneyInOffers[j] = 0;
 
             //Keep adding properties to the trade, until the player chooses to stop.
             boolean continueAdding = true;
