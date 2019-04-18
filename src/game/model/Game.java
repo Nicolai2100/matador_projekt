@@ -196,7 +196,7 @@ public class Game extends Subject {
 		List<Player> activePlayers = new ArrayList<>();
 		for (Player player : players) {
 			if (!prisonIgnored) {
-				if (!player.isBroke() && !player.isInPrison()) activePlayers.add(player);
+				if (!player.isBroke() || !player.isInPrison()) activePlayers.add(player);
 			} else {
 				if (!player.isBroke()) activePlayers.add(player);
 			}
