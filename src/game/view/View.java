@@ -58,11 +58,6 @@ public class View implements Observer, Runnable {
 
         GUI_Field[] guiFields = gui.getFields();
 
-        for (Player player : game.getPlayers()) {
-            PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
-            player2PlayerPanel.put(player, playerPanel);
-        }
-
         int i = 0;
         for (Space space : game.getSpaces()) {
             // TODO, here we assume that the games fields fit to the GUI's fields;
@@ -165,9 +160,9 @@ public class View implements Observer, Runnable {
     }
 
     /**
-     *  @author Nicolai L
      * @param player
      * @return
+     * @author Nicolai L
      */
     public int calcNumOfMoves(Player player) {
         Integer oldPos = player2position.get(player);
@@ -215,6 +210,8 @@ public class View implements Observer, Runnable {
             player2GuiPlayer.put(player, guiPlayer);
             gui.addPlayer(guiPlayer);
             player2position.put(player, 0);
+            PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
+            player2PlayerPanel.put(player, playerPanel);
             player.attach(this);
             updatePlayer(player);
         }
@@ -231,6 +228,8 @@ public class View implements Observer, Runnable {
             gui.addPlayer(guiPlayer);
             player2position.put(player, player.getCurrentPosition().getIndex());
             space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
+            PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
+            player2PlayerPanel.put(player, playerPanel);
             player.attach(this);
             updatePlayer(player);
             for (Property p : player.getOwnedProperties()) {
@@ -312,6 +311,9 @@ public class View implements Observer, Runnable {
 
     @Override
     public void run() {
-            try {Thread.sleep(150); } catch (Exception e){}
+        try {
+            Thread.sleep(150);
+        } catch (Exception e) {
+        }
     }
 }

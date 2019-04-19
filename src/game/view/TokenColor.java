@@ -10,7 +10,6 @@ public class TokenColor {
     private HashMap<String, Color> colorMap;
     private List stringList;
 
-
     public TokenColor() {
         instaColorMap();
         instaStringList();
@@ -36,7 +35,7 @@ public class TokenColor {
 
     private void instaColorMap() {
         colorMap = new HashMap<>();
-        colorMap.put("Grey", Color.GRAY);
+        colorMap.put("Grey", Color.DARK_GRAY);
         colorMap.put("Green", Color.GREEN);
         colorMap.put("Blue", Color.BLUE.brighter());
         colorMap.put("Magenta", Color.MAGENTA);
