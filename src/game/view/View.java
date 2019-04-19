@@ -165,7 +165,7 @@ public class View implements Observer, Runnable {
     }
 
     /**
-     * Nicolai L
+     *  @author Nicolai L
      * @param player
      * @return
      */
