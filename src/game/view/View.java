@@ -230,6 +230,7 @@ public class View implements Observer, Runnable {
             player2GuiPlayer.put(player, guiPlayer);
             gui.addPlayer(guiPlayer);
             player2position.put(player, player.getCurrentPosition().getIndex());
+            space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
             player.attach(this);
             updatePlayer(player);
             for (Property p : player.getOwnedProperties()) {
