@@ -140,7 +140,17 @@ public class PlayerPanel extends JFrame implements MouseListener {
 
     public JPanel panelMaker(ColorGroup color) {
         JPanel colorGroupPanel = new JPanel();
+
+        JPanel colorPanel = new JPanel();
+        colorPanel.setMinimumSize(dimension2);
+        colorPanel.setMaximumSize(dimension2);
+        colorPanel.setPreferredSize(dimension2);
+        colorPanel.setBackground(ColorGroup.colorGroupTransformer(color));
+
+        colorGroupPanel.add(colorPanel);
+/*
         colorGroupPanel.setBackground(ColorGroup.colorGroupTransformer(color));
+*/
         colorGroupPanel.setLayout(new BoxLayout(colorGroupPanel, BoxLayout.Y_AXIS));
         colorGroupPanel.setBorder(new EtchedBorder());
         colorGroupPanel.setMaximumSize(dimension);
