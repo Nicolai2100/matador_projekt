@@ -34,7 +34,7 @@ public class PlayerPanel extends JFrame implements MouseListener {
         smallPanelDimension = new Dimension(64, 20);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.setTitle(player.getName());
-        this.setLocation(710, game.getPlayers().indexOf(player) * 210);
+        this.setLocation(710, game.getPlayers().indexOf(player) * 160);
         this.setSize(360, 120);
         this.setMinimumSize(new Dimension(360, 120));
         this.validate();

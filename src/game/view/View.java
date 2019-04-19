@@ -212,6 +212,7 @@ public class View implements Observer, Runnable {
             player2position.put(player, 0);
             PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
             player2PlayerPanel.put(player, playerPanel);
+            space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
             player.attach(this);
             updatePlayer(player);
         }
@@ -250,7 +251,7 @@ public class View implements Observer, Runnable {
                 player.setName(input);
                 break;
             } else {
-/*
+/*todo ret dette
                 gui.showMessage("prøv igen");
 */
                 break;
