@@ -34,7 +34,7 @@ import static gui_fields.GUI_Car.Type.RACECAR;
  * @author Ekkart Kindler, ekki@dtu.dk
  * Sørg for at udvide klassen View, så at dens metode
  */
-public class View implements Observer {
+public class View implements Observer, Runnable {
 
     private Game game;
     private GUI gui;
@@ -44,8 +44,6 @@ public class View implements Observer {
     private Map<Space, GUI_Field> space2GuiField = new HashMap<Space, GUI_Field>();
     private Map<Player, PlayerPanel> player2PlayerPanel = new HashMap<Player, PlayerPanel>();
     private boolean disposed = false;
-    public static Runnable carSlower;
-
 
     /**
      * Constructor for the view of a game based on a game and an already
@@ -57,7 +55,6 @@ public class View implements Observer {
     public View(Game game, GUI gui) {
         this.game = game;
         this.gui = gui;
-        this.carSlower = new GuiCarMover();
 
         GUI_Field[] guiFields = gui.getFields();
 
@@ -149,7 +146,7 @@ public class View implements Observer {
 
                 int moves = calcNumOfMoves(player);
                 for (int i = 1; i <= moves; i++) {
-                    carSlower.run();
+                    run();
                     guiFields[((oldPosition + i - 1) % 40)].setCar(player2GuiPlayer.get(player), false);
                     player2position.put(player, pos);
                     guiFields[((oldPosition + i) % 40)].setCar(player2GuiPlayer.get(player), true);
@@ -262,7 +259,7 @@ public class View implements Observer {
     }
 
     /**
-     * Nicola L
+     * Nicolai L
      *
      * @param player
      * @return
@@ -312,7 +309,8 @@ public class View implements Observer {
         return carColorChoice;
     }
 
-    public Map<Space, GUI_Field> getSpace2GuiField() {
-        return space2GuiField;
+    @Override
+    public void run() {
+            try {Thread.sleep(150); } catch (Exception e){}
     }
 }
