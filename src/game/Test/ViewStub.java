@@ -1,5 +1,4 @@
-package game.view;
-
+package game.Test;
 import designpattern.Observer;
 import designpattern.Subject;
 import game.controller.GameController;
@@ -10,6 +9,8 @@ import game.model.Space;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Utility;
+import game.view.PlayerPanel;
+import game.view.TokenColor;
 import gui_fields.*;
 import gui_fields.GUI_Car.Pattern;
 import gui_fields.GUI_Car.Type;
@@ -34,18 +35,16 @@ import static gui_fields.GUI_Car.Type.RACECAR;
  * @author Ekkart Kindler, ekki@dtu.dk
  * Sørg for at udvide klassen View, så at dens metode
  */
-public class View implements Observer {
+public class ViewStub implements Observer {
 
     private Game game;
     private GUI gui;
 
-    private Map<Player, GUI_Player> player2GuiPlayer = new HashMap<Player, GUI_Player>();
-    private Map<Player, Integer> player2position = new HashMap<Player, Integer>();
-    private Map<Space, GUI_Field> space2GuiField = new HashMap<Space, GUI_Field>();
-    private Map<Player, PlayerPanel> player2PlayerPanel = new HashMap<Player, PlayerPanel>();
+     Map<Player, GUI_Player> player2GuiPlayer = new HashMap<Player, GUI_Player>();
+     Map<Player, Integer> player2position = new HashMap<Player, Integer>();
+     Map<Space, GUI_Field> space2GuiField = new HashMap<Space, GUI_Field>();
+     Map<Player, PlayerPanel> player2PlayerPanel = new HashMap<Player, PlayerPanel>();
     private boolean disposed = false;
-    public static Runnable carSlower;
-
 
     /**
      * Constructor for the view of a game based on a game and an already
@@ -54,10 +53,9 @@ public class View implements Observer {
      * @param game the game
      * @param gui  the GUI
      */
-    public View(Game game, GUI gui) {
+    public ViewStub(Game game, GUI gui) {
         this.game = game;
         this.gui = gui;
-        this.carSlower = new  GuiCarMover();
 
         GUI_Field[] guiFields = gui.getFields();
 
@@ -75,6 +73,14 @@ public class View implements Observer {
             space.attach(this);
             i++;
         }
+    }
+
+    public Map<Player, GUI_Player> getPlayer2GuiPlayer() {
+        return player2GuiPlayer;
+    }
+
+    public Map<Player, Integer> getPlayer2position() {
+        return player2position;
     }
 
     @Override
@@ -143,29 +149,15 @@ public class View implements Observer {
 
             GUI_Field[] guiFields = gui.getFields();
             Integer oldPosition = player2position.get(player);
-            int pos = player.getCurrentPosition().getIndex();
-
-
-           /*     guiFields[oldPosition].setCar(guiPlayer, false);
+            if (oldPosition != null && oldPosition < guiFields.length) {
+                guiFields[oldPosition].setCar(guiPlayer, false);
             }
             int pos = player.getCurrentPosition().getIndex();
             if (pos < guiFields.length) {
                 player2position.put(player, pos);
                 guiFields[pos].setCar(guiPlayer, true);
-            }*/
-
-        if (oldPosition != null && oldPosition < guiFields.length) {
-
-            int moves = calcNumOfMoves(player);
-
-            for (int i = 1; i <= moves; i++) {
-                carSlower.run();
-                guiFields[((oldPosition + i - 1) % 40)].setCar(player2GuiPlayer.get(player), false);
-                player2position.put(player, pos);
-                guiFields[((oldPosition + i) % 40)].setCar(player2GuiPlayer.get(player), true);
             }
 
-        }
             String name = player.getName();
             if (player.isBroke()) {
             } else if (player.isInPrison()) {
@@ -197,37 +189,10 @@ public class View implements Observer {
         return moves;
     }
 
-
-        public void setSpecificCar(Player player) {
-
-    }
-
-
-
-
-    public void dispose() {
-        if (!disposed) {
-            disposed = true;
-            for (Player player : game.getPlayers()) {
-                // unregister from the player as observer
-                player.detach(this);
-            }
-            for (Space space : game.getSpaces()) {
-                space.detach(this);
-            }
-        }
-    }
-
-    /**
-     * Nicolai L
-     */
     public void createPlayers() {
         TokenColor tokenColor = new TokenColor();
         for (Player player : game.getPlayers()) {
-            enterNamePlayer(player);
-            Color userColor = chooseCarColor(tokenColor, player);
-            player.setColor(userColor);
-            GUI_Car car = chosePlayerCar(player);
+            GUI_Car car = new GUI_Car(Color.RED, Color.BLUE, GUI_Car.Type.UFO, GUI_Car.Pattern.FILL);
             GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
             player2GuiPlayer.put(player, guiPlayer);
             gui.addPlayer(guiPlayer);
@@ -235,98 +200,5 @@ public class View implements Observer {
             player.attach(this);
             updatePlayer(player);
         }
-    }
-
-    /**
-     * @author Jeppe s170196, Nicolai s185020, Nicolai W s185036
-     */
-    public void loadPlayers() {
-        for (Player player : game.getPlayers()) {
-            GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.valueOf(player.getToken()), Pattern.FILL);
-            GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
-            player2GuiPlayer.put(player, guiPlayer);
-            gui.addPlayer(guiPlayer);
-            player2position.put(player, player.getCurrentPosition().getIndex());
-            player.attach(this);
-            updatePlayer(player);
-            for (Property p : player.getOwnedProperties()) {
-                updateProperty(p);
-            }
-        }
-    }
-
-    /**
-     * Nicolai L
-     *
-     * @param player
-     */
-    public void enterNamePlayer(Player player) {
-        while (true) {
-            String input = gui.getUserString("indtast navn");
-            if (input.length() > 0) {
-                player.setName(input);
-                break;
-            } else {
-/*
-                gui.showMessage("prøv igen");
-*/
-                break;
-            }
-        }
-    }
-
-    /**
-     * Nicola L
-     *
-     * @param player
-     * @return
-     */
-    public GUI_Car chosePlayerCar(Player player) {
-        String carChoice = gui.getUserSelection("Choose car", "Car", "Ufo", "Tractor", "Racecar");
-        GUI_Car car;
-        HashMap<String, GUI_Car.Type> enumMap = new HashMap();
-        enumMap.put("Ufo", UFO);
-        enumMap.put("Car", CAR);
-        enumMap.put("Tractor", TRACTOR);
-        enumMap.put("Racecar", RACECAR);
-        car = new GUI_Car(player.getColor(), Color.BLUE, enumMap.get(carChoice), GUI_Car.Pattern.FILL);
-        player.setToken(enumMap.get(carChoice).toString());
-        return car;
-    }
-
-    /**
-     * Nicolai L
-     *
-     * @param tokenColorObj
-     * @param player
-     * @return
-     */
-    public Color chooseCarColor(TokenColor tokenColorObj, Player player) {
-        String[] chooseColorStrings = tokenColorObj.setColorsToChooseFrom().split(" ");
-        String carColorS;
-
-        for (int i = 0; i < chooseColorStrings.length; i++) {
-        }
-        if (chooseColorStrings.length == 6) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3], chooseColorStrings[4], chooseColorStrings[5]);
-        } else if (chooseColorStrings.length == 5) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3], chooseColorStrings[4]);
-        } else if (chooseColorStrings.length == 4) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3]);
-        } else if (chooseColorStrings.length == 3) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2]);
-        } else if (chooseColorStrings.length == 2) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1]);
-        } else {
-            gui.showMessage(player.getName() + "'s color is " + chooseColorStrings[0]);
-            carColorS = chooseColorStrings[0];
-        }
-        Color carColorChoice = tokenColorObj.colorChosen(carColorS);
-
-        return carColorChoice;
-    }
-
-    public Map<Space, GUI_Field> getSpace2GuiField() {
-        return space2GuiField;
     }
 }
