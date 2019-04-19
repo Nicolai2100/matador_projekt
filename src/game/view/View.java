@@ -57,7 +57,7 @@ public class View implements Observer {
     public View(Game game, GUI gui) {
         this.game = game;
         this.gui = gui;
-        this.carSlower = new  GuiCarMover();
+        this.carSlower = new GuiCarMover();
 
         GUI_Field[] guiFields = gui.getFields();
 
@@ -145,27 +145,16 @@ public class View implements Observer {
             Integer oldPosition = player2position.get(player);
             int pos = player.getCurrentPosition().getIndex();
 
+            if (oldPosition != null && oldPosition < guiFields.length) {
 
-           /*     guiFields[oldPosition].setCar(guiPlayer, false);
+                int moves = calcNumOfMoves(player);
+                for (int i = 1; i <= moves; i++) {
+                    carSlower.run();
+                    guiFields[((oldPosition + i - 1) % 40)].setCar(player2GuiPlayer.get(player), false);
+                    player2position.put(player, pos);
+                    guiFields[((oldPosition + i) % 40)].setCar(player2GuiPlayer.get(player), true);
+                }
             }
-            int pos = player.getCurrentPosition().getIndex();
-            if (pos < guiFields.length) {
-                player2position.put(player, pos);
-                guiFields[pos].setCar(guiPlayer, true);
-            }*/
-
-        if (oldPosition != null && oldPosition < guiFields.length) {
-
-            int moves = calcNumOfMoves(player);
-
-            for (int i = 1; i <= moves; i++) {
-                carSlower.run();
-                guiFields[((oldPosition + i - 1) % 40)].setCar(player2GuiPlayer.get(player), false);
-                player2position.put(player, pos);
-                guiFields[((oldPosition + i) % 40)].setCar(player2GuiPlayer.get(player), true);
-            }
-
-        }
             String name = player.getName();
             if (player.isBroke()) {
             } else if (player.isInPrison()) {
@@ -178,6 +167,11 @@ public class View implements Observer {
         }
     }
 
+    /**
+     * Nicolai L
+     * @param player
+     * @return
+     */
     public int calcNumOfMoves(Player player) {
         Integer oldPos = player2position.get(player);
         if (oldPos == null) {
@@ -196,14 +190,6 @@ public class View implements Observer {
         }
         return moves;
     }
-
-
-        public void setSpecificCar(Player player) {
-
-    }
-
-
-
 
     public void dispose() {
         if (!disposed) {
