@@ -21,7 +21,17 @@ public class CardMove extends Card {
 	private boolean toPrison;
 	private Space target;
 
-	//TODO contructorer
+	public CardMove(int untargetedAmount) {
+		this.untargetedAmount = untargetedAmount;
+	}
+
+	public CardMove(boolean toPrison) {
+		this.toPrison = toPrison;
+	}
+
+	public CardMove(Space target) {
+		this.target = target;
+	}
 
 	/** 
 	 * Returns the target space to which this card directs the player to go.
@@ -46,10 +56,9 @@ public class CardMove extends Card {
 		try {
 			if (untargetedAmount != 0) {
 				int targetIndex = player.getCurrentPosition().getIndex() + untargetedAmount;
-				//TODO kortet kender ikke brættet...
+				//TODO mangler makeMove(int) i controlleren
 			} else if (toPrison) {
-				player.setCurrentPosition(target);
-				player.setInPrison(true);
+				controller.gotoJail(player);
 			} else {
 				controller.moveToSpace(player, target);
 			}

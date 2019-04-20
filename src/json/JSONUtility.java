@@ -5,6 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import game.model.*;
+import game.model.cards.CardEconomicEffect;
+import game.model.cards.CardGetOutOfJail;
+import game.model.cards.CardMove;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
@@ -14,6 +17,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 /**
  * Main-method creates data for JSON-file,
@@ -323,6 +327,137 @@ public class JSONUtility {
         raadhuspladsen.setPriceForHouse(4000);
         game.addSpace(raadhuspladsen);
 
+        //creating data for the chance cards
+        ArrayList<Card> cards = new ArrayList<>();
+
+        Card card = new CardEconomicEffect(-200);
+        card.setText("De har fået en parkeringsbøde. Betal kr. 200 i bøde.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(-1000);
+        card.setText("De har købt 4 nye dæk til deres vogn. Betal kr. 1000");
+        cards.add(card);
+
+        card = new CardEconomicEffect(-200);
+        card.setText("De har været en tur i udlandet og haft for mange cigaretter med hjem. Betal told kr. 200.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(-1000);
+        card.setText("Betal deres bilforsikring - kr. 1000");
+        cards.add(card);
+
+        card = new CardEconomicEffect(-200);
+        card.setText("Betal kr. 200 for levering af 2 kasser øl.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(-300);
+        card.setText("Betal for vognvask og smøring kr. 300");
+        cards.add(card);
+
+        card = new CardEconomicEffect(-3000);
+        card.setText("Betal kr. 3000 for reparation af deres vogn");
+        cards.add(card);
+        cards.add(card);
+
+        card = new CardEconomicEffect(-1000);
+        card.setText("De har kørt frem for \"fuldt stop\". Betal kr. 1000 i bøde.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(-2000);
+        card.setText("De har modtaget deres tandlægeregning. Betal kr. 2000.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(3000);
+        card.setText("Kommunen har eftergivet et kvartals skat. Hæv i banken kr. 3000.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(1000);
+        card.setText("De havde en række med elleve rigtige i tipning. Modtag kr. 1000.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(1000);
+        card.setText("Deres præmieobligation er udtrukket. De modtager kr. 1000 af banken.");
+        cards.add(card);
+        cards.add(card);
+
+        card = new CardEconomicEffect(1000);
+        card.setText("De modtager deres aktieudbytte. Modtag kr. 1000 af banken.");
+        cards.add(card);
+        cards.add(card);
+        cards.add(card);
+
+        card = new CardEconomicEffect(200);
+        card.setText("Værdien af egen avl fra nyttehaven udgør kr. 200, som de modtager af banken.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(500);
+        card.setText("De har solgt et brugt TV til en fyr, der hedder Brian. " +
+                "Brian blev snydt, da fjernsynet faktisk var i stykker. " +
+                "Modtag kr. 500 for deres ugerning og håb Brian ikke finder dig.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(1000);
+        card.setText("Grundet dyrtiden har de fået gageforhøjelse. Modtag kr. 1000.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(500);
+        card.setText("De har vundet i lotteriet. Modtag kr. 500");
+        cards.add(card);
+
+        card = new CardEconomicEffect(1000);
+        card.setText("De har solgt nogle gamle møbler på auktion. Modtag kr. 1000 af banken.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(true);
+        card.setText("Oliepriserne er steget, og de skal betal kr. 500 pr. bygning.");
+        cards.add(card);
+
+        card = new CardEconomicEffect(true);
+        card.setText("Ejendomsskatterne er steget. Ekstraudgifterne er kr. 500 pr. bygning.");
+        cards.add(card);
+
+        card = new CardMove(true);
+        card.setText("Gå i fængsel. Ryk direkte til fængslet. Selv om de passerer \"start\" indkasserer de ikke kr. 4000.");
+        cards.add(card);
+        cards.add(card);
+
+        card = new CardMove(game.getSpaces().get(39));
+        card.setText("Gå ind på rådhuspladsen.");
+        cards.add(card);
+
+        card = new CardMove(game.getSpaces().get(24));
+        card.setText("Ryk frem til Grønningen. Hvis de passerer \"start\", indkassér da kr. 4000.");
+        cards.add(card);
+
+        card = new CardMove(game.getSpaces().get(0));
+        card.setText("Ryk frem til start.");
+        cards.add(card);
+        cards.add(card);
+
+        card = new CardMove(game.getSpaces().get(19));
+        card.setText("Ryk frem til Strandvejen. Hvis de passerer \"start\", indkassér da kr. 4000.");
+        cards.add(card);
+
+        card = new CardMove(game.getSpaces().get(15));
+        card.setText("Tag med D.F.D.S. Hvis de passerer \"start\", indkassér da kr. 4000.");
+        cards.add(card);
+
+        card = new CardMove(game.getSpaces().get(32));
+        card.setText("Ryk frem til Vimmelskaftet. Hvis de passerer \"start\", indkassér da kr. 4000.");
+        cards.add(card);
+
+        card = new CardMove(game.getSpaces().get(37));
+        card.setText("Ryk frem til Frederiksberg Allé. Hvis de passerer \"start\", indkassér da kr. 4000.");
+        cards.add(card);
+
+        card = new CardGetOutOfJail();
+        card.setText("I andledning af kongens fødselsdag benådes de hermed for fængsel. " +
+                "Dette kort kan opbevares, indtil de får brug for det, eller de kan sælge det.");
+        cards.add(card);
+        cards.add(card);
+
+        game.setCardDeck(cards);
+
 
         //JSON-GSON operations
         Path path = Paths.get("src/resources");
@@ -353,6 +488,7 @@ public class JSONUtility {
         if (temp.exists()) {
             try {
                 temp.delete();
+                //TODO Jeg ved ikke, om det er smart at slette den, hvis den allerede eksisterer. Så er der jo ikke rigtig nogen grund til at loade fra en fil til at starte med.
                 createData();
             } catch (IOException e) {
                 e.printStackTrace();

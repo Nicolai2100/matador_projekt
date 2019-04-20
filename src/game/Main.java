@@ -23,15 +23,6 @@ public class Main {
         JSONUtility ju = new JSONUtility();
         Game game = ju.createGame();
 
-        //midlertidigt bare så det virker
-        ArrayList<Card> temp = new ArrayList<>();
-        CardEconomicEffect card = new CardEconomicEffect();
-        card.setText("You receive 100$ from the bank.");
-        card.setAmount(100);
-        temp.add(card);
-        game.setCardDeck(temp);
-        //
-
         GameController controller = new GameController(game);
         controller.playOrLoadGame();
     }

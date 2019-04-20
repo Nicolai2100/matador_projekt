@@ -3,8 +3,6 @@ package game.Test;
 import designpattern.Subject;
 import game.model.*;
 import game.model.cards.CardMove;
-import game.model.cards.CardReceiveMoneyFromBank;
-import game.model.cards.PayTax;
 import game.model.properties.RealEstate;
 import game.model.properties.Utility;
 
@@ -267,20 +265,11 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 
         List<Card> cards = new ArrayList<Card>();
 
-        CardMove move = new CardMove();
+        CardMove move = new CardMove(spaces.get(0));
         move.setTarget(getSpaces().get(9));
-        move.setText("Move to Allégade!");
+        move.setText("Gå til start");
         cards.add(move);
 
-        PayTax tax = new PayTax();
-        tax.setText("Pay 10% income tax!");
-        cards.add(tax);
-
-        CardReceiveMoneyFromBank b = new CardReceiveMoneyFromBank();
-        b.setText("You receive 100$ from the bank.");
-        b.setAmount(100);
-        cards.add(b);
-        setCardDeck(cards);
     }
 
     public void createPlayer(){

@@ -57,8 +57,9 @@ public class CardEconomicEffect extends Card {
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
 		try {
 			if (paymentFromOpponents) {
-				//TODO kortet kender ikke til spillerne...
+				//TODO mangler paymentFromOpponents(int amount) i controlleren
 			} else if (paymentPerHouse){
+				//TODO hoteller tælles som huse pt., og beløb er hardcoded
 				int houseCount = 0;
 				for (Property property : player.getOwnedProperties()) {
 					if (property instanceof RealEstate) {
@@ -68,7 +69,7 @@ public class CardEconomicEffect extends Card {
 				setAmount(houseCount * 500);
 				controller.paymentToBank(player, amount);
 			} else if (isGrant) {
-				//TODO gider man dette?
+				//TODO implementer
 			} else if (amount >= 0){
 				controller.paymentFromBank(player, amount);
 			} else {
