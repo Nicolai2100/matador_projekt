@@ -20,7 +20,8 @@ public class Main {
      * main metoden ændret af Nicolai L
      */
     public static void main(String[] args) {
-        Game game = JSONUtility.createGame();
+        JSONUtility ju = new JSONUtility();
+        Game game = ju.createGame();
 
         //midlertidigt bare så det virker
         ArrayList<Card> temp = new ArrayList<>();

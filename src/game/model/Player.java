@@ -1,6 +1,10 @@
 package game.model;
 
 import designpattern.Subject;
+import game.model.properties.Brewery;
+import game.model.properties.RealEstate;
+import game.model.properties.Ship;
+import game.model.properties.Utility;
 
 import java.awt.*;
 import java.util.List;
@@ -154,6 +158,14 @@ public class Player extends Subject {
         notifyChange();
     }
 
+    public Set<Property> getOwnedPropertiesNotMortgaged() {
+        Set<Property> properties = new HashSet<>();
+        for (Property property : ownedProperties) {
+            if (!property.getMortgaged()) properties.add(property);
+        }
+        return Collections.unmodifiableSet(properties);
+    }
+
     /**
      * Adds a property to the list of currently owned properties.
      *
@@ -162,6 +174,7 @@ public class Player extends Subject {
     public void addOwnedProperty(Property property) {
         ownedProperties.add(property);
         checkIsSuperOwned(property);
+        checkRentLevel();
         notifyChange();
     }
 
@@ -209,6 +222,18 @@ public class Player extends Subject {
             }
             //todo meddelelse til bruger om at han nu kan bygge huse!!!
         }
+    }
+
+    public void checkRentLevel() {
+        ArrayList<Ship> ships = new ArrayList<>();
+        ArrayList<Brewery> breweries = new ArrayList<>();
+        for (Property p : ownedProperties) {
+            if (p instanceof Ship) ships.add((Ship) p);
+            if (p instanceof Brewery) breweries.add((Brewery) p);
+            if (p instanceof RealEstate) p.computeRent();
+        }
+        for (Ship ship : ships) ship.setCurrentRentLevel(ships.size() - 1);
+        for (Brewery brewery : breweries) brewery.setCurrentRentLevel(breweries.size() - 1);
     }
 
     /**

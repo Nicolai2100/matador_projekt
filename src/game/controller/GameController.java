@@ -1,13 +1,20 @@
 package game.controller;
 
+import game.Test.GameStub;
 import game.database.GameDAO;
 import game.model.*;
 import game.model.exceptions.GameEndedException;
 import game.model.exceptions.PlayerBrokeException;
+import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
+import game.model.properties.Ship;
 import game.view.View;
 import gui_main.GUI;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.File;
 import java.util.*;
 
 /**
@@ -39,8 +46,10 @@ import java.util.*;
 public class GameController {
 
     private Game game;
+    private GameStub gameStub;
     private GUI gui;
     private GameDAO gameDb;
+    private int sumOfDies;
 
     private View view;
 
@@ -55,43 +64,81 @@ public class GameController {
         super();
         this.game = game;
         gui = new GUI();
+        initializeGUI();
         gameDb = new GameDAO();
+    }
+    // Til tests
+    public GameController(GameStub game) {
+        super();
+        this.gameStub = game;
+        gui = new GUI();
     }
 
     /**
-     * This method will initialize the GUI. It should be called after
-     * the players of the game are created. As of now, the initialization
+     * This method will initialize the GUI by adding descriptions to all properties. As of now, the initialization
      * assumes that the spaces of the game fit to the fields of the GUI;
      * this could eventually be changed, by creating the GUI fields
      * based on the underlying game's spaces (fields).
      */
     public void initializeGUI() {
-        this.view = new View(game, gui);
+        int i = 0;
+        for (Space space : game.getSpaces()) {
+            Property property = null;
+            if (space instanceof Property) {
+                property = (Property) space;
+            }
+            String description = "";
+            if (property instanceof RealEstate) {
+                description = "<table width=\"170\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
+                        + "<tr><td>Leje af grund:</td><td align=\"right\">" + property.getRentLevels()[0] + "kr.</td></tr>"
+                        + "<tr><td>m/1 hus:</td><td align=\"right\">" + property.getRentLevels()[1] + "kr.</td></tr>"
+                        + "<tr><td>2 huse:</td><td align=\"right\">" + property.getRentLevels()[2] + "kr.</td></tr>"
+                        + "<tr><td>3 huse:</td><td align=\"right\">" + property.getRentLevels()[3] + "kr.</td></tr>"
+                        + "<tr><td>4 huse:</td><td align=\"right\">" + property.getRentLevels()[4] + "kr.</td></tr>"
+                        + "<tr><td>hotel:</td><td align=\"right\">" + property.getRentLevels()[5] + "kr.</td></tr>"
+                        + "<tr><td>pr. hus/hotel:</td><td align=\"right\">" + ((RealEstate) space).getPriceForHouse() + "kr.</td></tr></table>";
+            } else if (space instanceof Ship) {
+                description = "<table width=\"170\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
+                        + "<tr><td>Leje:</td><td align=\"right\">" + property.getRentLevels()[0] + "kr.</td></tr>"
+                        + "<tr><td>2 rederier:</td><td align=\"right\">" + property.getRentLevels()[1] + "kr.</td></tr>"
+                        + "<tr><td>3 rederier:</td><td align=\"right\">" + property.getRentLevels()[2] + "kr.</td></tr>"
+                        + "<tr><td>4 rederier:</td><td align=\"right\">" + property.getRentLevels()[3] + "kr.</td></tr></table>";
+            } else if (space instanceof Brewery) {
+                description = ("Hvis 1 virksomhed ejes, betales 100 gange så meget, som øjnene viser. Hvis både Tuborg og Carlsberg ejes, betales 200 gange så meget, som øjnene viser.");
+            }
+            gui.getFields()[i].setDescription(description);
+            i++;
+        }
     }
 
     /**
-     * Nicolai L
+     * @author Nicolai L, Nicolai W
      */
     public void playOrLoadGame() {
-        String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil");
+        String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil", "Afslut");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             game.shuffleCardDeck();
-            //todo Nicolai L - mulighed for at oprette 6 spillere
-            int numOfPlayers = gui.getUserInteger("Hvor mange spillere?", 3,4);
-            game.createPlayers(numOfPlayers);
-            initializeGUI();
-            view.createPlayers();
-            play();
+            ArrayList<Integer> options = new ArrayList<>(Arrays.asList(3, 4, 5, 6));
+            Integer numOfPlayers = chooseFromOptions(options, "Hvor mange spillere?", "Annuller", null, null, null);
+            if (numOfPlayers != null) {
+                game.createPlayers(numOfPlayers);
+                view = new View(game, gui);
+                view.createPlayers();
+                play();
+            }
+        } else if (userSelection.equals("Afslut")) {
+            System.exit(0);
         } else {
-            List<String> games = gameDb.getGamesList();
-            String[] gamesArray = games.toArray(new String[games.size()]);
-            String userGameSelection = gui.getUserSelection("Vælg spil:", gamesArray);
-            game = gameDb.loadGame(game, userGameSelection);
-            game.shuffleCardDeck();
-            initializeGUI();
-            view.loadPlayers();
-            play();
+            String gameSelection = chooseFromOptions(gameDb.getGamesList(), "Vælg spil:", "Annuller", null, null, null);
+            if (gameSelection != null) {
+                game = gameDb.loadGame(game, gameSelection);
+                game.shuffleCardDeck();
+                view = new View(game, gui);
+                view.loadPlayers();
+                play();
+            }
         }
+        playOrLoadGame();
     }
 
     /**
@@ -119,7 +166,7 @@ public class GameController {
                 try {
                     showTurnMenu(player, true);
                     this.makeMove(player);
-                    showTurnMenu(player, false);
+                    //showTurnMenu(player, false);
                 } catch (PlayerBrokeException e) {
                 } catch (GameEndedException w) {
                     gui.showMessage(w.getMessage());
@@ -133,47 +180,51 @@ public class GameController {
 
             current = (current + 1) % players.size();
             game.setCurrentPlayer(players.get(current));
-            /* Commented out, because I think it's not neccesary.
-            if (current == 0) {
-                String selection = gui.getUserButtonPressed("En runde er slut. Vil I fortsætte spillet?", "Ja", "Nej");
-                if (selection.equals("Nej")) {
-                    terminated = true;
-                }
-            }
-            */
         }
 
         dispose();
     }
 
+    /**
+     * @param player
+     * @param startOfTurn
+     * @author Nicolai Wulff, s185036
+     */
     public void showTurnMenu(Player player, Boolean startOfTurn) {
         boolean continueChoosing = true;
         while (continueChoosing) {
-            String choice = null;
+            String choice;
 
             if (startOfTurn) {
-                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Hvad skal der ske?" , "Kør", "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil");
+                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?" , "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil", "Kør");
             } else {
                 choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "'s tur. Hvad skal der ske?" , "Slut turen", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
             }
 
-            if (choice.equals("Byg huse")) {
-                buyHouseAction();
-            } else if (choice.equals("Handel")) {
-                trade();
-            } else if (choice.equals("Sælg huse")) {
-                sellHouseAction();
-            } else if (choice.equals("Pantsættelser")) {
-                String input = gui.getUserButtonPressed("Vælg:", "Pantsætte", "Indfri gæld", "Tilbage til menu");
-                if (input.equals("Pantsætte")) {
-                    mortgageAction();
-                } else if (input.equals("Indfri gæld")) {
-                    unmortgageAction();
-                }
-            } else if (choice.equals("Gem spil")) {
-                saveGame();
-            } else {
-                continueChoosing = false;
+            switch (choice) {
+                case "Byg huse":
+                    buyHouseAction();
+                    break;
+                case "Handel":
+                    trade(null);
+                    break;
+                case "Sælg huse":
+                    sellHouseAction(null);
+                    break;
+                case "Pantsættelser":
+                    String input = gui.getUserButtonPressed("Vælg:", "Pantsætte", "Indfri gæld", "Tilbage til menu");
+                    if (input.equals("Pantsætte")) {
+                        mortgageAction(null);
+                    } else if (input.equals("Indfri gæld")) {
+                        unmortgageAction();
+                    }
+                    break;
+                case "Gem spil":
+                    saveGame();
+                    break;
+                default:
+                    continueChoosing = false;
+                    break;
             }
         }
     }
@@ -184,6 +235,7 @@ public class GameController {
         } else {
             gameDb.updateGame(game);
         }
+        playSound("saved.wav");
         gui.showMessage("Spillet blev gemt!");
     }
 
@@ -215,9 +267,8 @@ public class GameController {
             }
         }
         if (countActive == 1) {
-            gui.showMessage(
-                    "Player " + winner.getName() +
-                            " has won with " + winner.getBalance() + "$.");
+            playSound("applause.wav");
+            gui.showMessage("Tillykke, " + winner.getName() + "! Du har vundet spillet med en balance på " + winner.getBalance() + "kr!");
             returnBool = true;
         } else if (countActive < 1) {
             // This can actually happen in very rare conditions and only
@@ -225,7 +276,7 @@ public class GameController {
             // in an auction in the same round when the last but one player went
             // bankrupt)
             gui.showMessage(
-                    "All players are broke.");
+                    "Spillet er slut uden en vinder, da alle spillere er gået konkurs!");
             returnBool = false;
         }
         return returnBool;
@@ -246,27 +297,24 @@ public class GameController {
         boolean castDouble;
         int doublesCount = 0;
         do {
-            // TODO right now the dice are limited to the numbers 1, 2 and 3
-            // for making the game faster. Eventually, this should be set
-            // to 1 - 6 again (to this end, the constants 3.0 below should
-            // be set to 6.0 again.
-            int die1 = (int) (1 + 3.0 * Math.random());
-            int die2 = (int) (1 + 3.0 * Math.random());
+            int die1 = (int) (1 + 6.0 * Math.random());
+            int die2 = (int) (1 + 6.0 * Math.random());
+            sumOfDies = die1 + die2;
             castDouble = (die1 == die2);
             gui.setDice(die1, die2);
 
             if (player.isInPrison() && castDouble) {
                 player.setInPrison(false);
-                gui.showMessage("Player " + player.getName() + " leaves prison now since he cast a double!");
+                gui.showMessage( player + " har kastet to ens, og bliver derfor løsladt fra fængslet!");
             } else if (player.isInPrison()) {
-                gui.showMessage("Player " + player.getName() + " stays in prison since he did not cast a double!");
+                gui.showMessage(player + " forbliver i fængsel, da han/hun ikke slog to ens.");
             }
             // TODO note that the player could also pay to get out of prison,
             //      which is not yet implemented
             if (castDouble) {
                 doublesCount++;
                 if (doublesCount > 2) {
-                    gui.showMessage("Player " + player.getName() + " has cast the third double and goes to jail!");
+                    gui.showMessage(player + " har kastet to ens tre gange i træk og ryger derfor i fængsel!");
                     gotoJail(player);
                     return;
                 }
@@ -278,9 +326,10 @@ public class GameController {
                 List<Space> spaces = game.getSpaces();
                 int newPos = (pos + die1 + die2) % spaces.size();
                 Space space = spaces.get(newPos);
+                playSound("engine.wav");
                 moveToSpace(player, space);
                 if (castDouble) {
-                    gui.showMessage("Player " + player.getName() + " cast a double and gets to make another move.");
+                    gui.showMessage( player + " har kastet to ens og får derfor en ekstra tur.");
                     showTurnMenu(player, true);
                 }
             }
@@ -305,10 +354,11 @@ public class GameController {
             // Note that this assumes that the game has more than 12 spaces here!
             // TODO: the amount of 2000$ should not be a fixed constant here (could also
             //       be configured in the Game class.
-            gui.showMessage("Player " + player.getName() + " receives 2000$ for passing Go!");
+            playSound("yougotmoney.wav");
+            gui.showMessage(player + " modtager 2000kr for at passere start!");
             this.paymentFromBank(player, 2000);
         }
-        gui.showMessage("Player " + player.getName() + " arrives at " + space.getIndex() + ": " + space.getName() + ".");
+        gui.showMessage(player + " ankommer til " + space + ".");
 
         // Execute the action associated with the respective space. Note
         // that this is delegated to the field, which implements this action
@@ -324,6 +374,7 @@ public class GameController {
         // Field #10 is in the default game board of Monopoly the field
         // representing the prison.
         // TODO the 10 should not be hard coded
+        playSound("imprisoned.wav");
         player.setCurrentPosition(game.getSpaces().get(10));
         player.setInPrison(true);
     }
@@ -372,9 +423,71 @@ public class GameController {
      *
      * @param player the player
      * @param amount the amount the player should have available after the act
+     * @author Nicolai Wulff s185036
      */
-    public void obtainCash(Player player, int amount) {
-        // TODO implement
+    public boolean obtainCash(Player player, int amount, boolean beforePurchase) {
+        boolean tryToObtain = true;
+        while (tryToObtain) {
+
+            //Check if the player has anything left to sell. If not, and the player still can't pay,
+            //declare the player bankrupt.
+            if (player.getOwnedProperties().size() == 0 && player.getBalance() < amount && !beforePurchase) {
+                gui.showMessage(player + ", du har desværre intet tilbage, du kan sælge, og må derfor erklæres konkurs.");
+                return false;
+            }
+
+            String choice;
+            if (!beforePurchase) {
+                if (player.getBalance() < amount) {
+                    choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at betale " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Erklær dig konkurs");
+                } else {
+                    choice = gui.getUserButtonPressed(player + ", du har nu råd til at betale " + amount + "kr. Du kan nu fortsætte med at sælge/handle eller gå til betaling.", "Sælg huse", "Pantsæt grunde", "Handle", "Betal");
+                }
+            } else {
+                if (player.getBalance() < amount) {
+                    choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke nok penge til at købe grunden for " + amount + "kr. Hvad vil du gøre?", "Sælg huse", "Pantsæt grunde", "Handle", "Annuller købet");
+                } else {
+                    choice = gui.getUserButtonPressed(player + ", du har nu råd til at købe grunden for " + amount + "kr. Du kan nu fortsætte med at sælge/handle eller gå til betaling.", "Sælg huse", "Pantsæt grunde", "Handle", "Køb", "Annuller købet");
+                }
+            }
+
+            switch (choice) {
+                case "Sælg huse" :
+                    sellHouseAction(player);
+                    break;
+                case "Pantsæt grunde" :
+                    mortgageAction(player);
+                    break;
+                case "Handle" :
+                    trade(player);
+                    break;
+                case "Erklær dig konkurs":
+                    if (player.getOwnedPropertiesNotMortgaged().size() > 0) {
+                        boolean ownsHouses = false;
+                        for (Property property : player.getOwnedPropertiesNotMortgaged()) {
+                            if (property instanceof RealEstate) {
+                                if (((RealEstate) property).getHouseCount() > 0) ownsHouses = true;
+                            }
+                        }
+                        gui.showMessage(ownsHouses ? "Du har stadig huse/hoteller, du kan sælge!" : "Du har stadig grunde, du kan pantsætte eller handle med!");
+                    } else if (player.getOwnedProperties().size() > 0 && player.getOwnedPropertiesNotMortgaged().size() == 0) {
+                        String choice2 = gui.getUserButtonPressed("Er du sikker på, du ikke vil forsøge at sælge dine pantsatte grunde til andre spillere?", "Ja", "Nej");
+                        if (choice2.equals("Ja")) {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                    break;
+                case "Annuller købet" :
+                    return false;
+                case "Betal" :
+                    return true;
+                case "Køb" :
+                    return true;
+            }
+        }
+        return true;
     }
 
     /**
@@ -388,18 +501,22 @@ public class GameController {
      * @throws PlayerBrokeException when the player chooses to buy but could not afford it
      */
     public void offerToBuy(Property property, Player player) throws PlayerBrokeException, GameEndedException {
-        // TODO We might also allow the player to obtainCash before
-        // the actual offer, to see whether he can free enough cash
-        // for the sale.
 
-        String choice = gui.getUserSelection(
-                "Player " + player.getName() +
-                        ": Do you want to buy " + property.getName() +
-                        " for " + property.getCost() + "$?",
-                "yes",
-                "no");
+        String choice;
+        boolean proceedPurchase = true;
+        if (player.getBalance() < property.getCost()) {
+            choice = gui.getUserButtonPressed(player + ", du har i øjeblikket ikke penge nok til at købe " + property + ". Vil du forsøge at finde pengene ved at sælge, handle eller pantsætte noget?", "Ja", "Nej");
+            if (choice.equals("Ja")) {
+                proceedPurchase = obtainCash(player, property.getCost(), true);
+            } else {
+                proceedPurchase = false;
+            }
+        }
 
-        if (choice.equals("yes")) {
+        choice = "";
+        if (proceedPurchase) choice = gui.getUserSelection(player + ", ønsker du at købe " + property + " for " + property.getCost() + "kr?", "Ja", "Nej");
+
+        if (choice.equals("Ja")) {
             try {
                 paymentToBank(player, property.getCost());
             } catch (PlayerBrokeException e) {
@@ -413,6 +530,7 @@ public class GameController {
             }
             property.setOwner(player);
             player.addOwnedProperty(property);
+            playSound("purchase.wav");
             return;
         }
 
@@ -434,7 +552,7 @@ public class GameController {
      */
     public void payment(Player payer, int amount, Player receiver) throws PlayerBrokeException, GameEndedException {
         if (payer.getBalance() < amount) {
-            obtainCash(payer, amount);
+            obtainCash(payer, amount, false);
             if (payer.getBalance() < amount) {
                 playerBrokeTo(payer, receiver);
                 if (gameEnds())
@@ -442,7 +560,7 @@ public class GameController {
                 throw new PlayerBrokeException(payer);
             }
         }
-        gui.showMessage("Player " + payer.getName() + " pays " + amount + "$ to player " + receiver.getName() + ".");
+        gui.showMessage(payer + " betaler " + amount + "kr til " + receiver + ".");
         payer.payMoney(amount);
         receiver.receiveMoney(amount);
     }
@@ -469,7 +587,7 @@ public class GameController {
      */
     public void paymentToBank(Player player, int amount) throws PlayerBrokeException, GameEndedException {
         if (amount > player.getBalance()) {
-            obtainCash(player, amount);
+            obtainCash(player, amount, false);
             if (amount > player.getBalance()) {
                 playerBrokeToBank(player);
                 if (gameEnds())
@@ -477,7 +595,7 @@ public class GameController {
                 throw new PlayerBrokeException(player);
             }
         }
-        gui.showMessage("Player " + player.getName() + " pays " + amount + "$ to the bank.");
+        gui.showMessage(player + " betaler " + amount + "kr til banken.");
         player.payMoney(amount);
     }
 
@@ -489,34 +607,88 @@ public class GameController {
      */
     public void auction(Property property) throws GameEndedException {
         List<Player> bidders = new ArrayList<>();
-        int currentBid;
-        int highBid = 0;
-        Player highBidder = new Player();
-
-        bidders.addAll(game.getPlayers());
         Collections.shuffle(bidders);
+        for (Player p : game.getActivePlayers(false)) {
+            if (p.getBalance() > 0) {
+                bidders.add(p);
+            }
+        }
 
-        while (bidders.size() != 1) {
-            for (int i = 0; i < bidders.size(); i++) {
-                Player p = bidders.get(i);
-                if (!p.equals(highBidder)) {
+        if (bidders.size() == 0) {
+            gui.showMessage("Der kan ikke afholdes en auktion for salget af " + property + ", da ingen spillere kan deltage. ");
+            return;
+        }
 
-                    currentBid = highBid == 0 ? gui.getUserInteger(p.getName() + ":\nPlace bid", 0, p.getBalance())
-                            : gui.getUserInteger(p.getName() + ":\nPlace bid. Current high bid: " + highBid + " by " + highBidder.getName(), 0, p.getBalance());
+        gui.showMessage("Der vil nu blive afholdt en auktion for at købe " + property + ". Grunden er vurderet til " + property.getCost() + "kr. Man udgår af auktionen ved at byde 0kr eller ikke at byde over højeste bud.");
 
-                    if (currentBid > highBid) {
-                        highBid = currentBid;
-                        highBidder = p;
-                    } else {
-                        bidders.remove(p);
-                    }
+        if (bidders.size() == 1) {
+            gui.showMessage(bidders.get(0) + ", du er en eneste, der kan deltage i auktionen. Du får derfor lov til selv at bestemme, hvad du vil betale for " + property + ".");
+        } else {
+            for (Player p : game.getActivePlayers(true)) {
+                if (p.isInPrison()) {
+                    gui.showMessage(p + " kan ikke deltage i auktionen, da han/hun er i fængsel.");
+                } else if (p.getBalance() == 0) {
+                    gui.showMessage(p + " kan ikke deltage i auktionen, da han/hun ikke har nogen penge.");
                 }
             }
         }
-        property.setCost(highBid);
+
+        Clip clip = null;
         try {
-            offerToBuy(property, bidders.get(0));
-            bidders.clear();
+            File f = new File("src/resources/sounds/auction.wav");
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+            clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        int highBid = 0;
+        Player highBidder = null;
+
+        do {
+            ArrayList<Player> toBeRemoved = new ArrayList<>();
+            for (Player bidder : bidders) {
+                if (highBidder == bidder) continue;
+                int bid = -1;
+                while (!(bid >= 0 && bid <= bidder.getBalance())) {
+                    if (highBid == 0) {
+                        bid = gui.getUserInteger(bidder + ", hvad vil du byde?", 0, bidder.getBalance());
+                    } else {
+                        bid = gui.getUserInteger(bidder + ", hvad vil du byde?. Højeste bud er: " + highBid + "kr af " + highBidder, 0, bidder.getBalance());
+                    }
+
+                    if (bid < 0 || bid > bidder.getBalance()) {
+                        gui.showMessage("Ugyldigt bud! Prøv igen.");
+                    } else if (bid > highBid) {
+                        highBid = bid;
+                        highBidder = bidder;
+                    } else if (bid == 0) {
+                        gui.showMessage(bidder + " har budt 0kr og udgår derfor af auktionen.");
+                        toBeRemoved.add(bidder);
+                    } else {
+                        gui.showMessage(bidder + " har ikke budt over og udgår derfor af auktionen.");
+                        toBeRemoved.add(bidder);
+                    }
+                }
+            }
+            bidders.removeAll(toBeRemoved);
+        } while (bidders.size() > 1);
+
+        if (bidders.size() == 0) {
+            clip.stop();
+            gui.showMessage("Ingen spillere har budt på " + property + ", og den er derfor stadig til salg.");
+            return;
+        }
+
+        clip.stop();
+        playSound("auctionsold.wav");
+        gui.showMessage("Første.. Anden.. Tredje.. " + highBidder + " vinder auktionen og køber " + property + " for " + highBid + "kr.");
+        try {
+            paymentToBank(highBidder, highBid);
+            property.setOwner(highBidder);
+            highBidder.addOwnedProperty(property);
         } catch (PlayerBrokeException e) {
             e.printStackTrace();
         }
@@ -548,8 +720,8 @@ public class GameController {
             game.returnCardToDeck(brokePlayer.getOwnedCards().get(0));
         }
 
-        gui.showMessage("Player " + brokePlayer.getName() + "went broke and transfered all"
-                + "assets to " + benificiary.getName());
+        playSound("trombones.wav");
+        gui.showMessage(brokePlayer + " er gået konkurs og overfører hele konkursboet til " + benificiary);
     }
     /**
      * Action handling the situation when a player is broke to the bank.
@@ -568,7 +740,8 @@ public class GameController {
         }
         player.removeAllProperties();
 
-        gui.showMessage("Player " + player.getName() + " went broke");
+        playSound("trombones.wav");
+        gui.showMessage(player + " er gået konkurs.");
 
         while (!player.getOwnedCards().isEmpty()) {
             game.returnCardToDeck(player.getOwnedCards().get(0));
@@ -606,18 +779,26 @@ public class GameController {
             gui.showMessage("Du kan ikke bygge mere på denne grund!");
         } else if (re.getHouseCount() > lowestHouseCount){
             gui.showMessage("Du skal bygge jævnt!");
-        } else {
+        } else if (player.getBalance() >= re.getPriceForHouse()){
             try {
                 paymentToBank(player, re.getPriceForHouse());
                 re.setHouseCount(re.getHouseCount() + 1);
+                playSound("purchase.wav");
             } catch (PlayerBrokeException e){
-                gui.showMessage(player.getName() + " har ikke råd til at bygge et hus på denne grund.");
+                e.printStackTrace();
             } catch (GameEndedException e) {
                 e.printStackTrace();
             }
+        } else {
+            gui.showMessage(player.getName() + ", du har ikke råd til at bygge et hus/hotel på denne grund.");
         }
     }
 
+    /**
+     * @param player
+     * @param re
+     * @author Nicolai Wulff s185036
+     */
     private void sellHouse(Player player, RealEstate re) {
         int highestHouseCount = 0;
         for (Property property : player.getOwnedProperties()) {
@@ -640,7 +821,7 @@ public class GameController {
      */
     private void buyHouseAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at købe huse?", null, false);
-
+        if (player == null) return;
         boolean continueBuying = true;
         while (continueBuying) {
             ArrayList<RealEstate> potentialProperties = new ArrayList<>();
@@ -675,8 +856,12 @@ public class GameController {
         }
     }
 
-    private void sellHouseAction() {
-        Player player = choosePlayer("Hvilken spiller ønsker at sælge huse?", null, false);
+    /**
+     * @author Nicolai Wulff s185036
+     */
+    private void sellHouseAction(Player player) {
+        if (player == null) player = choosePlayer("Hvilken spiller ønsker at sælge huse?", null, false);
+        if (player == null) return;
         boolean continueSelling = true;
         while (continueSelling) {
             //Makes a list of all real estate, that has at least one house built on it.
@@ -713,10 +898,11 @@ public class GameController {
     }
 
     /**
-     * @Author Nicolai Wulff, s185036
+     * @author Nicolai Wulff, s185036
      */
-    private void trade() {
+    private void trade(Player firstParty) {
         Player[] tradingPlayers = new Player[2];
+        tradingPlayers[0] = firstParty;
         int[] moneyInOffers = new int[2];
         ArrayList<Property>[] propertiesInOffers = new ArrayList[2];
         propertiesInOffers[0] = new ArrayList<>();
@@ -727,8 +913,9 @@ public class GameController {
         int i = 0;
         while (choosing) {
             Player player = null;
-            if (i == 0) player = choosePlayer("Hvem er den ene part i handlen?", null, true);
-            if (i == 1) player = choosePlayer("Hvem er den ene part i handlen?", tradingPlayers[0], true);
+            if (firstParty != null) i++;
+            if (i == 0 && firstParty == null) player = choosePlayer("Hvem er den ene part i handlen?", null, true);
+            if (i == 1) player = choosePlayer("Hvem er den anden part i handlen?", tradingPlayers[0], true);
             if (player != null && player.isInPrison()) {
                 gui.showMessage(player.getName() + " er i fængsel, og må derfor ikke handle!");
             } else if (player != null) {
@@ -744,6 +931,7 @@ public class GameController {
         for (int j = 0; j < 2; j++) {
             //Ask what amount of money, the player wants to trade.
             moneyInOffers[j] = gui.getUserInteger(tradingPlayers[j] + ", hvilket beløb vil du tilføje i handlen?", 0, tradingPlayers[j].getBalance());
+            if (moneyInOffers[j] < 0) moneyInOffers[j] = 0;
 
             //Keep adding properties to the trade, until the player chooses to stop.
             boolean continueAdding = true;
@@ -824,7 +1012,7 @@ public class GameController {
      * @param giver
      * @param property
      * @param receiver
-     * @Author Nicolai Wulff, s185036
+     * @author Nicolai Wulff s185036
      */
     private void transferProperty(Player giver, Property property, Player receiver) {
         property.setOwner(null);
@@ -833,9 +1021,9 @@ public class GameController {
         receiver.addOwnedProperty(property);
     }
 
-    private void mortgageAction() {
-        Player player = choosePlayer("Hvilken spiller ønsker at pantsætte?", null, false);
-
+    private void mortgageAction(Player player) {
+        if (player == null) player = choosePlayer("Hvilken spiller ønsker at pantsætte?", null, false);
+        if (player == null) return;
         boolean continuePawning = true;
         while (continuePawning) {
             ArrayList<Property> potentialProperties = new ArrayList<>();
@@ -883,14 +1071,22 @@ public class GameController {
         }
     }
 
+    /**
+     * @param player
+     * @param property
+     * @author Nicolai Wulff s185036
+     */
     private void mortgage(Player player, Property property) {
         property.setMortgaged(true);
         paymentFromBank(player, property.getCost() / 2);
     }
 
+    /**
+     * Nicolai Wulff s185036
+     */
     private void unmortgageAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", null, false);
-
+        if (player == null) return;
         boolean continuePawning = true;
         while (continuePawning) {
             ArrayList<Property> potentialProperties = new ArrayList<>();
@@ -919,25 +1115,35 @@ public class GameController {
         }
     }
 
+    /**
+     * @param player
+     * @param property
+     * @author Nicolai Wulff s185036
+     */
     private void unmortgage(Player player, Property property) {
-        try {
-            paymentToBank(player, property.getCost() / 2);
-            property.setMortgaged(false);
-        } catch (PlayerBrokeException e) {
-            e.printStackTrace();
-        } catch (GameEndedException e) {
-            e.printStackTrace();
+        if (player.getBalance() >= property.getCost() / 2 ) {
+            try {
+                paymentToBank(player, property.getCost() / 2);
+                property.setMortgaged(false);
+            } catch (PlayerBrokeException e) {
+                e.printStackTrace();
+            } catch (GameEndedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            gui.showMessage(player + ", du har ikke råd til at indfri din gæld i denne pantsættelse.");
         }
+
     }
 
     /**
      * Use to choose an active player from a dropdown menu in the gui.
      * May exclude a specific player from the list and may exclude players in prison.
-     * @Author Nicolai Wulff, s185036
      * @param msg Message over dropdown menu.
      * @param excludedPlayer Exlude a specific player.
      * @param mayBeInPrison If true, include players in prison. If false, exclude players in prison.
      * @return the chosen player.
+     * @author Nicolai Wulff s185036
      */
     private Player choosePlayer(String msg, Player excludedPlayer, boolean mayBeInPrison) {
         //Make list of active players, that either may be or may not be in prison (depending on mayBeInPrison).
@@ -952,7 +1158,6 @@ public class GameController {
      * with a certain list of options. The last option in the list is used to
      * cancel and return to menu with no action. Each option may have strings
      * and values added to the end, eg: ", price: 100$/house".
-     * @Author Nicolai Wulff, s185036
      * @param c A collection of options.
      * @param msg Message to be shown over the dropdown menu.
      * @param stopOption The string to represent the option to cancel, eg: "Cancel".
@@ -964,6 +1169,7 @@ public class GameController {
      *                  to the end of the element of the collection with the same index.
      * @param <T> Type of the objects listed.
      * @return The chosen option of type T.
+     * @author Nicolai Wulff s185036
      */
     private <T> T chooseFromOptions(Collection<T> c, String msg, String stopOption, String addToEnd1, ArrayList values, Object addToEnd2) {
         String[] options = new String[c.size() + 1];
@@ -997,5 +1203,21 @@ public class GameController {
      */
     public void showMessage(String message) {
         gui.showMessage(message);
+    }
+
+    public int getSumOfDies() {
+        return sumOfDies;
+    }
+
+    public void playSound(String fileName) {
+        try {
+            File f = new File("src/resources/sounds/" + fileName);
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

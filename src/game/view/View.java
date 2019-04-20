@@ -2,11 +2,14 @@ package game.view;
 
 import designpattern.Observer;
 import designpattern.Subject;
+import game.controller.GameController;
 import game.model.Game;
 import game.model.Player;
 import game.model.Property;
 import game.model.Space;
+import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
+import game.model.properties.Utility;
 import gui_fields.*;
 import gui_fields.GUI_Car.Pattern;
 import gui_fields.GUI_Car.Type;
@@ -31,7 +34,7 @@ import static gui_fields.GUI_Car.Type.RACECAR;
  * @author Ekkart Kindler, ekki@dtu.dk
  * Sørg for at udvide klassen View, så at dens metode
  */
-public class View implements Observer {
+public class View implements Observer, Runnable {
 
     private Game game;
     private GUI gui;
@@ -53,10 +56,6 @@ public class View implements Observer {
         this.game = game;
         this.gui = gui;
 
-        for (Player player : game.getPlayers()) {
-            PlayerPanel playerPanel = new PlayerPanel(game, player);
-            player2PlayerPanel.put(player, playerPanel);
-        }
         GUI_Field[] guiFields = gui.getFields();
 
         int i = 0;
@@ -64,8 +63,9 @@ public class View implements Observer {
             // TODO, here we assume that the games fields fit to the GUI's fields;
             // the GUI fields should actually be created according to the game's
             // fields
-            space2GuiField.put(space, guiFields[i++]);
+            space2GuiField.put(space, guiFields[i]);
             space.attach(this);
+            i++;
         }
     }
 
@@ -97,16 +97,22 @@ public class View implements Observer {
                 gui_ownable.setBorder(null);
                 gui_ownable.setOwnerName(null);
             }
+
+            gui_ownable.setRent(property.getRent() + "");
         }
         if (property instanceof RealEstate) {
             GUI_Street street = (GUI_Street) gui_field;
             street.setHotel(false);
-            if (((RealEstate) property).getHouseCount() > 0 && ((RealEstate) property).getHouseCount() < 5){
+            if (((RealEstate) property).getHouseCount() > 0 && ((RealEstate) property).getHouseCount() < 5) {
                 street.setHouses(((RealEstate) property).getHouseCount());
             } else if (((RealEstate) property).getHouseCount() == 5) {
                 street.setHotel(true);
             }
+            //street.setRent(property.getRent() + "");
+        }
 
+        if (property instanceof Brewery) {
+            ((GUI_Ownable) gui_field).setRent(property.getRent() + " gange øjnene.");
         }
 
         if (property.getOwner() != null) {
@@ -129,15 +135,18 @@ public class View implements Observer {
 
             GUI_Field[] guiFields = gui.getFields();
             Integer oldPosition = player2position.get(player);
-            if (oldPosition != null && oldPosition < guiFields.length) {
-                guiFields[oldPosition].setCar(guiPlayer, false);
-            }
             int pos = player.getCurrentPosition().getIndex();
-            if (pos < guiFields.length) {
-                player2position.put(player, pos);
-                guiFields[pos].setCar(guiPlayer, true);
-            }
 
+            if (oldPosition != null && oldPosition < guiFields.length) {
+
+                int moves = calcNumOfMoves(player);
+                for (int i = 1; i <= moves; i++) {
+                    run();
+                    guiFields[((oldPosition + i - 1) % 40)].setCar(player2GuiPlayer.get(player), false);
+                    player2position.put(player, pos);
+                    guiFields[((oldPosition + i) % 40)].setCar(player2GuiPlayer.get(player), true);
+                }
+            }
             String name = player.getName();
             if (player.isBroke()) {
             } else if (player.isInPrison()) {
@@ -148,6 +157,30 @@ public class View implements Observer {
             }
             player2PlayerPanel.get(player).update();
         }
+    }
+
+    /**
+     * @param player
+     * @return
+     * @author Nicolai L
+     */
+    public int calcNumOfMoves(Player player) {
+        Integer oldPos = player2position.get(player);
+        if (oldPos == null) {
+            oldPos = 0;
+        }
+        int curPos = player.getCurrentPosition().getIndex();
+        int moves;
+        if (curPos > oldPos) {
+            moves = curPos - oldPos;
+        } else {
+            try {
+                moves = 40 % (oldPos - curPos);
+            } catch (ArithmeticException e) {
+                moves = 0;
+            }
+        }
+        return moves;
     }
 
     public void dispose() {
@@ -167,23 +200,26 @@ public class View implements Observer {
      * Nicolai L
      */
     public void createPlayers() {
-        CarColor carColor = new CarColor();
+        TokenColor tokenColor = new TokenColor();
         for (Player player : game.getPlayers()) {
             enterNamePlayer(player);
-            Color userColor = chooseCarColor(carColor, player);
+            Color userColor = chooseCarColor(tokenColor, player);
             player.setColor(userColor);
             GUI_Car car = chosePlayerCar(player);
             GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
             player2GuiPlayer.put(player, guiPlayer);
             gui.addPlayer(guiPlayer);
             player2position.put(player, 0);
+            PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
+            player2PlayerPanel.put(player, playerPanel);
+            space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
             player.attach(this);
             updatePlayer(player);
         }
     }
 
     /**
-     * @author Jeppe s170196, Nicolai s185020
+     * @author Jeppe s170196, Nicolai s185020, Nicolai W s185036
      */
     public void loadPlayers() {
         for (Player player : game.getPlayers()) {
@@ -192,8 +228,14 @@ public class View implements Observer {
             player2GuiPlayer.put(player, guiPlayer);
             gui.addPlayer(guiPlayer);
             player2position.put(player, player.getCurrentPosition().getIndex());
+            space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
+            PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
+            player2PlayerPanel.put(player, playerPanel);
             player.attach(this);
             updatePlayer(player);
+            for (Property p : player.getOwnedProperties()) {
+                updateProperty(p);
+            }
         }
     }
 
@@ -209,7 +251,7 @@ public class View implements Observer {
                 player.setName(input);
                 break;
             } else {
-/*
+/*todo ret dette
                 gui.showMessage("prøv igen");
 */
                 break;
@@ -218,7 +260,7 @@ public class View implements Observer {
     }
 
     /**
-     * Nicola L
+     * Nicolai L
      *
      * @param player
      * @return
@@ -239,17 +281,21 @@ public class View implements Observer {
     /**
      * Nicolai L
      *
-     * @param carColorObj
+     * @param tokenColorObj
      * @param player
      * @return
      */
-    public Color chooseCarColor(CarColor carColorObj, Player player) {
-        String[] chooseColorStrings = carColorObj.setColorsToChooseFrom().split(" ");
+    public Color chooseCarColor(TokenColor tokenColorObj, Player player) {
+        String[] chooseColorStrings = tokenColorObj.setColorsToChooseFrom().split(" ");
         String carColorS;
 
         for (int i = 0; i < chooseColorStrings.length; i++) {
         }
-        if (chooseColorStrings.length == 4) {
+        if (chooseColorStrings.length == 6) {
+            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3], chooseColorStrings[4], chooseColorStrings[5]);
+        } else if (chooseColorStrings.length == 5) {
+            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3], chooseColorStrings[4]);
+        } else if (chooseColorStrings.length == 4) {
             carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3]);
         } else if (chooseColorStrings.length == 3) {
             carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2]);
@@ -259,8 +305,16 @@ public class View implements Observer {
             gui.showMessage(player.getName() + "'s color is " + chooseColorStrings[0]);
             carColorS = chooseColorStrings[0];
         }
-        Color carColorChoice = carColorObj.colorChosen(carColorS);
+        Color carColorChoice = tokenColorObj.colorChosen(carColorS);
 
         return carColorChoice;
+    }
+
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(150);
+        } catch (Exception e) {
+        }
     }
 }

@@ -14,6 +14,7 @@ public class Chance extends Space {
 
 	@Override
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
+		controller.playSound("chance.wav");
 		controller.takeChanceCard(player);
 	}
 
