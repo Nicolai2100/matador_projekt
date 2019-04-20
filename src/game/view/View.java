@@ -149,10 +149,10 @@ public class View implements Observer, Runnable {
             }
             String name = player.getName();
             if (player.isBroke()) {
+                guiPlayer.setName(player.getName() + " (konkurs)");
             } else if (player.isInPrison()) {
-                guiPlayer.setName(player.getName() + " (in prison)");
-            }
-            if (!name.equals(guiPlayer.getName())) {
+                guiPlayer.setName(player.getName() + " (i fængsel)");
+            } else {
                 guiPlayer.setName(name);
             }
             player2PlayerPanel.get(player).update();
@@ -175,7 +175,8 @@ public class View implements Observer, Runnable {
             moves = curPos - oldPos;
         } else {
             try {
-                moves = 40 % (oldPos - curPos);
+                //moves = (oldPos - curPos) % 4     0;
+                moves = (curPos - oldPos + 40) % 40;
             } catch (ArithmeticException e) {
                 moves = 0;
             }
