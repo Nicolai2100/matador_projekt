@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import game.model.*;
+import game.model.cards.GetOutOfJail;
 import game.model.cards.MoveEffect;
 import game.model.cards.EconomicEffect;
 import game.model.properties.Brewery;
@@ -495,6 +496,10 @@ public class JSONUtility {
         card = new EconomicEffect(EconomicEffect.EffectType.MATADOR_GRANT);
         card.setText("De modtager \"Matador-legatet for værdigt trængende\" på kr. 40.000. Ved værdigt trængende forstås, at Deres formue, dvs. Deres kontante penge + skøder + bygninger, ikke overstiger kr. 15.000.");
         ((EconomicEffect) card).setAmount1(40000);
+        cardList.add(card);
+
+        card = new GetOutOfJail();
+        card.setText("I anledningen af kongens fødselsdag benådes De herved for fængsel. Dette kort kan opbevares, indtil De får brug for det, eller De kan sælge det.");
         cardList.add(card);
 
         game.setCardDeck(cardList);
