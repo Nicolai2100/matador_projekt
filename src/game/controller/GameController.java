@@ -426,20 +426,21 @@ public class GameController {
      * @throws PlayerBrokeException if the player goes broke by this activity
      */
     public void takeChanceCard(Player player) throws PlayerBrokeException, GameEndedException {
-        /*
-        todo få metoden til at virke!
+
+        //todo få metoden til at virke!
         Card card = game.drawCardFromDeck();
 
-        System.out.println("Der er kommenteret en metode ud fordi den smed fejl");
+        //System.out.println("Der er kommenteret en metode ud fordi den smed fejl");
 
         gui.displayChanceCard(card.getText());
-        gui.showMessage("Player " + player.getName() + " draws a chance card.");
+        gui.showMessage(player + " trækker et chancekort...");
 
         try {
             card.doAction(this, player);
         } finally {
-            gui.displayChanceCard("done");
-        }*/
+            //gui.displayChanceCard("done");
+        }
+        gui.displayChanceCard("");
     }
 
     /**
