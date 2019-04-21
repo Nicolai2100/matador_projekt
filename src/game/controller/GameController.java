@@ -343,7 +343,7 @@ public class GameController {
                 moveToSpace(player, space);
                 if (castDouble) {
                     gui.showMessage( player + " har kastet to ens og får derfor en ekstra tur.");
-                    showTurnMenu(player, true);
+                    showTurnMenu(player);
                 }
             }
         } while (castDouble);
