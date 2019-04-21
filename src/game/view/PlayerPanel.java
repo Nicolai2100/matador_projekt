@@ -78,13 +78,10 @@ public class PlayerPanel extends JFrame implements MouseListener {
         colorPanel.setPreferredSize(smallPanelDimension);
         colorPanel.setBackground(player.getColor());
 
-        JLabel cardLabel = new JLabel();
-        if (player.getOwnedCards().size() > 0) {
-            cardLabel = new JLabel("Kort: " + player.getOwnedCards().size());
-            cardLabel.setMinimumSize(smallPanelDimension);
-            cardLabel.setMaximumSize(smallPanelDimension);
-            cardLabel.setPreferredSize(smallPanelDimension);
-        }
+        JLabel cardLabel = new JLabel("Kort: " + player.getOwnedCards().size());
+        cardLabel.setMinimumSize(smallPanelDimension);
+        cardLabel.setMaximumSize(smallPanelDimension);
+        cardLabel.setPreferredSize(smallPanelDimension);
 
 
         playerPanel.add(colorPanel);
