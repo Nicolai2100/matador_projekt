@@ -20,9 +20,18 @@ public class EconomicEffect extends Card {
 	
 	private int amount1;
 	private int amount2;
-	public enum EffectType {FROM_BANK, FROM_OTHER_PLAYERS, TO_BANK, TO_BANK_PER_HOUSE_AND_HOTEL}
-	private EffectType effectType = EffectType.FROM_BANK;
+	public enum EffectType {FROM_BANK, FROM_OTHER_PLAYERS, TO_BANK, TO_BANK_PER_HOUSE_AND_HOTEL, MATADOR_GRANT}
+	private EffectType effectType;
 	private List<Player> players;
+
+	public EconomicEffect(EffectType effectType) {
+	    this.effectType = effectType;
+    }
+
+    public EconomicEffect(EffectType effectType, List<Player> players) {
+        this.effectType = effectType;
+        this.players = players;
+    }
 
 	/**
 	 * Returns the amount1 this card directs the bank to pay to the player.
@@ -45,7 +54,7 @@ public class EconomicEffect extends Card {
     public void setAmount2(int amount2) {
         this.amount2 = amount2;
     }
-
+/*
     public void setEffectType(EffectType payer) {
         this.effectType = payer;
     }
@@ -55,6 +64,7 @@ public class EconomicEffect extends Card {
         this.players = players;
 
     }
+    */
 
     @Override
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
@@ -86,6 +96,25 @@ public class EconomicEffect extends Card {
                         }
                     }
                     controller.paymentToBank(player, houses * amount1 + hotels * amount2);
+                    break;
+                case MATADOR_GRANT:
+                    int totalSubstance = player.getBalance();
+                    for (Property p : player.getOwnedProperties()) {
+                        if (!p.getMortgaged()) {
+                            totalSubstance += p.getCost();
+                        } else if (p.getMortgaged()) {
+                            totalSubstance += p.getCost() / 2;
+                        }
+                        if (p instanceof RealEstate) {
+                            totalSubstance += ((RealEstate) p ).getHouseCount() * ((RealEstate) p ).getPriceForHouse();
+                        }
+                    }
+                    if (totalSubstance <= 15000) {
+                        controller.showMessage(player + ", din formue overstiger ikke 15000 kr, og du modtager derfor Matador-legatet på kr. 40.000, tillykke!");
+                        controller.paymentFromBank(player, amount1);
+                    } else {
+                        controller.showMessage(player + ", din formue overstiger 15000 kr, og du modtager derfor ikke Matador-legatet.");
+                    }
 
             }
 

@@ -326,45 +326,45 @@ public class JSONUtility {
 
         ArrayList<Card> cardList = new ArrayList<>();
 
-        Card card = new EconomicEffect();
+        Card card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("Deres premieobligation er udtrukket. De modtager kr. 1000 af banken.");
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("Værdien af egen avl fra nyttehaven udgør kr. 200, som De modtager af banken.");
         ((EconomicEffect) card).setAmount1(200);
         cardList.add(card);
 
         //2
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("Grundet dyrtiden har De fået gageforhøjelse. Modtag kr. 1000.");
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
         //2
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("De modtager Deres aktieudbytte. Modtag kr. 1000 af banken.");
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("De har solgt nogle gamle møbler på auktion. Modtag kr. 1000  af banken.");
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
         //2
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("De har vundet i Klasselotterliet. Modtag kr. 500.");
         ((EconomicEffect) card).setAmount1(500);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("Kommunen har eftergivet et kvartals skat. Hæv i banken kr. 3000.");
         ((EconomicEffect) card).setAmount1(3000);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("De har en række med elleve rigtige i tipning. Modtag kr. 1000.");
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
@@ -420,93 +420,82 @@ public class JSONUtility {
         ((MoveEffect) card).setTargetType(MoveEffect.targetTypes.THREE_BACKWARDS);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS);
         card.setText("Det er Deres fødselsdag. Modtag af hver medspiller kr. 200.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.FROM_OTHER_PLAYERS, game.getActivePlayers(true));
         ((EconomicEffect) card).setAmount1(200);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS, game.getActivePlayers(true));
         card.setText("De har lagt penge ud til et sammenskudsgilde. Mærkværdigvis betaler alle straks. Modtag fra hver medspiller kr. 500.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.FROM_OTHER_PLAYERS, game.getActivePlayers(true));
         ((EconomicEffect) card).setAmount1(500);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS, game.getActivePlayers(true));
         card.setText("De skal holde familiefest og får et tilskud fra hver medspiller på kr. 500");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.FROM_OTHER_PLAYERS, game.getActivePlayers(true));
         ((EconomicEffect) card).setAmount1(500);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK_PER_HOUSE_AND_HOTEL);
         card.setText("Ejendomsskatterne er steget. Ekstraudgifterne er:<BR>kr. 800 pr. hus.<BR>kr. 2300 pr. hotel.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK_PER_HOUSE_AND_HOTEL);
         ((EconomicEffect) card).setAmount1(800);
         ((EconomicEffect) card).setAmount2(2300);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK_PER_HOUSE_AND_HOTEL);
         card.setText("Oliepriserne er steget, og De skal betale:<BR>kr. 500 pr. hus.<BR>kr. 2000 pr. hotel.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK_PER_HOUSE_AND_HOTEL);
         ((EconomicEffect) card).setAmount1(500);
         ((EconomicEffect) card).setAmount2(2000);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK);
         card.setText("De har kørt frem for \"Fuldt stop\". Betal kr. 1000 i bøde.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK);
         card.setText("Betal kr. 3000 for reperation af Deres vogn.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
         ((EconomicEffect) card).setAmount1(3000);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK);
         card.setText("De har været en tur i udlandet og haft for mange cigaretter med hjem. Betal told kr. 200.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
         ((EconomicEffect) card).setAmount1(200);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK);
         card.setText("Betal for vognvask og smøring kr. 300.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
         ((EconomicEffect) card).setAmount1(300);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK);
         card.setText("De har modtaget Deres tandlægeregning. Betal kr. 2000.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
         ((EconomicEffect) card).setAmount1(2000);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK);
         card.setText("Betal kr. 200 for levering af 2 kasser øl.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
         ((EconomicEffect) card).setAmount1(200);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK);
         card.setText("De har købt 4 nye dæk til Deres vogn. Betal kr. 1000");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK);
         card.setText("Betal deres bilforsikring – kr. 1000.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        card = new EconomicEffect();
+        card = new EconomicEffect(EconomicEffect.EffectType.TO_BANK);
         card.setText("De har fået en parkeringsbøde. Betal kr 200 i bøde.");
-        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
         ((EconomicEffect) card).setAmount1(200);
         cardList.add(card);
 
-
+        card = new EconomicEffect(EconomicEffect.EffectType.MATADOR_GRANT);
+        card.setText("De modtager \"Matador-legatet for værdigt trængende\" på kr. 40.000. Ved værdigt trængende forstås, at Deres formue, dvs. Deres kontante penge + skøder + bygninger, ikke overstiger kr. 15.000.");
+        ((EconomicEffect) card).setAmount1(40000);
+        cardList.add(card);
 
         game.setCardDeck(cardList);
 

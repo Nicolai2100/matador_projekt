@@ -715,63 +715,79 @@
   ],
   "cardDeck": [
     {
-      "CLASSNAME": "game.model.cards.CardReceiveMoneyFromBank",
+      "CLASSNAME": "game.model.cards.EconomicEffect",
       "INSTANCE": {
-        "amount": 1000,
+        "amount1": 1000,
+        "amount2": 0,
+        "effectType": "FROM_BANK",
         "text": "Deres premieobligation er udtrukket. De modtager kr. 1000 af banken."
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardReceiveMoneyFromBank",
+      "CLASSNAME": "game.model.cards.EconomicEffect",
       "INSTANCE": {
-        "amount": 200,
+        "amount1": 200,
+        "amount2": 0,
+        "effectType": "FROM_BANK",
         "text": "Værdien af egen avl fra nyttehaven udgør kr. 200, som De modtager af banken."
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardReceiveMoneyFromBank",
+      "CLASSNAME": "game.model.cards.EconomicEffect",
       "INSTANCE": {
-        "amount": 1000,
+        "amount1": 1000,
+        "amount2": 0,
+        "effectType": "FROM_BANK",
         "text": "Grundet dyrtiden har De fået gageforhøjelse. Modtag kr. 1000."
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardReceiveMoneyFromBank",
+      "CLASSNAME": "game.model.cards.EconomicEffect",
       "INSTANCE": {
-        "amount": 1000,
+        "amount1": 1000,
+        "amount2": 0,
+        "effectType": "FROM_BANK",
         "text": "De modtager Deres aktieudbytte. Modtag kr. 1000 af banken."
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardReceiveMoneyFromBank",
+      "CLASSNAME": "game.model.cards.EconomicEffect",
       "INSTANCE": {
-        "amount": 1000,
+        "amount1": 1000,
+        "amount2": 0,
+        "effectType": "FROM_BANK",
         "text": "De har solgt nogle gamle møbler på auktion. Modtag kr. 1000  af banken."
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardReceiveMoneyFromBank",
+      "CLASSNAME": "game.model.cards.EconomicEffect",
       "INSTANCE": {
-        "amount": 500,
+        "amount1": 500,
+        "amount2": 0,
+        "effectType": "FROM_BANK",
         "text": "De har vundet i Klasselotterliet. Modtag kr. 500."
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardReceiveMoneyFromBank",
+      "CLASSNAME": "game.model.cards.EconomicEffect",
       "INSTANCE": {
-        "amount": 3000,
+        "amount1": 3000,
+        "amount2": 0,
+        "effectType": "FROM_BANK",
         "text": "Kommunen har eftergivet et kvartals skat. Hæv i banken kr. 3000."
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardReceiveMoneyFromBank",
+      "CLASSNAME": "game.model.cards.EconomicEffect",
       "INSTANCE": {
-        "amount": 1000,
+        "amount1": 1000,
+        "amount2": 0,
+        "effectType": "FROM_BANK",
         "text": "De har en række med elleve rigtige i tipning. Modtag kr. 1000."
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardMove",
+      "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
         "targetType": "NEAREST_SHIP_1",
         "spaces": [
@@ -1492,7 +1508,7 @@
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardMove",
+      "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
         "targetType": "NEAREST_SHIP_2",
         "spaces": [
@@ -2213,14 +2229,14 @@
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardMove",
+      "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
         "targetType": "GO_TO_JAIL",
         "text": "Gå i fængsel. Ryk direkte til fængslet. Selv om De passerer \"START\", indkasserer De ikke kr. 4000."
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardMove",
+      "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
         "target": {
           "CLASSNAME": "game.model.properties.RealEstate",
@@ -2250,7 +2266,7 @@
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardMove",
+      "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
         "target": {
           "CLASSNAME": "game.model.properties.RealEstate",
@@ -2280,7 +2296,7 @@
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardMove",
+      "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
         "target": {
           "CLASSNAME": "game.model.properties.RealEstate",
@@ -2310,7 +2326,7 @@
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardMove",
+      "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
         "target": {
           "CLASSNAME": "game.model.properties.Ship",
@@ -2336,7 +2352,7 @@
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardMove",
+      "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
         "target": {
           "CLASSNAME": "game.model.NeutralSpace",
@@ -2351,17 +2367,145 @@
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardMove",
+      "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
         "targetType": "THREE_FORWARDS",
         "text": "Ryk tre felter frem."
       }
     },
     {
-      "CLASSNAME": "game.model.cards.CardMove",
+      "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
         "targetType": "THREE_BACKWARDS",
         "text": "Ryk tre felter tilbage."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 200,
+        "amount2": 0,
+        "effectType": "FROM_OTHER_PLAYERS",
+        "text": "Det er Deres fødselsdag. Modtag af hver medspiller kr. 200."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 500,
+        "amount2": 0,
+        "effectType": "FROM_OTHER_PLAYERS",
+        "players": [],
+        "text": "De har lagt penge ud til et sammenskudsgilde. Mærkværdigvis betaler alle straks. Modtag fra hver medspiller kr. 500."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 500,
+        "amount2": 0,
+        "effectType": "FROM_OTHER_PLAYERS",
+        "players": [],
+        "text": "De skal holde familiefest og får et tilskud fra hver medspiller på kr. 500"
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 800,
+        "amount2": 2300,
+        "effectType": "TO_BANK_PER_HOUSE_AND_HOTEL",
+        "text": "Ejendomsskatterne er steget. Ekstraudgifterne er:\u003cBR\u003ekr. 800 pr. hus.\u003cBR\u003ekr. 2300 pr. hotel."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 500,
+        "amount2": 2000,
+        "effectType": "TO_BANK_PER_HOUSE_AND_HOTEL",
+        "text": "Oliepriserne er steget, og De skal betale:\u003cBR\u003ekr. 500 pr. hus.\u003cBR\u003ekr. 2000 pr. hotel."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 1000,
+        "amount2": 0,
+        "effectType": "TO_BANK",
+        "text": "De har kørt frem for \"Fuldt stop\". Betal kr. 1000 i bøde."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 3000,
+        "amount2": 0,
+        "effectType": "TO_BANK",
+        "text": "Betal kr. 3000 for reperation af Deres vogn."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 200,
+        "amount2": 0,
+        "effectType": "TO_BANK",
+        "text": "De har været en tur i udlandet og haft for mange cigaretter med hjem. Betal told kr. 200."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 300,
+        "amount2": 0,
+        "effectType": "TO_BANK",
+        "text": "Betal for vognvask og smøring kr. 300."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 2000,
+        "amount2": 0,
+        "effectType": "TO_BANK",
+        "text": "De har modtaget Deres tandlægeregning. Betal kr. 2000."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 200,
+        "amount2": 0,
+        "effectType": "TO_BANK",
+        "text": "Betal kr. 200 for levering af 2 kasser øl."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 1000,
+        "amount2": 0,
+        "effectType": "TO_BANK",
+        "text": "De har købt 4 nye dæk til Deres vogn. Betal kr. 1000"
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 1000,
+        "amount2": 0,
+        "effectType": "TO_BANK",
+        "text": "Betal deres bilforsikring – kr. 1000."
+      }
+    },
+    {
+      "CLASSNAME": "game.model.cards.EconomicEffect",
+      "INSTANCE": {
+        "amount1": 200,
+        "amount2": 0,
+        "effectType": "TO_BANK",
+        "text": "De har fået en parkeringsbøde. Betal kr 200 i bøde."
       }
     }
   ],

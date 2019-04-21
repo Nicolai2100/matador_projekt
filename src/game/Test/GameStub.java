@@ -276,7 +276,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
         tax.setText("Pay 10% income tax!");
         cards.add(tax);
 
-        EconomicEffect b = new EconomicEffect();
+        EconomicEffect b = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         b.setText("You receive 100$ from the bank.");
         b.setAmount1(100);
         cards.add(b);
