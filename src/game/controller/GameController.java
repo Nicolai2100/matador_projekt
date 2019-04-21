@@ -296,6 +296,16 @@ public class GameController {
 
         boolean castDouble;
         int doublesCount = 0;
+
+        if (player.isInPrison() && player.getDoubleAttempts() < 3) {
+            String choice = gui.getUserButtonPressed(player + ", ønsker du at betale bøden på 1000 kr for at blive løsladt fra fængsel?", "Ja", "Nej");
+            if (choice.equals("Ja")) {
+                payToGetOut(player);
+            }
+        } else if (player.isInPrison() && player.getDoubleAttempts() == 3) {
+            gui.showMessage(player + ", hvis du ikke slår to ens denne gang, skal du betale bøden på 1000 kr og derefter rykke frem.");
+        }
+
         do {
             int die1 = (int) (1 + 6.0 * Math.random());
             int die2 = (int) (1 + 6.0 * Math.random());
@@ -306,8 +316,12 @@ public class GameController {
             if (player.isInPrison() && castDouble) {
                 player.setInPrison(false);
                 gui.showMessage( player + " har kastet to ens, og bliver derfor løsladt fra fængslet!");
-            } else if (player.isInPrison()) {
+            } else if (player.isInPrison() && player.getDoubleAttempts() < 3) {
+                player.setDoubleAttempts(player.getDoubleAttempts() + 1);
                 gui.showMessage(player + " forbliver i fængsel, da han/hun ikke slog to ens.");
+            } else if (player.isInPrison() && player.getDoubleAttempts() == 3) {
+                gui.showMessage(player + ", du slog desværre ikke to ens, og du skal derfor betale bøden på 1000 kr for at blive løsladt.");
+                payToGetOut(player);
             }
             // TODO note that the player could also pay to get out of prison,
             //      which is not yet implemented
@@ -322,6 +336,7 @@ public class GameController {
             if (!player.isInPrison()) {
                 // make the actual move by computing the new position and then
                 // executing the action moving the player to that space
+                player.setDoubleAttempts(0);
                 int pos = player.getCurrentPosition().getIndex();
                 List<Space> spaces = game.getSpaces();
                 int newPos = (pos + die1 + die2) % spaces.size();
@@ -334,8 +349,18 @@ public class GameController {
                 }
             }
         } while (castDouble);
+    }
 
-
+    private void payToGetOut(Player player) {
+        try {
+            paymentToBank(player, 1000);
+        } catch (PlayerBrokeException e) {
+            return;
+        } catch (GameEndedException e) {
+            e.printStackTrace();
+        }
+        player.setInPrison(false);
+        gui.showMessage(player + "blev løsladt fra fængsel og må nu rykke frem!");
     }
 
     /**

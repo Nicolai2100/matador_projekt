@@ -32,6 +32,8 @@ public class Player extends Subject {
 
     private boolean inPrison = false;
 
+    private int doubleAttempts = 0;
+
     private boolean broke = false;
 
     private String token;
@@ -343,5 +345,14 @@ public class Player extends Subject {
     @Override
     public String toString() {
         return name;
+    }
+
+    public void setDoubleAttempts(int doubleAttempts) {
+        if (doubleAttempts < 0 || doubleAttempts > 3) throw new IllegalArgumentException();
+        this.doubleAttempts = doubleAttempts;
+    }
+
+    public int getDoubleAttempts() {
+        return doubleAttempts;
     }
 }
