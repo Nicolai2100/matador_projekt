@@ -2,8 +2,8 @@ package game.Test;
 
 import designpattern.Subject;
 import game.model.*;
-import game.model.cards.CardMove;
-import game.model.cards.CardReceiveMoney;
+import game.model.cards.MoveEffect;
+import game.model.cards.EconomicEffect;
 import game.model.cards.PayTax;
 import game.model.properties.RealEstate;
 import game.model.properties.Utility;
@@ -267,7 +267,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 
         List<Card> cards = new ArrayList<Card>();
 
-        CardMove move = new CardMove();
+        MoveEffect move = new MoveEffect();
         move.setTarget(getSpaces().get(9));
         move.setText("Move to Allégade!");
         cards.add(move);
@@ -276,9 +276,9 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
         tax.setText("Pay 10% income tax!");
         cards.add(tax);
 
-        CardReceiveMoney b = new CardReceiveMoney();
+        EconomicEffect b = new EconomicEffect();
         b.setText("You receive 100$ from the bank.");
-        b.setAmount(100);
+        b.setAmount1(100);
         cards.add(b);
         setCardDeck(cards);
     }

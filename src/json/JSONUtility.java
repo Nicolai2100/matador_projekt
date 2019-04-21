@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import game.model.*;
-import game.model.cards.CardMove;
-import game.model.cards.CardReceiveMoney;
+import game.model.cards.MoveEffect;
+import game.model.cards.EconomicEffect;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
@@ -326,117 +326,187 @@ public class JSONUtility {
 
         ArrayList<Card> cardList = new ArrayList<>();
 
-        Card card = new CardReceiveMoney();
+        Card card = new EconomicEffect();
         card.setText("Deres premieobligation er udtrukket. De modtager kr. 1000 af banken.");
-        ((CardReceiveMoney) card).setAmount(1000);
+        ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        card = new CardReceiveMoney();
+        card = new EconomicEffect();
         card.setText("Værdien af egen avl fra nyttehaven udgør kr. 200, som De modtager af banken.");
-        ((CardReceiveMoney) card).setAmount(200);
+        ((EconomicEffect) card).setAmount1(200);
         cardList.add(card);
 
         //2
-        card = new CardReceiveMoney();
+        card = new EconomicEffect();
         card.setText("Grundet dyrtiden har De fået gageforhøjelse. Modtag kr. 1000.");
-        ((CardReceiveMoney) card).setAmount(1000);
+        ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
         //2
-        card = new CardReceiveMoney();
+        card = new EconomicEffect();
         card.setText("De modtager Deres aktieudbytte. Modtag kr. 1000 af banken.");
-        ((CardReceiveMoney) card).setAmount(1000);
+        ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        card = new CardReceiveMoney();
+        card = new EconomicEffect();
         card.setText("De har solgt nogle gamle møbler på auktion. Modtag kr. 1000  af banken.");
-        ((CardReceiveMoney) card).setAmount(1000);
+        ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
         //2
-        card = new CardReceiveMoney();
+        card = new EconomicEffect();
         card.setText("De har vundet i Klasselotterliet. Modtag kr. 500.");
-        ((CardReceiveMoney) card).setAmount(500);
+        ((EconomicEffect) card).setAmount1(500);
         cardList.add(card);
 
-        card = new CardReceiveMoney();
+        card = new EconomicEffect();
         card.setText("Kommunen har eftergivet et kvartals skat. Hæv i banken kr. 3000.");
-        ((CardReceiveMoney) card).setAmount(3000);
+        ((EconomicEffect) card).setAmount1(3000);
         cardList.add(card);
 
-        card = new CardReceiveMoney();
+        card = new EconomicEffect();
         card.setText("De har en række med elleve rigtige i tipning. Modtag kr. 1000.");
-        ((CardReceiveMoney) card).setAmount(1000);
+        ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        card = new CardMove();
+        card = new MoveEffect();
         card.setText("Ryk brikken frem til det nærmeste rederi og betal ejeren to gange den leje, han ellers er berettiget til." +
                 " Hvis selskabet ikke ejes af nogen, kan De købe det af banken.");
-        ((CardMove) card).setSpecialTarget(CardMove.targetTypes.NEAREST_SHIP_1, game.getSpaces());
+        ((MoveEffect) card).setSpecialTarget(MoveEffect.targetTypes.NEAREST_SHIP_1, game.getSpaces());
         cardList.add(card);
 
-        card = new CardMove();
+        card = new MoveEffect();
         card.setText("Tag med den nærmeste færge. Flyt brikken frem, og hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((CardMove) card).setSpecialTarget(CardMove.targetTypes.NEAREST_SHIP_2, game.getSpaces());
+        ((MoveEffect) card).setSpecialTarget(MoveEffect.targetTypes.NEAREST_SHIP_2, game.getSpaces());
         cardList.add(card);
 
-        card = new CardMove();
+        card = new MoveEffect();
         card.setText("Gå i fængsel. Ryk direkte til fængslet. Selv om De passerer \"START\", indkasserer De ikke kr. 4000.");
-        ((CardMove) card).setTargetType(CardMove.targetTypes.GO_TO_JAIL);
+        ((MoveEffect) card).setTargetType(MoveEffect.targetTypes.GO_TO_JAIL);
         cardList.add(card);
 
-        card = new CardMove();
+        card = new MoveEffect();
         card.setText("Ryk frem til " + game.getSpaces().get(32) + ". Hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((CardMove) card).setTarget(game.getSpaces().get(32));
+        ((MoveEffect) card).setTarget(game.getSpaces().get(32));
         cardList.add(card);
 
-        card = new CardMove();
+        card = new MoveEffect();
         card.setText("Ryk frem til " + game.getSpaces().get(19) + ". Hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((CardMove) card).setTarget(game.getSpaces().get(19));
+        ((MoveEffect) card).setTarget(game.getSpaces().get(19));
         cardList.add(card);
 
-        card = new CardMove();
+        card = new MoveEffect();
         card.setText("Ryk frem til " + game.getSpaces().get(24) + ". Hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((CardMove) card).setTarget(game.getSpaces().get(24));
+        ((MoveEffect) card).setTarget(game.getSpaces().get(24));
         cardList.add(card);
 
-        card = new CardMove();
+        card = new MoveEffect();
         card.setText("Tag med " + game.getSpaces().get(15) + ". Flyt brikken frem, og hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((CardMove) card).setTarget(game.getSpaces().get(15));
+        ((MoveEffect) card).setTarget(game.getSpaces().get(15));
         cardList.add(card);
 
-        card = new CardMove();
+        card = new MoveEffect();
         card.setText("Ryk frem til \"START\".");
-        ((CardMove) card).setTarget(game.getSpaces().get(0));
+        ((MoveEffect) card).setTarget(game.getSpaces().get(0));
         cardList.add(card);
 
-        card = new CardMove();
+        card = new MoveEffect();
         card.setText("Ryk tre felter frem.");
-        ((CardMove) card).setTargetType(CardMove.targetTypes.THREE_FORWARDS);
+        ((MoveEffect) card).setTargetType(MoveEffect.targetTypes.THREE_FORWARDS);
         cardList.add(card);
 
-        card = new CardMove();
+        card = new MoveEffect();
         card.setText("Ryk tre felter tilbage.");
-        ((CardMove) card).setTargetType(CardMove.targetTypes.THREE_BACKWARDS);
+        ((MoveEffect) card).setTargetType(MoveEffect.targetTypes.THREE_BACKWARDS);
         cardList.add(card);
 
-        card = new CardReceiveMoney();
+        card = new EconomicEffect();
         card.setText("Det er Deres fødselsdag. Modtag af hver medspiller kr. 200.");
-        ((CardReceiveMoney) card).setPayer(CardReceiveMoney.Payers.OTHER_PLAYERS, game.getActivePlayers(true));
-        ((CardReceiveMoney) card).setAmount(200);
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.FROM_OTHER_PLAYERS, game.getActivePlayers(true));
+        ((EconomicEffect) card).setAmount1(200);
         cardList.add(card);
 
-        card = new CardReceiveMoney();
+        card = new EconomicEffect();
         card.setText("De har lagt penge ud til et sammenskudsgilde. Mærkværdigvis betaler alle straks. Modtag fra hver medspiller kr. 500.");
-        ((CardReceiveMoney) card).setPayer(CardReceiveMoney.Payers.OTHER_PLAYERS, game.getActivePlayers(true));
-        ((CardReceiveMoney) card).setAmount(500);
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.FROM_OTHER_PLAYERS, game.getActivePlayers(true));
+        ((EconomicEffect) card).setAmount1(500);
         cardList.add(card);
 
-        card = new CardReceiveMoney();
+        card = new EconomicEffect();
         card.setText("De skal holde familiefest og får et tilskud fra hver medspiller på kr. 500");
-        ((CardReceiveMoney) card).setPayer(CardReceiveMoney.Payers.OTHER_PLAYERS, game.getActivePlayers(true));
-        ((CardReceiveMoney) card).setAmount(500);
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.FROM_OTHER_PLAYERS, game.getActivePlayers(true));
+        ((EconomicEffect) card).setAmount1(500);
         cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("Ejendomsskatterne er steget. Ekstraudgifterne er:<BR>kr. 800 pr. hus.<BR>kr. 2300 pr. hotel.");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK_PER_HOUSE_AND_HOTEL);
+        ((EconomicEffect) card).setAmount1(800);
+        ((EconomicEffect) card).setAmount2(2300);
+        cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("Oliepriserne er steget, og De skal betale:<BR>kr. 500 pr. hus.<BR>kr. 2000 pr. hotel.");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK_PER_HOUSE_AND_HOTEL);
+        ((EconomicEffect) card).setAmount1(500);
+        ((EconomicEffect) card).setAmount2(2000);
+        cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("De har kørt frem for \"Fuldt stop\". Betal kr. 1000 i bøde.");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
+        ((EconomicEffect) card).setAmount1(1000);
+        cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("Betal kr. 3000 for reperation af Deres vogn.");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
+        ((EconomicEffect) card).setAmount1(3000);
+        cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("De har været en tur i udlandet og haft for mange cigaretter med hjem. Betal told kr. 200.");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
+        ((EconomicEffect) card).setAmount1(200);
+        cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("Betal for vognvask og smøring kr. 300.");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
+        ((EconomicEffect) card).setAmount1(300);
+        cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("De har modtaget Deres tandlægeregning. Betal kr. 2000.");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
+        ((EconomicEffect) card).setAmount1(2000);
+        cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("Betal kr. 200 for levering af 2 kasser øl.");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
+        ((EconomicEffect) card).setAmount1(200);
+        cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("De har købt 4 nye dæk til Deres vogn. Betal kr. 1000");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
+        ((EconomicEffect) card).setAmount1(1000);
+        cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("Betal deres bilforsikring – kr. 1000.");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
+        ((EconomicEffect) card).setAmount1(1000);
+        cardList.add(card);
+
+        card = new EconomicEffect();
+        card.setText("De har fået en parkeringsbøde. Betal kr 200 i bøde.");
+        ((EconomicEffect) card).setEffectType(EconomicEffect.EffectType.TO_BANK);
+        ((EconomicEffect) card).setAmount1(200);
+        cardList.add(card);
+
+
 
         game.setCardDeck(cardList);
 

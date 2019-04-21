@@ -15,7 +15,7 @@ import java.util.List;
  * @author Ekkart Kindler, ekki@dtu.dk
  * 
  */
-public class CardMove extends Card {
+public class MoveEffect extends Card {
 	
 	private Space target;
 	public enum targetTypes {SPACE, NEAREST_SHIP_1, NEAREST_SHIP_2, GO_TO_JAIL, THREE_FORWARDS, THREE_BACKWARDS}

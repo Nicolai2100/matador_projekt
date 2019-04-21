@@ -22,9 +22,9 @@ public class Main {
         /*
         //midlertidigt bare så det virker
         ArrayList<Card> temp = new ArrayList<>();
-        CardReceiveMoney card = new CardReceiveMoney();
+        EconomicEffect card = new EconomicEffect();
         card.setText("You receive 100$ from the bank.");
-        card.setAmount(100);
+        card.setAmount1(100);
         temp.add(card);
         game.setCardDeck(temp);
         //*/
