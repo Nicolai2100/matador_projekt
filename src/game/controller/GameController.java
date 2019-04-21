@@ -132,6 +132,7 @@ public class GameController {
             String gameSelection = chooseFromOptions(gameDb.getGamesList(), "Vælg spil:", "Annuller", null, null, null);
             if (gameSelection != null) {
                 game = gameDb.loadGame(game, gameSelection);
+                //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
                 game.shuffleCardDeck();
                 view = new View(game, gui);
                 view.loadPlayers();

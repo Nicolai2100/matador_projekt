@@ -18,8 +18,8 @@ import java.util.List;
 public class CardMove extends Card {
 	
 	private Space target;
-	public enum SpecialTargets {NEAREST_SHIP_1, NEAREST_SHIP_2, GO_TO_JAIL, THREE_FORWARDS, THREE_BACKWARDS}
-	private SpecialTargets specialTarget;
+	//public enum targetTypes {NEAREST_SHIP_1, NEAREST_SHIP_2, GO_TO_JAIL, THREE_FORWARDS, THREE_BACKWARDS}
+	private targetTypes targetType = targetTypes.SPACE;
 	List<Space> spaces;
 
 	/** 
@@ -40,19 +40,19 @@ public class CardMove extends Card {
 		this.target = target;
 	}
 
-    public void setSpecialTarget(SpecialTargets type) {
-        this.specialTarget = type;
+    public void setTargetType(targetTypes type) {
+        this.targetType = type;
     }
 
-	public void setSpecialTarget(SpecialTargets type, List<Space> spaces) {
-		this.specialTarget = type;
+	public void setSpecialTarget(targetTypes type, List<Space> spaces) {
+		this.targetType = type;
 		this.spaces = spaces;
 	}
 	
 	@Override
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
 		try {
-            switch (specialTarget) {
+            switch (targetType) {
                 case NEAREST_SHIP_1:
                     setTargetToNearestShip(player);
                     ((Ship) target).setRent(((Ship) target).getRent() * 2);
@@ -68,12 +68,13 @@ public class CardMove extends Card {
                     controller.gotoJail(player);
                     break;
                 case THREE_FORWARDS:
-                    controller.moveToSpace(player, spaces.get(player.getCurrentPosition().getIndex() + 3));
+                    controller.moveToSpace(player, spaces.get((player.getCurrentPosition().getIndex() + 3) % 40));
                     break;
                 case THREE_BACKWARDS:
                     //TODO: Ændre eventuel i View, så spilleren rent faktisk rykker bagud, og ikke hele pladen rundt,
                     // til han ender tre felter bag, hvor han først var.
-                    player.setCurrentPosition(spaces.get(player.getCurrentPosition().getIndex() - 3));
+                    player.setCurrentPosition(spaces.get((player.getCurrentPosition().getIndex() - 3 + 40) % 40));
+                    break;
                 default:
                     controller.moveToSpace(player, target);
                     break;
