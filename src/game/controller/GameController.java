@@ -297,7 +297,12 @@ public class GameController {
         boolean castDouble;
         int doublesCount = 0;
 
-        if (player.isInPrison() && player.getDoubleAttempts() < 3) {
+        if (player.getOwnedCards().size() > 0) {
+            String choice = gui.getUserButtonPressed(player + ", ønsker du at bruge dit benådelseskort til at blive løsladt?", "Ja", "Nej");
+            if (choice.equals("Ja")) {
+                useCardToGetOut(player);
+            }
+        } else if (player.isInPrison() && player.getDoubleAttempts() < 3) {
             String choice = gui.getUserButtonPressed(player + ", ønsker du at betale bøden på 1000 kr for at blive løsladt fra fængsel?", "Ja", "Nej");
             if (choice.equals("Ja")) {
                 payToGetOut(player);
@@ -361,6 +366,16 @@ public class GameController {
         }
         player.setInPrison(false);
         gui.showMessage(player + "blev løsladt fra fængsel og må nu rykke frem!");
+    }
+
+    private void useCardToGetOut(Player player) {
+        try {
+            List<Card> ownedCards = player.getOwnedCards();
+            ownedCards.remove(0);
+            player.setOwnedCards(ownedCards);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
