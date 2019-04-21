@@ -713,7 +713,1483 @@
       }
     }
   ],
-  "cardDeck": [],
+  "cardDeck": [
+    {
+      "amount": 1000,
+      "text": "Deres premieobligation er udtrukket. De modtager kr. 1000 af banken."
+    },
+    {
+      "amount": 200,
+      "text": "Værdien af egen avl fra nyttehaven udgør kr. 200, som De modtager af banken."
+    },
+    {
+      "amount": 1000,
+      "text": "Grundet dyrtiden har De fået gageforhøjelse. Modtag kr. 1000."
+    },
+    {
+      "amount": 1000,
+      "text": "De modtager Deres aktieudbytte. Modtag kr. 1000 af banken."
+    },
+    {
+      "amount": 1000,
+      "text": "De har solgt nogle gamle møbler på auktion. Modtag kr. 1000  af banken."
+    },
+    {
+      "amount": 500,
+      "text": "De har vundet i Klasselotterliet. Modtag kr. 500."
+    },
+    {
+      "amount": 3000,
+      "text": "Kommunen har eftergivet et kvartals skat. Hæv i banken kr. 3000."
+    },
+    {
+      "amount": 1000,
+      "text": "De har en række med elleve rigtige i tipning. Modtag kr. 1000."
+    },
+    {
+      "specialTarget": "NEAREST_SHIP_1",
+      "spaces": [
+        {
+          "CLASSNAME": "game.model.NeutralSpace",
+          "INSTANCE": {
+            "name": "Start",
+            "index": 0,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 1000,
+            "cost": 1200,
+            "rent": 0,
+            "rentLevels": [
+              50,
+              250,
+              750,
+              2250,
+              4000,
+              6000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "lightblue",
+            "name": "Rødovrevej",
+            "index": 1,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 2,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 1000,
+            "cost": 1200,
+            "rent": 0,
+            "rentLevels": [
+              50,
+              250,
+              750,
+              2250,
+              4000,
+              6000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "lightblue",
+            "name": "Hvidovrevej",
+            "index": 3,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Tax",
+          "INSTANCE": {
+            "name": "Indkomstskat",
+            "index": 4,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Ship",
+          "INSTANCE": {
+            "cost": 4000,
+            "rent": 0,
+            "rentLevels": [
+              500,
+              1000,
+              2000,
+              4000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "navy",
+            "name": "Øresund",
+            "index": 5,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 1000,
+            "cost": 2000,
+            "rent": 0,
+            "rentLevels": [
+              100,
+              600,
+              1800,
+              5400,
+              8000,
+              11000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "pink",
+            "name": "Roskildevej",
+            "index": 6,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 7,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 1000,
+            "cost": 2000,
+            "rent": 0,
+            "rentLevels": [
+              100,
+              600,
+              1800,
+              5400,
+              8000,
+              11000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "pink",
+            "name": "Valby Langgade",
+            "index": 8,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 1000,
+            "cost": 2400,
+            "rent": 0,
+            "rentLevels": [
+              150,
+              800,
+              2000,
+              6000,
+              9000,
+              12000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "pink",
+            "name": "Allégade",
+            "index": 9,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.NeutralSpace",
+          "INSTANCE": {
+            "name": "I fængsel/På besøg",
+            "index": 10,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 2800,
+            "rent": 0,
+            "rentLevels": [
+              200,
+              1000,
+              3000,
+              9000,
+              12500,
+              15000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "green",
+            "name": "Fredriksberg Allé",
+            "index": 11,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Brewery",
+          "INSTANCE": {
+            "cost": 3000,
+            "rent": 0,
+            "rentLevels": [
+              100,
+              200
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "darkgreen",
+            "name": "Tuborg",
+            "index": 12,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 2800,
+            "rent": 0,
+            "rentLevels": [
+              200,
+              1000,
+              3000,
+              9000,
+              12500,
+              15000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "green",
+            "name": "Bülowsvej",
+            "index": 13,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 3200,
+            "rent": 0,
+            "rentLevels": [
+              250,
+              1250,
+              3750,
+              10000,
+              14000,
+              18000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "green",
+            "name": "Gammelkongevej",
+            "index": 14,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Ship",
+          "INSTANCE": {
+            "cost": 4000,
+            "rent": 0,
+            "rentLevels": [
+              500,
+              1000,
+              2000,
+              4000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "navy",
+            "name": "D.F.D.S",
+            "index": 15,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 3600,
+            "rent": 0,
+            "rentLevels": [
+              300,
+              1400,
+              4000,
+              11000,
+              15000,
+              19000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "darkgrey",
+            "name": "Bernstorffsvej",
+            "index": 16,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 17,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 3600,
+            "rent": 0,
+            "rentLevels": [
+              300,
+              1400,
+              4000,
+              11000,
+              15000,
+              19000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "darkgrey",
+            "name": "Hellerupvej",
+            "index": 18,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 4000,
+            "rent": 0,
+            "rentLevels": [
+              350,
+              1600,
+              4400,
+              12000,
+              16000,
+              20000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "darkgrey",
+            "name": "Strandvej",
+            "index": 19,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.NeutralSpace",
+          "INSTANCE": {
+            "name": "Helle",
+            "index": 20,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 4400,
+            "rent": 0,
+            "rentLevels": [
+              350,
+              1800,
+              5000,
+              14000,
+              17500,
+              21000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "red",
+            "name": "Trianglen",
+            "index": 21,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 22,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 4400,
+            "rent": 0,
+            "rentLevels": [
+              350,
+              1800,
+              5000,
+              14000,
+              17500,
+              21000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "red",
+            "name": "Østerbrogade",
+            "index": 23,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 4800,
+            "rent": 0,
+            "rentLevels": [
+              400,
+              2000,
+              6000,
+              15000,
+              18500,
+              22000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "red",
+            "name": "Grønningen",
+            "index": 24,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Ship",
+          "INSTANCE": {
+            "cost": 4000,
+            "rent": 0,
+            "rentLevels": [
+              500,
+              1000,
+              2000,
+              4000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "navy",
+            "name": "Ø.S.",
+            "index": 25,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 5200,
+            "rent": 0,
+            "rentLevels": [
+              450,
+              2200,
+              6600,
+              16000,
+              19500,
+              23000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "white",
+            "name": "Bredgade",
+            "index": 26,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 5200,
+            "rent": 0,
+            "rentLevels": [
+              450,
+              2200,
+              6600,
+              16000,
+              19500,
+              23000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "white",
+            "name": "Kgs. Nytorv",
+            "index": 27,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Brewery",
+          "INSTANCE": {
+            "cost": 3000,
+            "rent": 0,
+            "rentLevels": [
+              100,
+              200
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "darkgreen",
+            "name": "Carlsberg",
+            "index": 28,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 5600,
+            "rent": 0,
+            "rentLevels": [
+              500,
+              2400,
+              7200,
+              17000,
+              20500,
+              24000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "white",
+            "name": "Østergade",
+            "index": 29,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.GoToJail",
+          "INSTANCE": {
+            "name": "Gå i fængsel",
+            "index": 30,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 4000,
+            "cost": 6000,
+            "rent": 0,
+            "rentLevels": [
+              550,
+              2600,
+              7800,
+              18000,
+              22000,
+              25000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "yellow",
+            "name": "Amagertorv",
+            "index": 31,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 4000,
+            "cost": 6000,
+            "rent": 0,
+            "rentLevels": [
+              550,
+              2600,
+              7800,
+              18000,
+              22000,
+              25000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "yellow",
+            "name": "Vimmelskaftet",
+            "index": 32,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 33,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 4000,
+            "cost": 6400,
+            "rent": 0,
+            "rentLevels": [
+              600,
+              3000,
+              9000,
+              20000,
+              24000,
+              28000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "yellow",
+            "name": "Nygade",
+            "index": 34,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Ship",
+          "INSTANCE": {
+            "cost": 4000,
+            "rent": 0,
+            "rentLevels": [
+              500,
+              1000,
+              2000,
+              4000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "navy",
+            "name": "Bornholm",
+            "index": 35,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 36,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 4000,
+            "cost": 7000,
+            "rent": 0,
+            "rentLevels": [
+              700,
+              3500,
+              10000,
+              22000,
+              26000,
+              30000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "purple",
+            "name": "Frederiksberggade",
+            "index": 37,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Tax",
+          "INSTANCE": {
+            "name": "Ekstraordinær statsskat",
+            "index": 38,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 4000,
+            "cost": 8000,
+            "rent": 0,
+            "rentLevels": [
+              1000,
+              4000,
+              12000,
+              28000,
+              34000,
+              40000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "purple",
+            "name": "Rådhuspladsen",
+            "index": 39,
+            "observers": []
+          }
+        }
+      ],
+      "text": "Ryk brikken frem til det nærmeste rederi og betal ejeren to gange den leje, han ellers er berettiget til. Hvis selskabet ikke ejes af nogen, kan De købe det af banken."
+    },
+    {
+      "specialTarget": "NEAREST_SHIP_2",
+      "spaces": [
+        {
+          "CLASSNAME": "game.model.NeutralSpace",
+          "INSTANCE": {
+            "name": "Start",
+            "index": 0,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 1000,
+            "cost": 1200,
+            "rent": 0,
+            "rentLevels": [
+              50,
+              250,
+              750,
+              2250,
+              4000,
+              6000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "lightblue",
+            "name": "Rødovrevej",
+            "index": 1,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 2,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 1000,
+            "cost": 1200,
+            "rent": 0,
+            "rentLevels": [
+              50,
+              250,
+              750,
+              2250,
+              4000,
+              6000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "lightblue",
+            "name": "Hvidovrevej",
+            "index": 3,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Tax",
+          "INSTANCE": {
+            "name": "Indkomstskat",
+            "index": 4,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Ship",
+          "INSTANCE": {
+            "cost": 4000,
+            "rent": 0,
+            "rentLevels": [
+              500,
+              1000,
+              2000,
+              4000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "navy",
+            "name": "Øresund",
+            "index": 5,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 1000,
+            "cost": 2000,
+            "rent": 0,
+            "rentLevels": [
+              100,
+              600,
+              1800,
+              5400,
+              8000,
+              11000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "pink",
+            "name": "Roskildevej",
+            "index": 6,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 7,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 1000,
+            "cost": 2000,
+            "rent": 0,
+            "rentLevels": [
+              100,
+              600,
+              1800,
+              5400,
+              8000,
+              11000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "pink",
+            "name": "Valby Langgade",
+            "index": 8,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 1000,
+            "cost": 2400,
+            "rent": 0,
+            "rentLevels": [
+              150,
+              800,
+              2000,
+              6000,
+              9000,
+              12000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "pink",
+            "name": "Allégade",
+            "index": 9,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.NeutralSpace",
+          "INSTANCE": {
+            "name": "I fængsel/På besøg",
+            "index": 10,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 2800,
+            "rent": 0,
+            "rentLevels": [
+              200,
+              1000,
+              3000,
+              9000,
+              12500,
+              15000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "green",
+            "name": "Fredriksberg Allé",
+            "index": 11,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Brewery",
+          "INSTANCE": {
+            "cost": 3000,
+            "rent": 0,
+            "rentLevels": [
+              100,
+              200
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "darkgreen",
+            "name": "Tuborg",
+            "index": 12,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 2800,
+            "rent": 0,
+            "rentLevels": [
+              200,
+              1000,
+              3000,
+              9000,
+              12500,
+              15000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "green",
+            "name": "Bülowsvej",
+            "index": 13,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 3200,
+            "rent": 0,
+            "rentLevels": [
+              250,
+              1250,
+              3750,
+              10000,
+              14000,
+              18000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "green",
+            "name": "Gammelkongevej",
+            "index": 14,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Ship",
+          "INSTANCE": {
+            "cost": 4000,
+            "rent": 0,
+            "rentLevels": [
+              500,
+              1000,
+              2000,
+              4000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "navy",
+            "name": "D.F.D.S",
+            "index": 15,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 3600,
+            "rent": 0,
+            "rentLevels": [
+              300,
+              1400,
+              4000,
+              11000,
+              15000,
+              19000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "darkgrey",
+            "name": "Bernstorffsvej",
+            "index": 16,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 17,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 3600,
+            "rent": 0,
+            "rentLevels": [
+              300,
+              1400,
+              4000,
+              11000,
+              15000,
+              19000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "darkgrey",
+            "name": "Hellerupvej",
+            "index": 18,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 2000,
+            "cost": 4000,
+            "rent": 0,
+            "rentLevels": [
+              350,
+              1600,
+              4400,
+              12000,
+              16000,
+              20000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "darkgrey",
+            "name": "Strandvej",
+            "index": 19,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.NeutralSpace",
+          "INSTANCE": {
+            "name": "Helle",
+            "index": 20,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 4400,
+            "rent": 0,
+            "rentLevels": [
+              350,
+              1800,
+              5000,
+              14000,
+              17500,
+              21000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "red",
+            "name": "Trianglen",
+            "index": 21,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 22,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 4400,
+            "rent": 0,
+            "rentLevels": [
+              350,
+              1800,
+              5000,
+              14000,
+              17500,
+              21000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "red",
+            "name": "Østerbrogade",
+            "index": 23,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 4800,
+            "rent": 0,
+            "rentLevels": [
+              400,
+              2000,
+              6000,
+              15000,
+              18500,
+              22000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "red",
+            "name": "Grønningen",
+            "index": 24,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Ship",
+          "INSTANCE": {
+            "cost": 4000,
+            "rent": 0,
+            "rentLevels": [
+              500,
+              1000,
+              2000,
+              4000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "navy",
+            "name": "Ø.S.",
+            "index": 25,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 5200,
+            "rent": 0,
+            "rentLevels": [
+              450,
+              2200,
+              6600,
+              16000,
+              19500,
+              23000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "white",
+            "name": "Bredgade",
+            "index": 26,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 5200,
+            "rent": 0,
+            "rentLevels": [
+              450,
+              2200,
+              6600,
+              16000,
+              19500,
+              23000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "white",
+            "name": "Kgs. Nytorv",
+            "index": 27,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Brewery",
+          "INSTANCE": {
+            "cost": 3000,
+            "rent": 0,
+            "rentLevels": [
+              100,
+              200
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "darkgreen",
+            "name": "Carlsberg",
+            "index": 28,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 3000,
+            "cost": 5600,
+            "rent": 0,
+            "rentLevels": [
+              500,
+              2400,
+              7200,
+              17000,
+              20500,
+              24000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "white",
+            "name": "Østergade",
+            "index": 29,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.GoToJail",
+          "INSTANCE": {
+            "name": "Gå i fængsel",
+            "index": 30,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 4000,
+            "cost": 6000,
+            "rent": 0,
+            "rentLevels": [
+              550,
+              2600,
+              7800,
+              18000,
+              22000,
+              25000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "yellow",
+            "name": "Amagertorv",
+            "index": 31,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 4000,
+            "cost": 6000,
+            "rent": 0,
+            "rentLevels": [
+              550,
+              2600,
+              7800,
+              18000,
+              22000,
+              25000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "yellow",
+            "name": "Vimmelskaftet",
+            "index": 32,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 33,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 4000,
+            "cost": 6400,
+            "rent": 0,
+            "rentLevels": [
+              600,
+              3000,
+              9000,
+              20000,
+              24000,
+              28000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "yellow",
+            "name": "Nygade",
+            "index": 34,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.Ship",
+          "INSTANCE": {
+            "cost": 4000,
+            "rent": 0,
+            "rentLevels": [
+              500,
+              1000,
+              2000,
+              4000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "navy",
+            "name": "Bornholm",
+            "index": 35,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Chance",
+          "INSTANCE": {
+            "name": "chance",
+            "index": 36,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 4000,
+            "cost": 7000,
+            "rent": 0,
+            "rentLevels": [
+              700,
+              3500,
+              10000,
+              22000,
+              26000,
+              30000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "purple",
+            "name": "Frederiksberggade",
+            "index": 37,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.Tax",
+          "INSTANCE": {
+            "name": "Ekstraordinær statsskat",
+            "index": 38,
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "game.model.properties.RealEstate",
+          "INSTANCE": {
+            "houseCount": 0,
+            "priceForHouse": 4000,
+            "cost": 8000,
+            "rent": 0,
+            "rentLevels": [
+              1000,
+              4000,
+              12000,
+              28000,
+              34000,
+              40000
+            ],
+            "superOwned": false,
+            "mortgaged": false,
+            "colorGroup": "purple",
+            "name": "Rådhuspladsen",
+            "index": 39,
+            "observers": []
+          }
+        }
+      ],
+      "text": "Tag med den nærmeste færge. Flyt brikken frem, og hvis De passerer \"START\", indkassér da kr. 4000."
+    },
+    {
+      "specialTarget": "GO_TO_JAIL",
+      "text": "Gå i fængsel. Ryk direkte til fængslet. Selv om De passerer \"START\", indkasserer De ikke kr. 4000."
+    },
+    {
+      "text": "Ryk frem til Vimmelskaftet. Hvis De passerer \"START\", indkassér da kr. 4000."
+    }
+  ],
   "players": [],
   "gameId": -1,
   "observers": []
