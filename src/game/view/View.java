@@ -152,7 +152,7 @@ public class View implements Observer, Runnable {
                 guiPlayer.setName(player.getName() + " (konkurs)");
             } else if (player.isInPrison()) {
                 guiPlayer.setName(player.getName() + " (i fængsel)");
-            } else {
+            } else if (!name.equals(guiPlayer.getName())) {
                 guiPlayer.setName(name);
             }
             player2PlayerPanel.get(player).update();
