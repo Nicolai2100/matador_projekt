@@ -6,7 +6,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import game.model.*;
 import game.model.cards.CardMove;
-import game.model.cards.CardReceiveMoneyFromBank;
+import game.model.cards.CardReceiveMoney;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
@@ -326,47 +326,47 @@ public class JSONUtility {
 
         ArrayList<Card> cardList = new ArrayList<>();
 
-        Card card = new CardReceiveMoneyFromBank();
+        Card card = new CardReceiveMoney();
         card.setText("Deres premieobligation er udtrukket. De modtager kr. 1000 af banken.");
-        ((CardReceiveMoneyFromBank) card).setAmount(1000);
+        ((CardReceiveMoney) card).setAmount(1000);
         cardList.add(card);
 
-        card = new CardReceiveMoneyFromBank();
+        card = new CardReceiveMoney();
         card.setText("Værdien af egen avl fra nyttehaven udgør kr. 200, som De modtager af banken.");
-        ((CardReceiveMoneyFromBank) card).setAmount(200);
+        ((CardReceiveMoney) card).setAmount(200);
         cardList.add(card);
 
         //2
-        card = new CardReceiveMoneyFromBank();
+        card = new CardReceiveMoney();
         card.setText("Grundet dyrtiden har De fået gageforhøjelse. Modtag kr. 1000.");
-        ((CardReceiveMoneyFromBank) card).setAmount(1000);
+        ((CardReceiveMoney) card).setAmount(1000);
         cardList.add(card);
 
         //2
-        card = new CardReceiveMoneyFromBank();
+        card = new CardReceiveMoney();
         card.setText("De modtager Deres aktieudbytte. Modtag kr. 1000 af banken.");
-        ((CardReceiveMoneyFromBank) card).setAmount(1000);
+        ((CardReceiveMoney) card).setAmount(1000);
         cardList.add(card);
 
-        card = new CardReceiveMoneyFromBank();
+        card = new CardReceiveMoney();
         card.setText("De har solgt nogle gamle møbler på auktion. Modtag kr. 1000  af banken.");
-        ((CardReceiveMoneyFromBank) card).setAmount(1000);
+        ((CardReceiveMoney) card).setAmount(1000);
         cardList.add(card);
 
         //2
-        card = new CardReceiveMoneyFromBank();
+        card = new CardReceiveMoney();
         card.setText("De har vundet i Klasselotterliet. Modtag kr. 500.");
-        ((CardReceiveMoneyFromBank) card).setAmount(500);
+        ((CardReceiveMoney) card).setAmount(500);
         cardList.add(card);
 
-        card = new CardReceiveMoneyFromBank();
+        card = new CardReceiveMoney();
         card.setText("Kommunen har eftergivet et kvartals skat. Hæv i banken kr. 3000.");
-        ((CardReceiveMoneyFromBank) card).setAmount(3000);
+        ((CardReceiveMoney) card).setAmount(3000);
         cardList.add(card);
 
-        card = new CardReceiveMoneyFromBank();
+        card = new CardReceiveMoney();
         card.setText("De har en række med elleve rigtige i tipning. Modtag kr. 1000.");
-        ((CardReceiveMoneyFromBank) card).setAmount(1000);
+        ((CardReceiveMoney) card).setAmount(1000);
         cardList.add(card);
 
         card = new CardMove();
@@ -418,6 +418,24 @@ public class JSONUtility {
         card = new CardMove();
         card.setText("Ryk tre felter tilbage.");
         ((CardMove) card).setTargetType(CardMove.targetTypes.THREE_BACKWARDS);
+        cardList.add(card);
+
+        card = new CardReceiveMoney();
+        card.setText("Det er Deres fødselsdag. Modtag af hver medspiller kr. 200.");
+        ((CardReceiveMoney) card).setPayer(CardReceiveMoney.Payers.OTHER_PLAYERS, game.getActivePlayers(true));
+        ((CardReceiveMoney) card).setAmount(200);
+        cardList.add(card);
+
+        card = new CardReceiveMoney();
+        card.setText("De har lagt penge ud til et sammenskudsgilde. Mærkværdigvis betaler alle straks. Modtag fra hver medspiller kr. 500.");
+        ((CardReceiveMoney) card).setPayer(CardReceiveMoney.Payers.OTHER_PLAYERS, game.getActivePlayers(true));
+        ((CardReceiveMoney) card).setAmount(500);
+        cardList.add(card);
+
+        card = new CardReceiveMoney();
+        card.setText("De skal holde familiefest og får et tilskud fra hver medspiller på kr. 500");
+        ((CardReceiveMoney) card).setPayer(CardReceiveMoney.Payers.OTHER_PLAYERS, game.getActivePlayers(true));
+        ((CardReceiveMoney) card).setAmount(500);
         cardList.add(card);
 
         game.setCardDeck(cardList);

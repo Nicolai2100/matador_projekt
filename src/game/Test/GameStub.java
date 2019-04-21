@@ -3,7 +3,7 @@ package game.Test;
 import designpattern.Subject;
 import game.model.*;
 import game.model.cards.CardMove;
-import game.model.cards.CardReceiveMoneyFromBank;
+import game.model.cards.CardReceiveMoney;
 import game.model.cards.PayTax;
 import game.model.properties.RealEstate;
 import game.model.properties.Utility;
@@ -276,7 +276,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
         tax.setText("Pay 10% income tax!");
         cards.add(tax);
 
-        CardReceiveMoneyFromBank b = new CardReceiveMoneyFromBank();
+        CardReceiveMoney b = new CardReceiveMoney();
         b.setText("You receive 100$ from the bank.");
         b.setAmount(100);
         cards.add(b);

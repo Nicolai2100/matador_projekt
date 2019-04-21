@@ -22,7 +22,7 @@ public class Main {
         /*
         //midlertidigt bare så det virker
         ArrayList<Card> temp = new ArrayList<>();
-        CardReceiveMoneyFromBank card = new CardReceiveMoneyFromBank();
+        CardReceiveMoney card = new CardReceiveMoney();
         card.setText("You receive 100$ from the bank.");
         card.setAmount(100);
         temp.add(card);
