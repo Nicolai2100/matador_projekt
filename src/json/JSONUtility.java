@@ -7,7 +7,6 @@ import com.google.gson.stream.JsonWriter;
 import game.model.*;
 import game.model.cards.CardMove;
 import game.model.cards.CardReceiveMoneyFromBank;
-import game.model.cards.targetTypes;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
@@ -373,17 +372,17 @@ public class JSONUtility {
         card = new CardMove();
         card.setText("Ryk brikken frem til det nærmeste rederi og betal ejeren to gange den leje, han ellers er berettiget til." +
                 " Hvis selskabet ikke ejes af nogen, kan De købe det af banken.");
-        ((CardMove) card).setSpecialTarget(targetTypes.NEAREST_SHIP_1, game.getSpaces());
+        ((CardMove) card).setSpecialTarget(CardMove.targetTypes.NEAREST_SHIP_1, game.getSpaces());
         cardList.add(card);
 
         card = new CardMove();
         card.setText("Tag med den nærmeste færge. Flyt brikken frem, og hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((CardMove) card).setSpecialTarget(targetTypes.NEAREST_SHIP_2, game.getSpaces());
+        ((CardMove) card).setSpecialTarget(CardMove.targetTypes.NEAREST_SHIP_2, game.getSpaces());
         cardList.add(card);
 
         card = new CardMove();
         card.setText("Gå i fængsel. Ryk direkte til fængslet. Selv om De passerer \"START\", indkasserer De ikke kr. 4000.");
-        ((CardMove) card).setTargetType(targetTypes.GO_TO_JAIL);
+        ((CardMove) card).setTargetType(CardMove.targetTypes.GO_TO_JAIL);
         cardList.add(card);
 
         card = new CardMove();
@@ -413,12 +412,12 @@ public class JSONUtility {
 
         card = new CardMove();
         card.setText("Ryk tre felter frem.");
-        ((CardMove) card).setTargetType(targetTypes.THREE_FORWARDS);
+        ((CardMove) card).setTargetType(CardMove.targetTypes.THREE_FORWARDS);
         cardList.add(card);
 
         card = new CardMove();
         card.setText("Ryk tre felter tilbage.");
-        ((CardMove) card).setTargetType(targetTypes.THREE_BACKWARDS);
+        ((CardMove) card).setTargetType(CardMove.targetTypes.THREE_BACKWARDS);
         cardList.add(card);
 
         game.setCardDeck(cardList);

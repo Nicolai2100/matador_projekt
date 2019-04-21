@@ -18,7 +18,7 @@ import java.util.List;
 public class CardMove extends Card {
 	
 	private Space target;
-	//public enum targetTypes {NEAREST_SHIP_1, NEAREST_SHIP_2, GO_TO_JAIL, THREE_FORWARDS, THREE_BACKWARDS}
+	public enum targetTypes {SPACE, NEAREST_SHIP_1, NEAREST_SHIP_2, GO_TO_JAIL, THREE_FORWARDS, THREE_BACKWARDS}
 	private targetTypes targetType = targetTypes.SPACE;
 	List<Space> spaces;
 
@@ -82,15 +82,6 @@ public class CardMove extends Card {
         } finally {
 		    super.doAction(controller, player);
         }
-
-        /*
-	    try {
-			controller.moveToSpace(player, target);	
-		} finally {
-			// Make sure that the card is returned to the deck even when
-			// an Exception should occur!
-			super.doAction(controller, player);
-		}*/
 	}
 
 	private void setTargetToNearestShip(Player player) {
