@@ -3,6 +3,7 @@ package game.controller;
 import game.Test.GameStub;
 import game.database.GameDAO;
 import game.model.*;
+import game.model.cards.GetOutOfJail;
 import game.model.exceptions.GameEndedException;
 import game.model.exceptions.PlayerBrokeException;
 import game.model.properties.Brewery;
@@ -165,9 +166,8 @@ public class GameController {
 
             if (!player.isBroke()) {
                 try {
-                    showTurnMenu(player, true);
+                    showTurnMenu(player);
                     this.makeMove(player);
-                    //showTurnMenu(player, false);
                 } catch (PlayerBrokeException e) {
                 } catch (GameEndedException w) {
                     gui.showMessage(w.getMessage());
@@ -188,20 +188,12 @@ public class GameController {
 
     /**
      * @param player
-     * @param startOfTurn
      * @author Nicolai Wulff, s185036
      */
-    public void showTurnMenu(Player player, Boolean startOfTurn) {
+    public void showTurnMenu(Player player) {
         boolean continueChoosing = true;
         while (continueChoosing) {
-            String choice;
-
-            if (startOfTurn) {
-                choice = gui.getUserButtonPressed("Det er " + player.getName() + "s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?" , "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil", "Kør");
-            } else {
-                choice = gui.getUserButtonPressed("Det er stadig " + player.getName() + "'s tur. Hvad skal der ske?" , "Slut turen", "Byg huse", "Sælg huse", "Handel", "Pantsættelser");
-            }
-
+            String choice = gui.getUserButtonPressed("Det er " + player.getName() + "'s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?" , "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil", "Kør");
             switch (choice) {
                 case "Byg huse":
                     buyHouseAction();
@@ -298,7 +290,7 @@ public class GameController {
         boolean castDouble;
         int doublesCount = 0;
 
-        if (player.getOwnedCards().size() > 0) {
+        if (player.isInPrison() && player.getOwnedCards().size() > 0) {
             String choice = gui.getUserButtonPressed(player + ", ønsker du at bruge dit benådelseskort til at blive løsladt?", "Ja", "Nej");
             if (choice.equals("Ja")) {
                 useCardToGetOut(player);
@@ -371,7 +363,7 @@ public class GameController {
 
     private void useCardToGetOut(Player player) {
         try {
-            List<Card> ownedCards = player.getOwnedCards();
+            ArrayList<Card> ownedCards = new ArrayList<>(player.getOwnedCards());
             ownedCards.remove(0);
             player.setOwnedCards(ownedCards);
         } catch (NullPointerException e) {
@@ -949,6 +941,7 @@ public class GameController {
         ArrayList<Property>[] propertiesInOffers = new ArrayList[2];
         propertiesInOffers[0] = new ArrayList<>();
         propertiesInOffers[1] = new ArrayList<>();
+        int[] cardsInOffers = new int[2];
 
         //Keep asking which players wants to trade. Check if each player is in jail).
         boolean choosing = true;
@@ -984,7 +977,7 @@ public class GameController {
                     if (!propertiesInOffers[j].contains(p)) propertyOptions.add(p);
                 }
 
-                Property property = chooseFromOptions(propertyOptions, "Hvilken grund vil du tilføje til handlen?", "Stop med at tilføje grunde", null, null, null);
+                Property property = chooseFromOptions(propertyOptions, tradingPlayers[j] + ", hvilke grunde vil du tilføje til handlen?", "Stop med at tilføje grunde", null, null, null);
                 if (property == null) {
                     continueAdding = false;
                 } else {
@@ -1005,6 +998,14 @@ public class GameController {
                     }
                 }
             }
+
+            if (tradingPlayers[j].getOwnedCards().size() > 0) {
+                String[] cardOptions = new String[tradingPlayers[j].getOwnedCards().size() + 1];
+                for (i = 0; i <= tradingPlayers[j].getOwnedCards().size(); i++) {
+                    cardOptions[i] = i + "";
+                }
+                cardsInOffers[j] = Integer.parseInt(gui.getUserSelection(tradingPlayers[j] + ", hvor mange benådelseskort vil du tilføje til handlen?", cardOptions));
+            }
         }
 
         //Construct a string for each player, containing all the properties,
@@ -1019,11 +1020,14 @@ public class GameController {
             }
         }
 
+
         //Construct a string showing a complete overview of the trade.
         String tradeOverview = tradingPlayers[0].getName() + ": " + moneyInOffers[0] + "kr.\n"
                 + tradingPlayers[1].getName() + ": " + moneyInOffers[1] + "kr.\n"
                 + tradingPlayers[0].getName() + ": " + playerProperties[0] + "\n"
-                + tradingPlayers[1].getName() + ": " + playerProperties[1] + "\n";
+                + tradingPlayers[1].getName() + ": " + playerProperties[1] + "\n"
+                + tradingPlayers[0].getName() + ": " + cardsInOffers[0] + " benådelseskort.\n"
+                + tradingPlayers[1].getName() + ": " + cardsInOffers[1] + " benådelseskort.\n";
 
         //Ask if the players want to accept and complete the trade.
         String accept = gui.getUserButtonPressed("Jeres byttehandel ser således ud:\n" + tradeOverview + "\nVil I acceptere og lukke handlen?", "Ja", "Nej");
@@ -1039,6 +1043,14 @@ public class GameController {
                 }
                 for (Property property : propertiesInOffers[1]) {
                     transferProperty(tradingPlayers[1], property, tradingPlayers[0]);
+                }
+                if (cardsInOffers[0] > 0 || cardsInOffers[1] > 0) {
+                    for (int j = 0; j < cardsInOffers[0]; j++) {
+                        transferCard(tradingPlayers[0], tradingPlayers[1]);
+                    }
+                    for (int j = 0; j < cardsInOffers[1]; j++) {
+                        transferCard(tradingPlayers[1], tradingPlayers[0]);
+                    }
                 }
 
             } catch (PlayerBrokeException e) {
@@ -1061,6 +1073,23 @@ public class GameController {
         giver.removeOwnedProperty(property);
         property.setOwner(receiver);
         receiver.addOwnedProperty(property);
+    }
+
+    private void transferCard(Player giver, Player receiver) {
+        ArrayList<Card> giverCards = new ArrayList<>(giver.getOwnedCards());
+        ArrayList<Card> receiverCards = new ArrayList<>(receiver.getOwnedCards());
+
+        try {
+            Card card = giverCards.get(0);
+            giverCards.remove(0);
+            receiverCards.add(card);
+            giver.setOwnedCards(giverCards);
+            receiver.setOwnedCards(receiverCards);
+            gui.showMessage(giver + " overfører et benådelseskort til " + receiver + ".");
+        } catch (Exception e){
+            System.err.println("Cannot transfer card, since giver owns no cards!");
+        }
+
     }
 
     private void mortgageAction(Player player) {

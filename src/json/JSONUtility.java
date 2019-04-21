@@ -502,6 +502,14 @@ public class JSONUtility {
         card.setText("I anledningen af kongens fødselsdag benådes De herved for fængsel. Dette kort kan opbevares, indtil De får brug for det, eller De kan sælge det.");
         cardList.add(card);
 
+        card = new GetOutOfJail();
+        card.setText("I anledningen af kongens fødselsdag benådes De herved for fængsel. Dette kort kan opbevares, indtil De får brug for det, eller De kan sælge det.");
+        cardList.add(card);
+
+        card = new GetOutOfJail();
+        card.setText("I anledningen af kongens fødselsdag benådes De herved for fængsel. Dette kort kan opbevares, indtil De får brug for det, eller De kan sælge det.");
+        cardList.add(card);
+
         game.setCardDeck(cardList);
 
         //JSON-GSON operations

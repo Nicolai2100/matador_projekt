@@ -4,7 +4,6 @@ import designpattern.Subject;
 import game.model.*;
 import game.model.cards.MoveEffect;
 import game.model.cards.EconomicEffect;
-import game.model.cards.PayTax;
 import game.model.properties.RealEstate;
 import game.model.properties.Utility;
 
@@ -271,11 +270,11 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
         move.setTarget(getSpaces().get(9));
         move.setText("Move to Allégade!");
         cards.add(move);
-
+/*
         PayTax tax = new PayTax();
         tax.setText("Pay 10% income tax!");
         cards.add(tax);
-
+*/
         EconomicEffect b = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         b.setText("You receive 100$ from the bank.");
         b.setAmount1(100);
