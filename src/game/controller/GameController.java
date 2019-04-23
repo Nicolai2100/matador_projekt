@@ -1291,4 +1291,8 @@ public class GameController {
             e.printStackTrace();
         }
     }
+
+    public Game getGame() {
+        return game;
+    }
 }

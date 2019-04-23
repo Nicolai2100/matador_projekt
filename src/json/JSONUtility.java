@@ -370,55 +370,50 @@ public class JSONUtility {
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        card = new MoveEffect();
+        card = new MoveEffect(MoveEffect.TargetTypes.NEAREST_SHIP_1);
         card.setText("Ryk brikken frem til det nærmeste rederi og betal ejeren to gange den leje, han ellers er berettiget til." +
                 " Hvis selskabet ikke ejes af nogen, kan De købe det af banken.");
-        ((MoveEffect) card).setSpecialTarget(MoveEffect.targetTypes.NEAREST_SHIP_1, game.getSpaces());
         cardList.add(card);
 
-        card = new MoveEffect();
+        card = new MoveEffect(MoveEffect.TargetTypes.NEAREST_SHIP_2);
         card.setText("Tag med den nærmeste færge. Flyt brikken frem, og hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((MoveEffect) card).setSpecialTarget(MoveEffect.targetTypes.NEAREST_SHIP_2, game.getSpaces());
         cardList.add(card);
 
-        card = new MoveEffect();
+        card = new MoveEffect(MoveEffect.TargetTypes.GO_TO_JAIL);
         card.setText("Gå i fængsel. Ryk direkte til fængslet. Selv om De passerer \"START\", indkasserer De ikke kr. 4000.");
-        ((MoveEffect) card).setTargetType(MoveEffect.targetTypes.GO_TO_JAIL);
         cardList.add(card);
 
-        card = new MoveEffect();
+        card = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         card.setText("Ryk frem til " + game.getSpaces().get(32) + ". Hvis De passerer \"START\", indkassér da kr. 4000.");
         ((MoveEffect) card).setTarget(game.getSpaces().get(32));
         cardList.add(card);
 
-        card = new MoveEffect();
+        card = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         card.setText("Ryk frem til " + game.getSpaces().get(19) + ". Hvis De passerer \"START\", indkassér da kr. 4000.");
         ((MoveEffect) card).setTarget(game.getSpaces().get(19));
         cardList.add(card);
 
-        card = new MoveEffect();
+        card = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         card.setText("Ryk frem til " + game.getSpaces().get(24) + ". Hvis De passerer \"START\", indkassér da kr. 4000.");
         ((MoveEffect) card).setTarget(game.getSpaces().get(24));
         cardList.add(card);
 
-        card = new MoveEffect();
+        card = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         card.setText("Tag med " + game.getSpaces().get(15) + ". Flyt brikken frem, og hvis De passerer \"START\", indkassér da kr. 4000.");
         ((MoveEffect) card).setTarget(game.getSpaces().get(15));
         cardList.add(card);
 
-        card = new MoveEffect();
+        card = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         card.setText("Ryk frem til \"START\".");
         ((MoveEffect) card).setTarget(game.getSpaces().get(0));
         cardList.add(card);
 
-        card = new MoveEffect();
+        card = new MoveEffect(MoveEffect.TargetTypes.THREE_FORWARDS);
         card.setText("Ryk tre felter frem.");
-        ((MoveEffect) card).setTargetType(MoveEffect.targetTypes.THREE_FORWARDS);
         cardList.add(card);
 
-        card = new MoveEffect();
+        card = new MoveEffect(MoveEffect.TargetTypes.THREE_BACKWARDS);
         card.setText("Ryk tre felter tilbage.");
-        ((MoveEffect) card).setTargetType(MoveEffect.targetTypes.THREE_BACKWARDS);
         cardList.add(card);
 
         card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS);
@@ -426,12 +421,12 @@ public class JSONUtility {
         ((EconomicEffect) card).setAmount1(200);
         cardList.add(card);
 
-        card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS, game.getActivePlayers(true));
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS);
         card.setText("De har lagt penge ud til et sammenskudsgilde. Mærkværdigvis betaler alle straks. Modtag fra hver medspiller kr. 500.");
         ((EconomicEffect) card).setAmount1(500);
         cardList.add(card);
 
-        card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS, game.getActivePlayers(true));
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS);
         card.setText("De skal holde familiefest og får et tilskud fra hver medspiller på kr. 500");
         ((EconomicEffect) card).setAmount1(500);
         cardList.add(card);

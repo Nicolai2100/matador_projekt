@@ -266,7 +266,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 
         List<Card> cards = new ArrayList<Card>();
 
-        MoveEffect move = new MoveEffect();
+        MoveEffect move = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         move.setTarget(getSpaces().get(9));
         move.setText("Move to Allégade!");
         cards.add(move);

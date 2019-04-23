@@ -22,15 +22,9 @@ public class EconomicEffect extends Card {
 	private int amount2;
 	public enum EffectType {FROM_BANK, FROM_OTHER_PLAYERS, TO_BANK, TO_BANK_PER_HOUSE_AND_HOTEL, MATADOR_GRANT}
 	private EffectType effectType;
-	private List<Player> players;
 
 	public EconomicEffect(EffectType effectType) {
 	    this.effectType = effectType;
-    }
-
-    public EconomicEffect(EffectType effectType, List<Player> players) {
-        this.effectType = effectType;
-        this.players = players;
     }
 
 	/**
@@ -54,17 +48,6 @@ public class EconomicEffect extends Card {
     public void setAmount2(int amount2) {
         this.amount2 = amount2;
     }
-/*
-    public void setEffectType(EffectType payer) {
-        this.effectType = payer;
-    }
-
-    public void setEffectType(EffectType payer, List<Player> players) {
-        this.effectType = payer;
-        this.players = players;
-
-    }
-    */
 
     @Override
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
@@ -73,7 +56,8 @@ public class EconomicEffect extends Card {
                 case FROM_BANK:
                     controller.paymentFromBank(player, amount1);
                     break;
-                case FROM_OTHER_PLAYERS:
+                case FROM_OTHER_PLAYERS :
+                    List<Player> players = controller.getGame().getActivePlayers(true);
                     for (Player p : players) {
                         if (p != player) {
                             controller.payment(p, amount1, player);
