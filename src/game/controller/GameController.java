@@ -364,6 +364,7 @@ public class GameController {
     private void useCardToGetOut(Player player) {
         try {
             ArrayList<Card> ownedCards = new ArrayList<>(player.getOwnedCards());
+            returnChanceCardToDeck(ownedCards.get(0));
             ownedCards.remove(0);
             player.setOwnedCards(ownedCards);
         } catch (NullPointerException e) {

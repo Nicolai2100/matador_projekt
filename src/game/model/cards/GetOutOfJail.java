@@ -15,6 +15,7 @@ public class GetOutOfJail extends Card {
         ArrayList<Card> cards = new ArrayList<>(player.getOwnedCards());
         cards.add(this);
         player.setOwnedCards(cards);
-        super.doAction(controller, player);
+        //kommenteret ud, fordi kortet ikke skal returneres til bunken.
+        //super.doAction(controller, player);
     }
 }
