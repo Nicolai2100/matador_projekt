@@ -24,7 +24,6 @@ public class PlayerPanel extends JFrame implements MouseListener {
     private Dimension dimension;
     private Dimension smallPanelDimension;
     private Map<ColorGroup, JPanel> colorGroup2JPanel;
-    private Map<JLabel, ColorGroup> nicolaisMap;
 
     public PlayerPanel(Game game, Player player, GUI gui) {
         this.game = game;
@@ -52,7 +51,6 @@ public class PlayerPanel extends JFrame implements MouseListener {
     public void update() {
         mainPanel.removeAll();
         colorGroup2JPanel = new HashMap<>();
-        nicolaisMap = new HashMap<>();
 
         JPanel playerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         playerPanel.setBorder(new EtchedBorder());
@@ -164,7 +162,7 @@ public class PlayerPanel extends JFrame implements MouseListener {
 /*
             jLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 */
-            nicolaisMap.put(jLabel, property.getColorGroup());
+
             jLabel.addMouseListener(this);
             jPanel.add(jLabel);
         }
@@ -173,7 +171,6 @@ public class PlayerPanel extends JFrame implements MouseListener {
     public void pawnedLabelMaker(JPanel jPanel, Property property) {
         if (property.getMortgaged()) {
             JLabel jLabel = new JLabel(property.getName());
-            nicolaisMap.put(jLabel, property.getColorGroup());
             jLabel.addMouseListener(this);
             jPanel.add(jLabel);
         }
@@ -205,8 +202,6 @@ public class PlayerPanel extends JFrame implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         JLabel jl = ((JLabel) e.getSource());
-        jl.setBackground(Color.white);
-        jl.setOpaque(true);
         Font font = jl.getFont();
         Map attributes = font.getAttributes();
         attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
@@ -216,8 +211,6 @@ public class PlayerPanel extends JFrame implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         JLabel jl = ((JLabel) e.getSource());
-        //jl.setOpaque(false);
-        jl.setBackground(ColorGroup.colorGroupTransformer(nicolaisMap.get(jl)));
         Font font = jl.getFont();
         Map attributes = font.getAttributes();
         attributes.put(TextAttribute.UNDERLINE, -1);
