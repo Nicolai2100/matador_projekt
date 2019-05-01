@@ -28,7 +28,7 @@ public enum ColorGroup {
     public int getNumOfGroup(){
         return this.numOfGroup;
     }
-
+    //todo flyt til view
     public static Color colorGroupTransformer(ColorGroup e) {
 
         switch (e) {
