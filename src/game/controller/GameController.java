@@ -113,6 +113,12 @@ public class GameController {
                 description = ("Hvis 1 virksomhed ejes, betales 100 gange så meget, som øjnene viser. Hvis både Tuborg og Carlsberg ejes, betales 200 gange så meget, som øjnene viser.");
             }
             gui.getFields()[i].setDescription(description);
+            gui.getFields()[i].setTitle(space.getName());
+
+            if (space.getIndex() == 10) gui.getFields()[i].setSubText("Fængsel");
+            if (space instanceof GoToJail) gui.getFields()[i].setSubText("Gå i fængsel");
+            if (space instanceof Chance) gui.getFields()[i].setSubText("Prøv lykken");
+
             i++;
         }
     }
