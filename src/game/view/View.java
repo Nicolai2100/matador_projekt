@@ -198,12 +198,18 @@ public class View implements Observer, Runnable {
             GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
             player2GuiPlayer.put(player, guiPlayer);
             gui.addPlayer(guiPlayer);
-            player2position.put(player, 0);
+
+            if (player.getCurrentPosition() != null) {
+                player2position.put(player, player.getCurrentPosition().getIndex());
+            } else {
+                player2position.put(player, 0);
+            }
+
             PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
             player2PlayerPanel.put(player, playerPanel);
             space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
             player.attach(this);
-            updatePlayer(player);
+            //updatePlayer(player);
         }
 
         /*

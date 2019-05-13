@@ -155,7 +155,7 @@ public class GameController {
                 while(!validInput) {
                     //Enter names of chosen number of players TODO input validation
                     String name = gui.getUserString("Indtast navn på spiller " + (i + 1) + ":");
-                    if (true) {
+                    if (name.length() > 0) {
                         player.setName(name);
                         validInput = true;
                     }
