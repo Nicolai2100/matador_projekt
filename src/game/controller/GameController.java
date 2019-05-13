@@ -10,13 +10,18 @@ import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
 import game.view.View;
+import gui_fields.GUI_Car;
 import gui_main.GUI;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import java.awt.*;
 import java.io.File;
 import java.util.*;
+import java.util.List;
+
+import static gui_fields.GUI_Car.Type.*;
 
 /**
  * The overall controller of a Monopoly game. It provides access
@@ -119,14 +124,7 @@ public class GameController {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil", "Afslut");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             game.shuffleCardDeck();
-            ArrayList<Integer> options = new ArrayList<>(Arrays.asList(3, 4, 5, 6));
-            Integer numOfPlayers = chooseFromOptions(options, "Hvor mange spillere?", "Annuller", null, null, null);
-            if (numOfPlayers != null) {
-                game.createPlayers(numOfPlayers);
-                view = new View(game, gui);
-                view.createPlayers();
-                play();
-            }
+            createPlayers();
         } else if (userSelection.equals("Afslut")) {
             System.exit(0);
         } else {
@@ -141,6 +139,40 @@ public class GameController {
             }
         }
         playOrLoadGame();
+    }
+
+    private void createPlayers() {
+        //Ask for number of players with -chooseFromOptions- 3 to 6 players
+        ArrayList<Integer> options = new ArrayList<>(Arrays.asList(3, 4, 5, 6));
+        Integer numOfPlayers = chooseFromOptions(options, "Hvor mange spillere?", "Annuller", null, null, null);
+        if (numOfPlayers != null) {
+            game.createPlayers(numOfPlayers);
+
+            ArrayList<PlayerColor> colorsChosen = new ArrayList<>();
+            for (int i = 0; i < numOfPlayers; i++) {
+                boolean validInput = false;
+                while(!validInput) {
+                    //Enter names of chosen number of players TODO input validation
+                    String name = gui.getUserString("Indtast navn på spiller " + (i + 1) + ":");
+                    if (true) {
+                        game.getPlayers().get(i).setName(name);
+                        validInput = true;
+                    }
+                }
+                //Choose colour of player -
+                ArrayList<PlayerColor> colorOptions = new ArrayList<>();
+                for (PlayerColor color : PlayerColor.values()) {
+                    if (!colorsChosen.contains(color)) {
+                        colorOptions.add(color);
+                    }
+                }
+                Color playerColor = gui.getUserSelection("Vælg farve:", colorOptions.toArray())
+            }
+
+            view = new View(game, gui);
+            view.createPlayers();
+            play();
+        }
     }
 
     /**

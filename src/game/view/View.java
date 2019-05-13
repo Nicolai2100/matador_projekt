@@ -2,14 +2,12 @@ package game.view;
 
 import designpattern.Observer;
 import designpattern.Subject;
-import game.controller.GameController;
 import game.model.Game;
 import game.model.Player;
 import game.model.Property;
 import game.model.Space;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
-import game.model.properties.Utility;
 import gui_fields.*;
 import gui_fields.GUI_Car.Pattern;
 import gui_fields.GUI_Car.Type;
@@ -206,7 +204,7 @@ public class View implements Observer, Runnable {
             enterNamePlayer(player);
             Color userColor = chooseCarColor(tokenColor, player);
             player.setColor(userColor);
-            GUI_Car car = chosePlayerCar(player);
+            GUI_Car car = choosePlayerCar(player);
             GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
             player2GuiPlayer.put(player, guiPlayer);
             gui.addPlayer(guiPlayer);
@@ -266,7 +264,7 @@ public class View implements Observer, Runnable {
      * @param player
      * @return
      */
-    public GUI_Car chosePlayerCar(Player player) {
+    public GUI_Car choosePlayerCar(Player player) {
         String carChoice = gui.getUserSelection("Choose car", "Car", "Ufo", "Tractor", "Racecar");
         GUI_Car car;
         HashMap<String, GUI_Car.Type> enumMap = new HashMap();
