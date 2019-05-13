@@ -92,6 +92,7 @@ public class GameController {
             Property property = null;
             if (space instanceof Property) {
                 property = (Property) space;
+                gui.getFields()[i].setSubText(((Property) space).getCost() + " kr.");
             }
             String description = "";
             if (property instanceof RealEstate) {

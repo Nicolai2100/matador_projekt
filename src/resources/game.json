@@ -34,7 +34,7 @@
     {
       "CLASSNAME": "game.model.Chance",
       "INSTANCE": {
-        "name": "chance",
+        "name": "Chance",
         "index": 2,
         "observers": []
       }
@@ -115,7 +115,7 @@
     {
       "CLASSNAME": "game.model.Chance",
       "INSTANCE": {
-        "name": "chance",
+        "name": "Chance",
         "index": 7,
         "observers": []
       }
@@ -305,7 +305,7 @@
     {
       "CLASSNAME": "game.model.Chance",
       "INSTANCE": {
-        "name": "chance",
+        "name": "Chance",
         "index": 17,
         "observers": []
       }
@@ -390,7 +390,7 @@
     {
       "CLASSNAME": "game.model.Chance",
       "INSTANCE": {
-        "name": "chance",
+        "name": "Chance",
         "index": 22,
         "observers": []
       }
@@ -603,7 +603,7 @@
     {
       "CLASSNAME": "game.model.Chance",
       "INSTANCE": {
-        "name": "chance",
+        "name": "Chance",
         "index": 33,
         "observers": []
       }
@@ -653,7 +653,7 @@
     {
       "CLASSNAME": "game.model.Chance",
       "INSTANCE": {
-        "name": "chance",
+        "name": "Chance",
         "index": 36,
         "observers": []
       }

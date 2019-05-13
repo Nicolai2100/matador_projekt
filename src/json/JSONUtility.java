@@ -44,7 +44,7 @@ public class JSONUtility {
         game.addSpace(roedovrevej);
 
         Space chance = new Chance(); //colorgroup?
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance);
 
         RealEstate hvidovrevej = new RealEstate();
@@ -79,7 +79,7 @@ public class JSONUtility {
         game.addSpace(roskildevej);
 
         chance = new Chance();
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance); //virker dette?
 
         RealEstate valbyLanggade = new RealEstate();
@@ -157,7 +157,7 @@ public class JSONUtility {
         game.addSpace(bernstorffsvej);
 
         chance = new Chance();
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance);
 
         RealEstate hellerupvej = new RealEstate();
@@ -192,7 +192,7 @@ public class JSONUtility {
         game.addSpace(trianglen);
 
         chance = new Chance();
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance);
 
         RealEstate oesterbrogade = new RealEstate();
@@ -279,7 +279,7 @@ public class JSONUtility {
         game.addSpace(vimmelskaftet);
 
         chance = new Chance();
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance);
 
         RealEstate nygade = new RealEstate();
@@ -300,7 +300,7 @@ public class JSONUtility {
         game.addSpace(bornholm);
 
         chance = new Chance();
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance);
 
         RealEstate frederiksberggade = new RealEstate();

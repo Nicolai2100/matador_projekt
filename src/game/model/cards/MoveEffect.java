@@ -65,7 +65,7 @@ public class MoveEffect extends Card {
                     controller.moveToSpace(player, controller.getGame().getSpaces().get((player.getCurrentPosition().getIndex() + 3) % 40));
                     break;
                 case THREE_BACKWARDS:
-                    //TODO: Ændre eventuel i View, så spilleren rent faktisk rykker bagud, og ikke hele pladen rundt,
+                    //TODO: Ændre eventuelt i View, så spilleren rent faktisk rykker bagud, og ikke hele pladen rundt,
                     // til han ender tre felter bag, hvor han først var.
                     player.setCurrentPosition(controller.getGame().getSpaces().get((player.getCurrentPosition().getIndex() - 3 + 40) % 40));
                     break;
