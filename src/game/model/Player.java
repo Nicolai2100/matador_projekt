@@ -25,7 +25,9 @@ public class Player extends Subject {
 
     private String name;
 
-    private PlayerColor color;
+    private Color color;
+
+    private PlayerColor colorEnumType;
 
     private CarType carType;
 
@@ -69,7 +71,7 @@ public class Player extends Subject {
      *
      * @return the colour
      */
-    public PlayerColor getColor() {
+    public Color getColor() {
         return color;
     }
 
@@ -78,9 +80,17 @@ public class Player extends Subject {
      *
      * @param color the new colour of the player.
      */
-    public void setColor(PlayerColor color) {
+    public void setColor(Color color) {
         this.color = color;
         notifyChange();
+    }
+
+    public PlayerColor getColorEnumType() {
+        return colorEnumType;
+    }
+
+    public void setColorEnumType(PlayerColor colorEnumType) {
+        this.colorEnumType = colorEnumType;
     }
 
     /**
@@ -392,42 +402,6 @@ public class Player extends Subject {
                 case "Ufo": return UFO;
                 default: return null;
             }
-        }
-    }
-
-    //TODO: SKAL FJERNES IGEN
-    public Color getActualColor() {
-        switch (this.color) {
-            case GREY:
-                return Color.DARK_GRAY;
-            case GREEN:
-                return Color.GREEN;
-            case BlUE:
-                return Color.BLUE.brighter();
-            case MAGENTA:
-                return Color.MAGENTA;
-            case RED:
-                return Color.RED;
-            case YELLOW:
-                return Color.yellow.brighter();
-            default: return null;
-        }
-    }
-
-    public PlayerColor getColorFromRGB(int colorRGB) {
-
-        Color color = new Color(colorRGB);
-
-
-        int grey = Color.DARK_GRAY.getRGB();
-        int green = Color.GREEN.getRGB();
-        int blue = Color.BLUE.brighter().getRGB();
-        int magenta = Color.MAGENTA.getRGB();
-        int red = Color.RED.getRGB();
-        int yelow = Color.yellow.brighter().getRGB();
-
-        switch (colorRGB) {
-            case grey: return PlayerColor.GREY;
         }
     }
 }
