@@ -5,6 +5,7 @@ import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
 import game.model.properties.Utility;
+import org.w3c.dom.css.RGBColor;
 
 import java.awt.*;
 import java.util.List;
@@ -24,7 +25,9 @@ public class Player extends Subject {
 
     private String name;
 
-    private Color color;
+    private PlayerColor color;
+
+    private CarType carType;
 
     private Space currentPosition;
 
@@ -66,7 +69,7 @@ public class Player extends Subject {
      *
      * @return the colour
      */
-    public Color getColor() {
+    public PlayerColor getColor() {
         return color;
     }
 
@@ -75,7 +78,7 @@ public class Player extends Subject {
      *
      * @param color the new colour of the player.
      */
-    public void setColor(Color color) {
+    public void setColor(PlayerColor color) {
         this.color = color;
         notifyChange();
     }
@@ -354,5 +357,77 @@ public class Player extends Subject {
 
     public int getDoubleAttempts() {
         return doubleAttempts;
+    }
+
+    public void setCarType(CarType carType) {
+        this.carType = carType;
+    }
+
+    public CarType getCarType() {
+        return carType;
+    }
+
+    public enum CarType {
+        CAR,
+        RACECAR,
+        TRACTOR,
+        UFO;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case CAR: return "Bil";
+                case RACECAR: return "Racerbil";
+                case TRACTOR: return "Traktor";
+                case UFO: return "Ufo";
+                default: return null;
+            }
+        }
+
+        public static CarType getCarTypeFromString(String car) {
+            switch (car) {
+                case "Bil": return CAR;
+                case "Racerbil": return RACECAR;
+                case "Traktor": return TRACTOR;
+                case "Ufo": return UFO;
+                default: return null;
+            }
+        }
+    }
+
+    //TODO: SKAL FJERNES IGEN
+    public Color getActualColor() {
+        switch (this.color) {
+            case GREY:
+                return Color.DARK_GRAY;
+            case GREEN:
+                return Color.GREEN;
+            case BlUE:
+                return Color.BLUE.brighter();
+            case MAGENTA:
+                return Color.MAGENTA;
+            case RED:
+                return Color.RED;
+            case YELLOW:
+                return Color.yellow.brighter();
+            default: return null;
+        }
+    }
+
+    public PlayerColor getColorFromRGB(int colorRGB) {
+
+        Color color = new Color(colorRGB);
+
+
+        int grey = Color.DARK_GRAY.getRGB();
+        int green = Color.GREEN.getRGB();
+        int blue = Color.BLUE.brighter().getRGB();
+        int magenta = Color.MAGENTA.getRGB();
+        int red = Color.RED.getRGB();
+        int yelow = Color.yellow.brighter().getRGB();
+
+        switch (colorRGB) {
+            case grey: return PlayerColor.GREY;
+        }
     }
 }

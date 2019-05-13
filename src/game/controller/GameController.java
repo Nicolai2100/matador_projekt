@@ -134,7 +134,7 @@ public class GameController {
                 //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
                 game.shuffleCardDeck();
                 view = new View(game, gui);
-                view.loadPlayers();
+                view.createPlayers();
                 play();
             }
         }
@@ -150,23 +150,34 @@ public class GameController {
 
             ArrayList<PlayerColor> colorsChosen = new ArrayList<>();
             for (int i = 0; i < numOfPlayers; i++) {
+                Player player = game.getPlayers().get(i);
                 boolean validInput = false;
                 while(!validInput) {
                     //Enter names of chosen number of players TODO input validation
                     String name = gui.getUserString("Indtast navn på spiller " + (i + 1) + ":");
                     if (true) {
-                        game.getPlayers().get(i).setName(name);
+                        player.setName(name);
                         validInput = true;
                     }
                 }
                 //Choose colour of player -
-                ArrayList<PlayerColor> colorOptions = new ArrayList<>();
+                ArrayList<String> colorOptions = new ArrayList<>();
                 for (PlayerColor color : PlayerColor.values()) {
                     if (!colorsChosen.contains(color)) {
-                        colorOptions.add(color);
+                        colorOptions.add(color.toString());
                     }
                 }
-                Color playerColor = gui.getUserSelection("Vælg farve:", colorOptions.toArray())
+                String playerColor = gui.getUserSelection("Vælg farve:", colorOptions.toArray(new String[colorOptions.size()]));
+                PlayerColor chosenColor = PlayerColor.getColor(playerColor);
+                colorsChosen.add(chosenColor);
+                player.setColor(chosenColor);
+
+                String[] carTypes = new String[Player.CarType.values().length];
+                for (int j = 0; j < carTypes.length; j++) {
+                    carTypes[i] = Player.CarType.values()[i].toString();
+                }
+                String playerCar = gui.getUserSelection("Vælg køretøj:", carTypes);
+                player.setCarType(Player.CarType.getCarTypeFromString(playerCar));
             }
 
             view = new View(game, gui);

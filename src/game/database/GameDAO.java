@@ -98,7 +98,7 @@ public class GameDAO implements IGameDAO {
                 insertPLayers.setBoolean(5, player.isInPrison());
                 insertPLayers.setBoolean(6, player.isBroke());
                 insertPLayers.setInt(7, gameid);
-                insertPLayers.setInt(8, player.getColor().getRGB());
+                insertPLayers.setInt(8, player.getActualColor().getRGB());
                 insertPLayers.setString(9, player.getToken());
                 insertPLayers.executeUpdate();
                 insertPLayers.clearParameters();

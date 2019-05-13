@@ -2,10 +2,7 @@ package game.view;
 
 import designpattern.Observer;
 import designpattern.Subject;
-import game.model.Game;
-import game.model.Player;
-import game.model.Property;
-import game.model.Space;
+import game.model.*;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import gui_fields.*;
@@ -89,7 +86,7 @@ public class View implements Observer, Runnable {
             GUI_Ownable gui_ownable = (GUI_Ownable) gui_field;
             Player owner = property.getOwner();
             if (owner != null) {
-                gui_ownable.setBorder(owner.getColor());
+                gui_ownable.setBorder(transformPlayerColor(owner.getColor()));
                 gui_ownable.setOwnerName(owner.getName());
             } else {
                 gui_ownable.setBorder(null);
@@ -199,6 +196,20 @@ public class View implements Observer, Runnable {
      * Nicolai L
      */
     public void createPlayers() {
+        for (Player player : game.getPlayers()) {
+            GUI_Car car = new GUI_Car(transformPlayerColor(player.getColor()), Color.BLUE, transformCarType(player.getCarType()), GUI_Car.Pattern.FILL);
+            GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
+            player2GuiPlayer.put(player, guiPlayer);
+            gui.addPlayer(guiPlayer);
+            player2position.put(player, 0);
+            PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
+            player2PlayerPanel.put(player, playerPanel);
+            space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
+            player.attach(this);
+            updatePlayer(player);
+        }
+
+        /*
         TokenColor tokenColor = new TokenColor();
         for (Player player : game.getPlayers()) {
             enterNamePlayer(player);
@@ -215,11 +226,13 @@ public class View implements Observer, Runnable {
             player.attach(this);
             updatePlayer(player);
         }
+        */
     }
 
     /**
      * @author Jeppe s170196, Nicolai s185020, Nicolai W s185036
      */
+    /*
     public void loadPlayers() {
         for (Player player : game.getPlayers()) {
             GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.valueOf(player.getToken()), Pattern.FILL);
@@ -237,12 +250,12 @@ public class View implements Observer, Runnable {
             }
         }
     }
-
+/*
     /**
      * Nicolai L
      *
      * @param player
-     */
+     *//*
     public void enterNamePlayer(Player player) {
         while (true) {
             String input = gui.getUserString("indtast navn");
@@ -252,7 +265,7 @@ public class View implements Observer, Runnable {
             } else {
 /*todo ret dette
                 gui.showMessage("prøv igen");
-*/
+
                 break;
             }
         }
@@ -264,6 +277,7 @@ public class View implements Observer, Runnable {
      * @param player
      * @return
      */
+    /*
     public GUI_Car choosePlayerCar(Player player) {
         String carChoice = gui.getUserSelection("Choose car", "Car", "Ufo", "Tractor", "Racecar");
         GUI_Car car;
@@ -276,7 +290,8 @@ public class View implements Observer, Runnable {
         player.setToken(enumMap.get(carChoice).toString());
         return car;
     }
-
+*/
+    /*
     /**
      * Nicolai L
      *
@@ -284,6 +299,8 @@ public class View implements Observer, Runnable {
      * @param player
      * @return
      */
+
+    /*
     public Color chooseCarColor(TokenColor tokenColorObj, Player player) {
         String[] chooseColorStrings = tokenColorObj.setColorsToChooseFrom().split(" ");
         String carColorS;
@@ -308,12 +325,41 @@ public class View implements Observer, Runnable {
 
         return carColorChoice;
     }
+    */
 
     @Override
     public void run() {
         try {
             Thread.sleep(150);
         } catch (Exception e) {
+        }
+    }
+
+    private Color transformPlayerColor(PlayerColor playerColor) {
+        switch (playerColor) {
+            case GREY:
+                return Color.DARK_GRAY;
+            case GREEN:
+                return Color.GREEN;
+            case BlUE:
+                return Color.BLUE.brighter();
+            case MAGENTA:
+                return Color.MAGENTA;
+            case RED:
+                return Color.RED;
+            case YELLOW:
+                return Color.yellow.brighter();
+            default: return null;
+        }
+    }
+
+    private GUI_Car.Type transformCarType(Player.CarType carType) {
+        switch (carType) {
+            case CAR: return Type.CAR;
+            case RACECAR: return Type.RACECAR;
+            case TRACTOR: return Type.TRACTOR;
+            case UFO: return Type.UFO;
+            default: return null;
         }
     }
 }

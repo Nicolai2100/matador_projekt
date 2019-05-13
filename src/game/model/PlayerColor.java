@@ -9,9 +9,9 @@ public enum PlayerColor {
     MAGENTA,
     RED,
     YELLOW;
-
-    public Color getColor(PlayerColor playerColor) {
-        switch (this) {
+/*
+    public static Color getColor(PlayerColor playerColor) {
+        switch (playerColor) {
             case GREY:
                 return Color.DARK_GRAY;
             case GREEN:
@@ -24,10 +24,10 @@ public enum PlayerColor {
                 return Color.RED;
             case YELLOW:
                 return Color.yellow.brighter();
-            default: return Color.WHITE;
+            default: return null;
         }
     }
-
+*/
     @Override
     public String toString() {
         switch (this) {
@@ -37,7 +37,46 @@ public enum PlayerColor {
             case MAGENTA: return "Magenta";
             case RED: return "Rød";
             case YELLOW:return "Gul";
-            default: return "Hvid";
+            default: return null;
+        }
+    }
+
+    public static PlayerColor getColor(String color) {
+        switch (color) {
+            case "Grå": return GREY;
+            case "Grøn": return GREEN;
+            case "Blå": return BlUE;
+            case "Magenta": return MAGENTA;
+            case "Rød": return RED;
+            case "Gul": return YELLOW;
+            default: return null;
+        }
+    }
+
+    public Color getRGBcolor(PlayerColor playerColor) {
+        switch (playerColor) {
+            case GREY:
+                return Color.DARK_GRAY;
+            case GREEN:
+                return Color.GREEN;
+            case BlUE:
+                return Color.BLUE.brighter();
+            case MAGENTA:
+                return Color.MAGENTA;
+            case RED:
+                return Color.RED;
+            case YELLOW:
+                return Color.yellow.brighter();
+            default: return null;
+        }
+    }
+
+    public PlayerColor getColorFromRGB(int colorRGB) {
+
+        Color color = new Color(colorRGB);
+
+        switch (color) {
+            case (Color.DARK_GRAY): return PlayerColor.GREY;
         }
     }
 }

@@ -26,7 +26,7 @@ public class GameStub extends Subject {
 
     public GameStub() {
         createGame();
-        createPlayer();
+        //createPlayer();
 
     }
 
@@ -281,7 +281,7 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
         cards.add(b);
         setCardDeck(cards);
     }
-
+/*
     public void createPlayer(){
         Player p = new Player();
         p.setName("Player 1");
@@ -319,4 +319,5 @@ A hotel costs the same as a house but 4 houses are needed to build a hotel.*/
 		p.setColor(Color.cyan);
 		addPlayer(p);
     }
+   */
 }
