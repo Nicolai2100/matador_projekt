@@ -148,7 +148,7 @@ public class GameController {
         if (numOfPlayers != null) {
             game.createPlayers(numOfPlayers);
 
-            ArrayList<PlayerColor> colorsChosen = new ArrayList<>();
+            ArrayList<Player.PlayerColor> colorsChosen = new ArrayList<>();
             for (int i = 0; i < numOfPlayers; i++) {
                 Player player = game.getPlayers().get(i);
                 boolean validInput = false;
@@ -162,19 +162,19 @@ public class GameController {
                 }
                 //Choose colour of player -
                 ArrayList<String> colorOptions = new ArrayList<>();
-                for (PlayerColor color : PlayerColor.values()) {
+                for (Player.PlayerColor color : Player.PlayerColor.values()) {
                     if (!colorsChosen.contains(color)) {
                         colorOptions.add(color.toString());
                     }
                 }
                 String playerColor = gui.getUserSelection("Vælg farve:", colorOptions.toArray(new String[colorOptions.size()]));
-                PlayerColor chosenColor = PlayerColor.getColor(playerColor);
+                Player.PlayerColor chosenColor = Player.PlayerColor.getColorFromString(playerColor);
                 colorsChosen.add(chosenColor);
-                player.setColor(chosenColor);
+                player.setColorEnumType(chosenColor);
 
                 String[] carTypes = new String[Player.CarType.values().length];
                 for (int j = 0; j < carTypes.length; j++) {
-                    carTypes[i] = Player.CarType.values()[i].toString();
+                    carTypes[j] = Player.CarType.values()[j].toString();
                 }
                 String playerCar = gui.getUserSelection("Vælg køretøj:", carTypes);
                 player.setCarType(Player.CarType.getCarTypeFromString(playerCar));

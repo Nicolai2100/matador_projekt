@@ -98,8 +98,8 @@ public class GameDAO implements IGameDAO {
                 insertPLayers.setBoolean(5, player.isInPrison());
                 insertPLayers.setBoolean(6, player.isBroke());
                 insertPLayers.setInt(7, gameid);
-                insertPLayers.setInt(8, player.getActualColor().getRGB());
-                insertPLayers.setString(9, player.getToken());
+                insertPLayers.setInt(8, player.getColor().getRGB());
+                insertPLayers.setString(9, player.getCarType().toString());
                 insertPLayers.executeUpdate();
                 insertPLayers.clearParameters();
 
@@ -204,7 +204,7 @@ public class GameDAO implements IGameDAO {
                 p.setInPrison(playerRS.getBoolean("injail"));
                 p.setBroke(playerRS.getBoolean("isbroke"));
                 p.setColor(new Color(playerRS.getInt("color")));
-                p.setToken(playerRS.getString("token"));
+                p.setCarType(Player.CarType.getCarTypeFromString(playerRS.getString("token")));
                 listOfPlayers.add(playerRS.getInt("playerid"), p);
             }
             game.setPlayers(listOfPlayers);

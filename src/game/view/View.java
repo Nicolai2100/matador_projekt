@@ -6,16 +6,12 @@ import game.model.*;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import gui_fields.*;
-import gui_fields.GUI_Car.Pattern;
 import gui_fields.GUI_Car.Type;
 import gui_main.GUI;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-
-import static gui_fields.GUI_Car.Type.*;
-import static gui_fields.GUI_Car.Type.RACECAR;
 
 /**
  * This class implements a view on the Monopoly game based
@@ -86,7 +82,7 @@ public class View implements Observer, Runnable {
             GUI_Ownable gui_ownable = (GUI_Ownable) gui_field;
             Player owner = property.getOwner();
             if (owner != null) {
-                gui_ownable.setBorder(transformPlayerColor(owner.getColor()));
+                gui_ownable.setBorder(owner.getColor());
                 gui_ownable.setOwnerName(owner.getName());
             } else {
                 gui_ownable.setBorder(null);
@@ -197,7 +193,8 @@ public class View implements Observer, Runnable {
      */
     public void createPlayers() {
         for (Player player : game.getPlayers()) {
-            GUI_Car car = new GUI_Car(transformPlayerColor(player.getColor()), Color.BLUE, transformCarType(player.getCarType()), GUI_Car.Pattern.FILL);
+            if (player.getColorEnumType() != null) player.setColor(transformPlayerColor(player.getColorEnumType()));
+            GUI_Car car = new GUI_Car(player.getColor(), Color.BLUE, transformCarType(player.getCarType()), GUI_Car.Pattern.FILL);
             GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
             player2GuiPlayer.put(player, guiPlayer);
             gui.addPlayer(guiPlayer);
@@ -335,7 +332,7 @@ public class View implements Observer, Runnable {
         }
     }
 
-    private Color transformPlayerColor(PlayerColor playerColor) {
+    private Color transformPlayerColor(Player.PlayerColor playerColor) {
         switch (playerColor) {
             case GREY:
                 return Color.DARK_GRAY;
@@ -355,10 +352,10 @@ public class View implements Observer, Runnable {
 
     private GUI_Car.Type transformCarType(Player.CarType carType) {
         switch (carType) {
-            case CAR: return Type.CAR;
-            case RACECAR: return Type.RACECAR;
-            case TRACTOR: return Type.TRACTOR;
-            case UFO: return Type.UFO;
+            case CAR: return GUI_Car.Type.CAR;
+            case RACECAR: return GUI_Car.Type.RACECAR;
+            case TRACTOR: return GUI_Car.Type.TRACTOR;
+            case UFO: return GUI_Car.Type.UFO;
             default: return null;
         }
     }

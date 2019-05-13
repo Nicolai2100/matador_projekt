@@ -4,8 +4,6 @@ import designpattern.Subject;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
-import game.model.properties.Utility;
-import org.w3c.dom.css.RGBColor;
 
 import java.awt.*;
 import java.util.List;
@@ -41,7 +39,7 @@ public class Player extends Subject {
 
     private boolean broke = false;
 
-    private String token;
+    //private String token;
 
     private Set<Property> ownedProperties = new HashSet<Property>();
 
@@ -346,14 +344,14 @@ public class Player extends Subject {
             notifyChange();
         }
     }
-
+/*
     public String getToken() {
         return token;
     }
 
     public void setToken(String token) {
         this.token = token;
-    }
+    }*/
 
     @Override
     public String toString() {
@@ -375,6 +373,40 @@ public class Player extends Subject {
 
     public CarType getCarType() {
         return carType;
+    }
+
+    public enum PlayerColor {
+        GREY,
+        GREEN,
+        BlUE,
+        MAGENTA,
+        RED,
+        YELLOW;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case GREY: return "Grå";
+                case GREEN: return "Grøn";
+                case BlUE: return "Blå";
+                case MAGENTA: return "Magenta";
+                case RED: return "Rød";
+                case YELLOW:return "Gul";
+                default: return null;
+            }
+        }
+
+        public static PlayerColor getColorFromString(String color) {
+            switch (color) {
+                case "Grå": return GREY;
+                case "Grøn": return GREEN;
+                case "Blå": return BlUE;
+                case "Magenta": return MAGENTA;
+                case "Rød": return RED;
+                case "Gul": return YELLOW;
+                default: return null;
+            }
+        }
     }
 
     public enum CarType {
@@ -400,6 +432,10 @@ public class Player extends Subject {
                 case "Racerbil": return RACECAR;
                 case "Traktor": return TRACTOR;
                 case "Ufo": return UFO;
+                case "CAR": return CAR;
+                case "RACECAR": return RACECAR;
+                case "TRACTOR": return TRACTOR;
+                case "UFO": return UFO;
                 default: return null;
             }
         }
