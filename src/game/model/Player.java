@@ -4,7 +4,6 @@ import designpattern.Subject;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
-import game.model.properties.Utility;
 
 import java.awt.*;
 import java.util.List;
@@ -26,6 +25,10 @@ public class Player extends Subject {
 
     private Color color;
 
+    private PlayerColor colorEnumType;
+
+    private CarType carType;
+
     private Space currentPosition;
 
     private int balance = 50000;
@@ -36,7 +39,7 @@ public class Player extends Subject {
 
     private boolean broke = false;
 
-    private String token;
+    //private String token;
 
     private Set<Property> ownedProperties = new HashSet<Property>();
 
@@ -78,6 +81,14 @@ public class Player extends Subject {
     public void setColor(Color color) {
         this.color = color;
         notifyChange();
+    }
+
+    public PlayerColor getColorEnumType() {
+        return colorEnumType;
+    }
+
+    public void setColorEnumType(PlayerColor colorEnumType) {
+        this.colorEnumType = colorEnumType;
     }
 
     /**
@@ -333,14 +344,14 @@ public class Player extends Subject {
             notifyChange();
         }
     }
-
+/*
     public String getToken() {
         return token;
     }
 
     public void setToken(String token) {
         this.token = token;
-    }
+    }*/
 
     @Override
     public String toString() {
@@ -354,5 +365,79 @@ public class Player extends Subject {
 
     public int getDoubleAttempts() {
         return doubleAttempts;
+    }
+
+    public void setCarType(CarType carType) {
+        this.carType = carType;
+    }
+
+    public CarType getCarType() {
+        return carType;
+    }
+
+    public enum PlayerColor {
+        GREY,
+        GREEN,
+        BlUE,
+        MAGENTA,
+        RED,
+        YELLOW;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case GREY: return "Grå";
+                case GREEN: return "Grøn";
+                case BlUE: return "Blå";
+                case MAGENTA: return "Magenta";
+                case RED: return "Rød";
+                case YELLOW:return "Gul";
+                default: return null;
+            }
+        }
+
+        public static PlayerColor getColorFromString(String color) {
+            switch (color) {
+                case "Grå": return GREY;
+                case "Grøn": return GREEN;
+                case "Blå": return BlUE;
+                case "Magenta": return MAGENTA;
+                case "Rød": return RED;
+                case "Gul": return YELLOW;
+                default: return null;
+            }
+        }
+    }
+
+    public enum CarType {
+        CAR,
+        RACECAR,
+        TRACTOR,
+        UFO;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case CAR: return "Bil";
+                case RACECAR: return "Racerbil";
+                case TRACTOR: return "Traktor";
+                case UFO: return "Ufo";
+                default: return null;
+            }
+        }
+
+        public static CarType getCarTypeFromString(String car) {
+            switch (car) {
+                case "Bil": return CAR;
+                case "Racerbil": return RACECAR;
+                case "Traktor": return TRACTOR;
+                case "Ufo": return UFO;
+                case "CAR": return CAR;
+                case "RACECAR": return RACECAR;
+                case "TRACTOR": return TRACTOR;
+                case "UFO": return UFO;
+                default: return null;
+            }
+        }
     }
 }

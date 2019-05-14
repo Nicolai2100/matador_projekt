@@ -44,7 +44,7 @@ public class JSONUtility {
         game.addSpace(roedovrevej);
 
         Space chance = new Chance(); //colorgroup?
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance);
 
         RealEstate hvidovrevej = new RealEstate();
@@ -79,7 +79,7 @@ public class JSONUtility {
         game.addSpace(roskildevej);
 
         chance = new Chance();
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance); //virker dette?
 
         RealEstate valbyLanggade = new RealEstate();
@@ -157,7 +157,7 @@ public class JSONUtility {
         game.addSpace(bernstorffsvej);
 
         chance = new Chance();
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance);
 
         RealEstate hellerupvej = new RealEstate();
@@ -192,7 +192,7 @@ public class JSONUtility {
         game.addSpace(trianglen);
 
         chance = new Chance();
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance);
 
         RealEstate oesterbrogade = new RealEstate();
@@ -279,7 +279,7 @@ public class JSONUtility {
         game.addSpace(vimmelskaftet);
 
         chance = new Chance();
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance);
 
         RealEstate nygade = new RealEstate();
@@ -300,7 +300,7 @@ public class JSONUtility {
         game.addSpace(bornholm);
 
         chance = new Chance();
-        chance.setName("chance");
+        chance.setName("Chance");
         game.addSpace(chance);
 
         RealEstate frederiksberggade = new RealEstate();
@@ -385,27 +385,27 @@ public class JSONUtility {
 
         card = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         card.setText("Ryk frem til " + game.getSpaces().get(32) + ". Hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((MoveEffect) card).setTarget(game.getSpaces().get(32));
+        ((MoveEffect) card).setTarget(32);
         cardList.add(card);
 
         card = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         card.setText("Ryk frem til " + game.getSpaces().get(19) + ". Hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((MoveEffect) card).setTarget(game.getSpaces().get(19));
+        ((MoveEffect) card).setTarget(19);
         cardList.add(card);
 
         card = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         card.setText("Ryk frem til " + game.getSpaces().get(24) + ". Hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((MoveEffect) card).setTarget(game.getSpaces().get(24));
+        ((MoveEffect) card).setTarget(24);
         cardList.add(card);
 
         card = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         card.setText("Tag med " + game.getSpaces().get(15) + ". Flyt brikken frem, og hvis De passerer \"START\", indkassér da kr. 4000.");
-        ((MoveEffect) card).setTarget(game.getSpaces().get(15));
+        ((MoveEffect) card).setTarget(15);
         cardList.add(card);
 
         card = new MoveEffect(MoveEffect.TargetTypes.SPACE);
         card.setText("Ryk frem til \"START\".");
-        ((MoveEffect) card).setTarget(game.getSpaces().get(0));
+        ((MoveEffect) card).setTarget(0);
         cardList.add(card);
 
         card = new MoveEffect(MoveEffect.TargetTypes.THREE_FORWARDS);
@@ -532,16 +532,9 @@ public class JSONUtility {
      */
     public Game createGame() {
 
+        File file = new File("src/resources/game.json");
 
-        File temp = new File("src/resources/game.json");
-        if (temp.exists()) {
-            try {
-                temp.delete();
-                createData();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
+        if (!file.exists()) {
             try {
                 createData();
             } catch (IOException e) {
