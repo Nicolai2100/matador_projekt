@@ -17,6 +17,7 @@ import game.model.properties.Ship;
 public class MoveEffect extends Card {
 
     private int targetIndex;
+    private Space target;
     public enum TargetTypes {SPACE, NEAREST_SHIP_1, NEAREST_SHIP_2, GO_TO_JAIL, THREE_FORWARDS, THREE_BACKWARDS}
     private TargetTypes targetType;
 
@@ -81,5 +82,7 @@ public class MoveEffect extends Card {
             i++;
         }
         targetIndex = space.getIndex();
+        target = space;
+
     }
 }
