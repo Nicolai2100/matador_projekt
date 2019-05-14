@@ -532,16 +532,9 @@ public class JSONUtility {
      */
     public Game createGame() {
 
+        File file = new File("src/resources/game.json");
 
-        File temp = new File("src/resources/game.json");
-        if (temp.exists()) {
-            try {
-                temp.delete();
-                createData();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
+        if (!file.exists()) {
             try {
                 createData();
             } catch (IOException e) {
