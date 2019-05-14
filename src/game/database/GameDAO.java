@@ -211,6 +211,7 @@ public class GameDAO implements IGameDAO {
             game.setPlayers(listOfPlayers);
 
             //TODO: What about the cards in the game? Should they be saved and loaded as well?
+            //Maybe we can just subtract a getOutOfJail-card for each card, that a player owns.
 
             game.setCurrentPlayer(game.getPlayers().get(curplayerid));
 
