@@ -74,8 +74,10 @@ public class MoveEffect extends Card {
     private void setTargetToNearestShip(GameController controller, Player player) {
         Space space = null;
         int i = 1;
-        while (!(space instanceof Ship)) {
+        boolean isShip = false;
+        while (!isShip) {
             space = controller.getGame().getSpaces().get((player.getCurrentPosition().getIndex() + i) % 40);
+            if (space instanceof Ship) isShip = true;
             i++;
         }
         targetIndex = space.getIndex();
