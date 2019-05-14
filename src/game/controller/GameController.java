@@ -249,7 +249,7 @@ public class GameController {
     public void showTurnMenu(Player player) {
         boolean continueChoosing = true;
         while (continueChoosing) {
-            String choice = gui.getUserButtonPressed("Det er " + player.getName() + "'s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?" , "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil", "Afslut", "Kør");
+            String choice = gui.getUserButtonPressed("Det er " + player.getName() + "'s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?" , "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil", "Luk spil", "Kør");
             switch (choice) {
                 case "Byg huse":
                     buyHouseAction();
@@ -271,7 +271,7 @@ public class GameController {
                 case "Gem spil":
                     saveGame();
                     break;
-                case "Afslut":
+                case "Luk spil":
                     closeGame();
                     continueChoosing = false;
                     break;
