@@ -1,16 +1,13 @@
 package game.controller;
 
-import game.Test.GameStub;
 import game.database.GameDAO;
 import game.model.*;
-import game.model.cards.GetOutOfJail;
 import game.model.exceptions.GameEndedException;
 import game.model.exceptions.PlayerBrokeException;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import game.model.properties.Ship;
 import game.view.View;
-import gui_fields.GUI_Car;
 import gui_main.GUI;
 import json.JSONUtility;
 
@@ -21,8 +18,6 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 import java.util.List;
-
-import static gui_fields.GUI_Car.Type.*;
 
 /**
  * The overall controller of a Monopoly game. It provides access
@@ -55,19 +50,15 @@ public class GameController {
     JSONUtility ju = new JSONUtility();
 
     private Game game;
-    private GameStub gameStub;
     private GUI gui;
     private GameDAO gameDb;
     private int sumOfDies;
-
     private View view;
-
     boolean terminated;
     private boolean disposed = false;
 
     /**
      * Constructor for a controller of a game.
-     *
      */
     public GameController() {
         super();
@@ -75,12 +66,6 @@ public class GameController {
         gui = new GUI();
         initializeGUI();
         gameDb = new GameDAO();
-    }
-    // Til tests
-    public GameController(GameStub game) {
-        super();
-        this.gameStub = game;
-        gui = new GUI();
     }
 
     /**
@@ -122,7 +107,6 @@ public class GameController {
             if (space.getIndex() == 10) gui.getFields()[i].setSubText("Fængsel");
             if (space instanceof GoToJail) gui.getFields()[i].setSubText("Gå i fængsel");
             if (space instanceof Chance) gui.getFields()[i].setSubText("Prøv lykken");
-
             i++;
         }
     }
@@ -136,7 +120,7 @@ public class GameController {
             game.shuffleCardDeck();
             createPlayers();
             view = new View(game, gui);
-            view.createPlayers();
+            view.initializePlayers();
             play();
         } else if (userSelection.equals("Afslut")) {
             System.exit(0);
@@ -147,7 +131,7 @@ public class GameController {
                 //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
                 game.shuffleCardDeck();
                 view = new View(game, gui);
-                view.createPlayers();
+                view.initializePlayers();
                 play();
             }
         }
@@ -165,8 +149,7 @@ public class GameController {
             for (int i = 0; i < numOfPlayers; i++) {
                 Player player = game.getPlayers().get(i);
                 boolean validInput = false;
-                while(!validInput) {
-                    //Enter names of chosen number of players TODO input validation
+                while (!validInput) {
                     String name = gui.getUserString("Indtast navn på spiller " + (i + 1) + ":");
                     if (name.length() > 0) {
                         player.setName(name);
@@ -228,7 +211,6 @@ public class GameController {
                 } finally {
 
                 }
-                // We could react to the player having gone broke
             }
 
             current = (current + 1) % players.size();
@@ -238,7 +220,6 @@ public class GameController {
         view.dispose();
         view = null;
         game = ju.createGame();
-        //dispose();
     }
 
     /**
@@ -248,7 +229,7 @@ public class GameController {
     public void showTurnMenu(Player player) {
         boolean continueChoosing = true;
         while (continueChoosing) {
-            String choice = gui.getUserButtonPressed("Det er " + player.getName() + "'s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?" , "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil", "Luk spil", "Kør");
+            String choice = gui.getUserButtonPressed("Det er " + player.getName() + "'s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?", "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil", "Luk spil", "Kør");
             switch (choice) {
                 case "Byg huse":
                     buyHouseAction();
@@ -382,7 +363,7 @@ public class GameController {
 
             if (player.isInPrison() && castDouble) {
                 player.setInPrison(false);
-                gui.showMessage( player + " har kastet to ens, og bliver derfor løsladt fra fængslet!");
+                gui.showMessage(player + " har kastet to ens, og bliver derfor løsladt fra fængslet!");
             } else if (player.isInPrison() && player.getDoubleAttempts() < 3) {
                 player.setDoubleAttempts(player.getDoubleAttempts() + 1);
                 gui.showMessage(player + " forbliver i fængsel, da han/hun ikke slog to ens.");
@@ -390,8 +371,6 @@ public class GameController {
                 gui.showMessage(player + ", du slog desværre ikke to ens, og du skal derfor betale bøden på 1000 kr for at blive løsladt.");
                 payToGetOut(player);
             }
-            // TODO note that the player could also pay to get out of prison,
-            //      which is not yet implemented
             if (castDouble) {
                 doublesCount++;
                 if (doublesCount > 2) {
@@ -411,7 +390,7 @@ public class GameController {
                 playSound("engine.wav");
                 moveToSpace(player, space);
                 if (castDouble) {
-                    gui.showMessage( player + " har kastet to ens og får derfor en ekstra tur.");
+                    gui.showMessage(player + " har kastet to ens og får derfor en ekstra tur.");
                     showTurnMenu(player);
                     if (terminated) return;
                 }
@@ -494,8 +473,6 @@ public class GameController {
         //todo få metoden til at virke!
         Card card = game.drawCardFromDeck();
 
-        //System.out.println("Der er kommenteret en metode ud fordi den smed fejl");
-
         gui.displayChanceCard(card.getText());
         gui.showMessage(player + " trækker et chancekort...");
 
@@ -540,7 +517,6 @@ public class GameController {
                 gui.showMessage(player + ", du har desværre intet tilbage, du kan sælge, og må derfor erklæres konkurs.");
                 return false;
             }
-
             String choice;
             if (!beforePurchase) {
                 if (player.getBalance() < amount) {
@@ -557,13 +533,13 @@ public class GameController {
             }
 
             switch (choice) {
-                case "Sælg huse" :
+                case "Sælg huse":
                     sellHouseAction(player);
                     break;
-                case "Pantsæt grunde" :
+                case "Pantsæt grunde":
                     mortgageAction(player);
                     break;
-                case "Handle" :
+                case "Handle":
                     trade(player);
                     break;
                 case "Erklær dig konkurs":
@@ -584,11 +560,11 @@ public class GameController {
                         return false;
                     }
                     break;
-                case "Annuller købet" :
+                case "Annuller købet":
                     return false;
-                case "Betal" :
+                case "Betal":
                     return true;
-                case "Køb" :
+                case "Køb":
                     return true;
             }
         }
@@ -619,7 +595,8 @@ public class GameController {
         }
 
         choice = "";
-        if (proceedPurchase) choice = gui.getUserSelection(player + ", ønsker du at købe " + property + " for " + property.getCost() + "kr?", "Ja", "Nej");
+        if (proceedPurchase)
+            choice = gui.getUserSelection(player + ", ønsker du at købe " + property + " for " + property.getCost() + "kr?", "Ja", "Nej");
 
         if (choice.equals("Ja")) {
             try {
@@ -669,6 +646,7 @@ public class GameController {
         payer.payMoney(amount);
         receiver.receiveMoney(amount);
     }
+
     /**
      * This method implements the action of a player receiving money from
      * the bank.
@@ -798,6 +776,7 @@ public class GameController {
             e.printStackTrace();
         }
     }
+
     /**
      * Action handling the situation when one player is broke to another
      * player. All money and properties are transferred to the other player.
@@ -828,6 +807,7 @@ public class GameController {
         playSound("trombones.wav");
         gui.showMessage(brokePlayer + " er gået konkurs og overfører hele konkursboet til " + benificiary);
     }
+
     /**
      * Action handling the situation when a player is broke to the bank.
      *
@@ -837,8 +817,6 @@ public class GameController {
 
         player.setBalance(0);
         player.setBroke(true);
-
-        // TODO we also need to remove the houses and the mortgage from the properties
 
         for (Property property : player.getOwnedProperties()) {
             property.setOwner(null);
@@ -852,6 +830,7 @@ public class GameController {
             game.returnCardToDeck(player.getOwnedCards().get(0));
         }
     }
+
     /**
      * Method for disposing of this controller and cleaning up its resources.
      */
@@ -859,15 +838,13 @@ public class GameController {
         if (!disposed && view != null) {
             disposed = true;
             if (view != null) {
-
             }
-            // TODO we should also dispose of the GUI here. But this works only
-            //      for my private version of the GUI and not for the GUI currently
-            //      deployed via Maven (or other official versions);
         }
     }
+
     /**
      * Buys a house, if the player can afford it.
+     *
      * @param player
      * @param re
      * @Author Nicolai Wulff s185036
@@ -879,16 +856,16 @@ public class GameController {
                 lowestHouseCount = ((RealEstate) property).getHouseCount();
             }
         }
-        if(re.getHouseCount() == 5) {
+        if (re.getHouseCount() == 5) {
             gui.showMessage("Du kan ikke bygge mere på denne grund!");
-        } else if (re.getHouseCount() > lowestHouseCount){
+        } else if (re.getHouseCount() > lowestHouseCount) {
             gui.showMessage("Du skal bygge jævnt!");
-        } else if (player.getBalance() >= re.getPriceForHouse()){
+        } else if (player.getBalance() >= re.getPriceForHouse()) {
             try {
                 paymentToBank(player, re.getPriceForHouse());
                 re.setHouseCount(re.getHouseCount() + 1);
                 playSound("purchase.wav");
-            } catch (PlayerBrokeException e){
+            } catch (PlayerBrokeException e) {
                 e.printStackTrace();
             } catch (GameEndedException e) {
                 e.printStackTrace();
@@ -920,7 +897,9 @@ public class GameController {
         }
     }
 
-    /** Asks the player, if he/she wants to build houses, if the player owns any real estate.
+    /**
+     * Asks the player, if he/she wants to build houses, if the player owns any real estate.
+     *
      * @Author Nicolai Wulff s185036
      */
     private void buyHouseAction() {
@@ -1040,7 +1019,7 @@ public class GameController {
 
             //Keep adding properties to the trade, until the player chooses to stop.
             boolean continueAdding = true;
-            while(continueAdding) {
+            while (continueAdding) {
 
                 ArrayList<Property> propertyOptions = new ArrayList<>();
                 for (Property p : tradingPlayers[j].getOwnedProperties()) {
@@ -1133,6 +1112,7 @@ public class GameController {
 
     /**
      * Transfers a property from one player (giver) to another (receiver)
+     *
      * @param giver
      * @param property
      * @param receiver
@@ -1156,7 +1136,7 @@ public class GameController {
             giver.setOwnedCards(giverCards);
             receiver.setOwnedCards(receiverCards);
             gui.showMessage(giver + " overfører et benådelseskort til " + receiver + ".");
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Cannot transfer card, since giver owns no cards!");
         }
 
@@ -1262,7 +1242,7 @@ public class GameController {
      * @author Nicolai Wulff s185036
      */
     private void unmortgage(Player player, Property property) {
-        if (player.getBalance() >= property.getCost() / 2 ) {
+        if (player.getBalance() >= property.getCost() / 2) {
             try {
                 paymentToBank(player, property.getCost() / 2);
                 property.setMortgaged(false);
@@ -1274,15 +1254,15 @@ public class GameController {
         } else {
             gui.showMessage(player + ", du har ikke råd til at indfri din gæld i denne pantsættelse.");
         }
-
     }
 
     /**
      * Use to choose an active player from a dropdown menu in the gui.
      * May exclude a specific player from the list and may exclude players in prison.
-     * @param msg Message over dropdown menu.
+     *
+     * @param msg            Message over dropdown menu.
      * @param excludedPlayer Exlude a specific player.
-     * @param mayBeInPrison If true, include players in prison. If false, exclude players in prison.
+     * @param mayBeInPrison  If true, include players in prison. If false, exclude players in prison.
      * @return the chosen player.
      * @author Nicolai Wulff s185036
      */
@@ -1295,20 +1275,22 @@ public class GameController {
         return chooseFromOptions(playerList, msg, "Annuller", null, null, null);
     }
 
-    /** Method with generic return type used to show a dropdown menu in the gui
+    /**
+     * Method with generic return type used to show a dropdown menu in the gui
      * with a certain list of options. The last option in the list is used to
      * cancel and return to menu with no action. Each option may have strings
      * and values added to the end, eg: ", price: 100$/house".
-     * @param c A collection of options.
-     * @param msg Message to be shown over the dropdown menu.
+     *
+     * @param c          A collection of options.
+     * @param msg        Message to be shown over the dropdown menu.
      * @param stopOption The string to represent the option to cancel, eg: "Cancel".
-     * @param addToEnd1 String to be added to end of each option, before a certain value.
-     * @param values Values to be added to end of each option.
-     * @param addToEnd2 String or Arraylist with values to be added to end of each option, after a certain value.
-     *                  If it's a string, the same string will be added to each option.
-     *                  If it's an arraylist (of the same size as the collection, c) each element will be added
-     *                  to the end of the element of the collection with the same index.
-     * @param <T> Type of the objects listed.
+     * @param addToEnd1  String to be added to end of each option, before a certain value.
+     * @param values     Values to be added to end of each option.
+     * @param addToEnd2  String or Arraylist with values to be added to end of each option, after a certain value.
+     *                   If it's a string, the same string will be added to each option.
+     *                   If it's an arraylist (of the same size as the collection, c) each element will be added
+     *                   to the end of the element of the collection with the same index.
+     * @param <T>        Type of the objects listed.
      * @return The chosen option of type T.
      * @author Nicolai Wulff s185036
      */
@@ -1340,6 +1322,7 @@ public class GameController {
     /**
      * Used by Space objects to display a message in the gui,
      * instead of letting them access the gui.
+     *
      * @param message
      */
     public void showMessage(String message) {
@@ -1361,7 +1344,6 @@ public class GameController {
             e.printStackTrace();
         }
     }
-
     public Game getGame() {
         return game;
     }

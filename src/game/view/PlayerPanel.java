@@ -44,8 +44,6 @@ public class PlayerPanel extends JFrame implements MouseListener {
         this.getContentPane().add(mainPanel);
         update();
 
-        //todo Måske noget med en fængselsstatus
-        //todo få panelerne til at se bedre ud
     }
 
     public void update() {

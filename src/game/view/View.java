@@ -70,7 +70,7 @@ public class View implements Observer, Runnable {
                 updateProperty((Property) subject);
             }
             if (subject instanceof Game) {
-                createPlayers();
+                initializePlayers();
             }
         }
     }
@@ -128,7 +128,6 @@ public class View implements Observer, Runnable {
             int pos = player.getCurrentPosition().getIndex();
 
             if (oldPosition != null && oldPosition < guiFields.length) {
-
                 int moves = calcNumOfMoves(player);
                 for (int i = 1; i <= moves; i++) {
                     run();
@@ -148,7 +147,6 @@ public class View implements Observer, Runnable {
             player2PlayerPanel.get(player).update();
         }
     }
-
     /**
      * @param player
      * @return
@@ -165,7 +163,6 @@ public class View implements Observer, Runnable {
             moves = curPos - oldPos;
         } else {
             try {
-                //moves = (oldPos - curPos) % 4     0;
                 moves = (curPos - oldPos + 40) % 40;
             } catch (ArithmeticException e) {
                 moves = 0;
@@ -184,17 +181,13 @@ public class View implements Observer, Runnable {
             for (Space space : game.getSpaces()) {
                 space.detach(this);
             }
-            /*
-            for (GUI_Player guiPlayer : player2GuiPlayer.values()) {
-                gui.getFields()[0].setCar(guiPlayer, false);
-            }*/
         }
     }
 
     /**
      * Nicolai L
      */
-    public void createPlayers() {
+    public void initializePlayers() {
         for (Player player : game.getPlayers()) {
             if (player.getColorEnumType() != null) player.setColor(transformPlayerColor(player.getColorEnumType()));
             GUI_Car car = new GUI_Car(player.getColor(), Color.BLUE, transformCarType(player.getCarType()), GUI_Car.Pattern.FILL);
@@ -212,126 +205,8 @@ public class View implements Observer, Runnable {
             player2PlayerPanel.put(player, playerPanel);
             space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
             player.attach(this);
-            //updatePlayer(player);
-        }
-
-        /*
-        TokenColor tokenColor = new TokenColor();
-        for (Player player : game.getPlayers()) {
-            enterNamePlayer(player);
-            Color userColor = chooseCarColor(tokenColor, player);
-            player.setColor(userColor);
-            GUI_Car car = choosePlayerCar(player);
-            GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
-            player2GuiPlayer.put(player, guiPlayer);
-            gui.addPlayer(guiPlayer);
-            player2position.put(player, 0);
-            PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
-            player2PlayerPanel.put(player, playerPanel);
-            space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
-            player.attach(this);
-            updatePlayer(player);
-        }
-        */
-    }
-
-    /**
-     * @author Jeppe s170196, Nicolai s185020, Nicolai W s185036
-     */
-    /*
-    public void loadPlayers() {
-        for (Player player : game.getPlayers()) {
-            GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.valueOf(player.getToken()), Pattern.FILL);
-            GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
-            player2GuiPlayer.put(player, guiPlayer);
-            gui.addPlayer(guiPlayer);
-            player2position.put(player, player.getCurrentPosition().getIndex());
-            space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
-            PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
-            player2PlayerPanel.put(player, playerPanel);
-            player.attach(this);
-            updatePlayer(player);
-            for (Property p : player.getOwnedProperties()) {
-                updateProperty(p);
-            }
         }
     }
-/*
-    /**
-     * Nicolai L
-     *
-     * @param player
-     *//*
-    public void enterNamePlayer(Player player) {
-        while (true) {
-            String input = gui.getUserString("indtast navn");
-            if (input.length() > 0) {
-                player.setName(input);
-                break;
-            } else {
-/*todo ret dette
-                gui.showMessage("prøv igen");
-
-                break;
-            }
-        }
-    }
-
-    /**
-     * Nicolai L
-     *
-     * @param player
-     * @return
-     */
-    /*
-    public GUI_Car choosePlayerCar(Player player) {
-        String carChoice = gui.getUserSelection("Choose car", "Car", "Ufo", "Tractor", "Racecar");
-        GUI_Car car;
-        HashMap<String, GUI_Car.Type> enumMap = new HashMap();
-        enumMap.put("Ufo", UFO);
-        enumMap.put("Car", CAR);
-        enumMap.put("Tractor", TRACTOR);
-        enumMap.put("Racecar", RACECAR);
-        car = new GUI_Car(player.getColor(), Color.BLUE, enumMap.get(carChoice), GUI_Car.Pattern.FILL);
-        player.setToken(enumMap.get(carChoice).toString());
-        return car;
-    }
-*/
-    /*
-    /**
-     * Nicolai L
-     *
-     * @param tokenColorObj
-     * @param player
-     * @return
-     */
-
-    /*
-    public Color chooseCarColor(TokenColor tokenColorObj, Player player) {
-        String[] chooseColorStrings = tokenColorObj.setColorsToChooseFrom().split(" ");
-        String carColorS;
-
-        for (int i = 0; i < chooseColorStrings.length; i++) {
-        }
-        if (chooseColorStrings.length == 6) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3], chooseColorStrings[4], chooseColorStrings[5]);
-        } else if (chooseColorStrings.length == 5) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3], chooseColorStrings[4]);
-        } else if (chooseColorStrings.length == 4) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2], chooseColorStrings[3]);
-        } else if (chooseColorStrings.length == 3) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1], chooseColorStrings[2]);
-        } else if (chooseColorStrings.length == 2) {
-            carColorS = gui.getUserSelection("Choose color", chooseColorStrings[0], chooseColorStrings[1]);
-        } else {
-            gui.showMessage(player.getName() + "'s color is " + chooseColorStrings[0]);
-            carColorS = chooseColorStrings[0];
-        }
-        Color carColorChoice = tokenColorObj.colorChosen(carColorS);
-
-        return carColorChoice;
-    }
-    */
 
     @Override
     public void run() {
@@ -355,17 +230,23 @@ public class View implements Observer, Runnable {
                 return Color.RED;
             case YELLOW:
                 return Color.yellow.brighter();
-            default: return null;
+            default:
+                return null;
         }
     }
 
     private GUI_Car.Type transformCarType(Player.CarType carType) {
         switch (carType) {
-            case CAR: return GUI_Car.Type.CAR;
-            case RACECAR: return GUI_Car.Type.RACECAR;
-            case TRACTOR: return GUI_Car.Type.TRACTOR;
-            case UFO: return GUI_Car.Type.UFO;
-            default: return null;
+            case CAR:
+                return GUI_Car.Type.CAR;
+            case RACECAR:
+                return GUI_Car.Type.RACECAR;
+            case TRACTOR:
+                return GUI_Car.Type.TRACTOR;
+            case UFO:
+                return GUI_Car.Type.UFO;
+            default:
+                return null;
         }
     }
 }

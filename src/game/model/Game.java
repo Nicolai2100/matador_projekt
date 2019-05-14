@@ -1,8 +1,6 @@
 package game.model;
 
 import designpattern.Subject;
-import game.model.properties.RealEstate;
-import game.model.properties.Utility;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,7 +84,6 @@ public class Game extends Subject {
      * @return the topmost card of the deck
      */
     public Card drawCardFromDeck() {
-        // TODO should be more defensive
         Card card = cardDeck.remove(0);
         notifyChange();
         return card;
@@ -113,7 +110,6 @@ public class Game extends Subject {
         this.cardDeck = new ArrayList<Card>(cardDeck);
         notifyChange();
     }
-
 
     /**
      * Shuffles the cards in the deck.
@@ -187,22 +183,23 @@ public class Game extends Subject {
 
     /**
      * Returns a list of all players currently active in the game.
+     *
      * @param prisonIgnored if true, it returns only players that are not broke.
      *                      If false, it returns players that are not broke or in prison.
      * @return
      * @Author Nicolai Wulff, s185036
      */
-	public List<Player> getActivePlayers(Boolean prisonIgnored) {
-		List<Player> activePlayers = new ArrayList<>();
-		for (Player player : players) {
-			if (!prisonIgnored) {
-				if (!player.isBroke() || !player.isInPrison()) activePlayers.add(player);
-			} else {
-				if (!player.isBroke()) activePlayers.add(player);
-			}
-		}
-		return Collections.unmodifiableList(players);
-	}
+    public List<Player> getActivePlayers(Boolean prisonIgnored) {
+        List<Player> activePlayers = new ArrayList<>();
+        for (Player player : players) {
+            if (!prisonIgnored) {
+                if (!player.isBroke() || !player.isInPrison()) activePlayers.add(player);
+            } else {
+                if (!player.isBroke()) activePlayers.add(player);
+            }
+        }
+        return Collections.unmodifiableList(players);
+    }
 
     /**
      * This method will be called before the game is started to create
@@ -211,7 +208,7 @@ public class Game extends Subject {
     public void createPlayers(int numOfPlayers) {
         for (int i = 0; i < numOfPlayers; i++) {
             Player player = new Player();
-            int numOfPlayer = i+1;
+            int numOfPlayer = i + 1;
             player.setName("player " + numOfPlayer);
             player.setCurrentPosition(getSpaces().get(0));
             addPlayer(player);

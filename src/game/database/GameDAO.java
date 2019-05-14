@@ -48,7 +48,6 @@ public class GameDAO implements IGameDAO {
         String password = "iEFSqK2BFP60YWMPlw77I";
         return DriverManager.getConnection(url, user, password);
     }
-
     /**
      * Metoden bruges til at gemme et spil i databasen
      *
@@ -59,7 +58,6 @@ public class GameDAO implements IGameDAO {
         long performance = System.currentTimeMillis();
         try {
             c.setAutoCommit(false);
-
             PreparedStatement insertGame = c.prepareStatement(
                     "INSERT INTO game (curplayerid, date) " +
                             "VALUES(?,?);", Statement.RETURN_GENERATED_KEYS);
@@ -70,13 +68,10 @@ public class GameDAO implements IGameDAO {
             PreparedStatement insertProperties = c.prepareStatement(
                     "INSERT INTO property " +
                             "VALUES(?,?,?,?,?,?);");
-
             int curPlayer = game.getPlayers().indexOf(game.getCurrentPlayer());
             insertGame.setInt(1, curPlayer);
-
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
-
             insertGame.setString(2, dtf.format(now));
 
             insertGame.executeUpdate();
@@ -120,24 +115,17 @@ public class GameDAO implements IGameDAO {
                         }
 
                         int playerId = game.getPlayers().indexOf(player);
-
                         insertProperties.setInt(4, playerId);
                         insertProperties.setInt(5, gameid);
                         insertProperties.executeUpdate();
                         insertProperties.clearParameters();
-
                     }
-
                 }
-
             }
-
             c.commit();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         System.out.println("Tid det tog at gemme spillet i databasen: " + (System.currentTimeMillis() - performance) + "ms");
     }
 
@@ -205,14 +193,9 @@ public class GameDAO implements IGameDAO {
                 p.setBroke(playerRS.getBoolean("isbroke"));
                 p.setColor(new Color(playerRS.getInt("color")));
                 p.setCarType(Player.CarType.getCarTypeFromString(playerRS.getString("token")));
-                //TODO: Set Cards for player as well!
                 listOfPlayers.add(playerRS.getInt("playerid"), p);
             }
             game.setPlayers(listOfPlayers);
-
-            //TODO: What about the cards in the game? Should they be saved and loaded as well?
-            //Maybe we can just subtract a getOutOfJail-card for each card, that a player owns.
-
             game.setCurrentPlayer(game.getPlayers().get(curplayerid));
 
             listOfSpaces.addAll(game.getSpaces());
@@ -322,7 +305,7 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     * Metoden er kun til brug i test - for hurtigt at kunne slette og oprette tabellerne ved fejl.
+     * Metoden er kun brugt ifm udarbejdning af databasen - for hurtigt at kunne slette og oprette tabellerne ved fejl.
      *
      * @author Nicolai s185020
      */

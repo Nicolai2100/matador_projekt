@@ -10,9 +10,6 @@ import game.model.Property;
  *
  */
 public class Utility extends Property {
-	
-	// TODO to be implemented
-    //Husk færgen har 3 super owned til stande!
 
     public Utility(){
     }
@@ -22,11 +19,4 @@ public class Utility extends Property {
         this.setRent(this.getRent());
         notifyChange();
     }
-
-    //TODO: Skal denne metode ikke fjernes? Der kan jo ikke bygges huse på utilities.
-    public void setHouseCount(int houseCount) {
-        computeRent();
-        notifyChange();
-    }
-
 }

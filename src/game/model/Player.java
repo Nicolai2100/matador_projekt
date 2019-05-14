@@ -248,7 +248,6 @@ public class Player extends Subject {
         for (Ship ship : ships) ship.setCurrentRentLevel(ships.size() - 1);
         for (Brewery brewery : breweries) brewery.setCurrentRentLevel(breweries.size() - 1);
     }
-
     /**
      * Nicolai L - when a player loses/sells a property, his other
      * properties from the same colorgroup should no longer be
@@ -300,7 +299,6 @@ public class Player extends Subject {
         }
         return false;
     }
-
     /**
      * Returns whether the player is broke.
      *
@@ -309,7 +307,6 @@ public class Player extends Subject {
     public boolean isBroke() {
         return broke;
     }
-
     /**
      * Sets the new broke status of the player.
      *
@@ -322,7 +319,6 @@ public class Player extends Subject {
             notifyChange();
         }
     }
-
     /**
      * Returns whether the player is currently in prison.
      *
@@ -344,14 +340,6 @@ public class Player extends Subject {
             notifyChange();
         }
     }
-/*
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }*/
 
     @Override
     public String toString() {

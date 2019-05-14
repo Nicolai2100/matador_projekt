@@ -17,5 +17,4 @@ public class Chance extends Space {
 		controller.playSound("chance.wav");
 		controller.takeChanceCard(player);
 	}
-
 }
