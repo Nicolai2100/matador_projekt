@@ -205,9 +205,12 @@ public class GameDAO implements IGameDAO {
                 p.setBroke(playerRS.getBoolean("isbroke"));
                 p.setColor(new Color(playerRS.getInt("color")));
                 p.setCarType(Player.CarType.getCarTypeFromString(playerRS.getString("token")));
+                //TODO: Set Cards for player as well!
                 listOfPlayers.add(playerRS.getInt("playerid"), p);
             }
             game.setPlayers(listOfPlayers);
+
+            //TODO: What about the cards in the game? Should they be saved and loaded as well?
 
             game.setCurrentPlayer(game.getPlayers().get(curplayerid));
 
