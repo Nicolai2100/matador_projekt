@@ -36,7 +36,7 @@ public class MoveEffect extends Card {
 
     @Override
     public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
-        Space target = controller.getGame().getSpaces().get(targetIndex);
+        target = controller.getGame().getSpaces().get(targetIndex);
         try {
             switch (targetType) {
                 case NEAREST_SHIP_1:
