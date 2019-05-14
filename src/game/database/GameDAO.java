@@ -23,41 +23,32 @@ import java.util.List;
  * @author Jeppe s170196, Nicolai s185036, Nicolai L s185020
  */
 public class GameDAO implements IGameDAO {
-
+    private static final String url = "jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020";
+    private static final String user = "s185020";
+    private static final String password = "iEFSqK2BFP60YWMPlw77I";
     private static Connection connection;
 
     public GameDAO() {
-        try {
-            connection = createConnection();
-            initializeDataBase();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        initializeDataBase();
     }
+
     /**
      * Metoden opretter en forbindelse til databasen, som gemmes som i en lokal variabel.
-     * Den er gjort public for at kunne bruges i test.
      *
      * @return
      * @throws SQLException
      */
-    public static Connection createConnection() throws SQLException {
-        String url = "jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020";
-        String user = "s185020";
-        String password = "iEFSqK2BFP60YWMPlw77I";
-        return DriverManager.getConnection(url, user, password);
-    }
-
-    public static Connection getConnection(){
+    private static Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
-                connection = createConnection();
+                connection = DriverManager.getConnection(url, user, password);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return connection;
     }
+
     /**
      * Metoden bruges til at gemme et spil i databasen
      *
