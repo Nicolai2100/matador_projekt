@@ -789,6 +789,7 @@
     {
       "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
+        "targetIndex": 0,
         "targetType": "NEAREST_SHIP_1",
         "text": "Ryk brikken frem til det nærmeste rederi og betal ejeren to gange den leje, han ellers er berettiget til. Hvis selskabet ikke ejes af nogen, kan De købe det af banken."
       }
@@ -796,6 +797,7 @@
     {
       "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
+        "targetIndex": 0,
         "targetType": "NEAREST_SHIP_2",
         "text": "Tag med den nærmeste færge. Flyt brikken frem, og hvis De passerer \"START\", indkassér da kr. 4000."
       }
@@ -803,6 +805,7 @@
     {
       "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
+        "targetIndex": 0,
         "targetType": "GO_TO_JAIL",
         "text": "Gå i fængsel. Ryk direkte til fængslet. Selv om De passerer \"START\", indkasserer De ikke kr. 4000."
       }
@@ -810,29 +813,7 @@
     {
       "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
-        "target": {
-          "CLASSNAME": "game.model.properties.RealEstate",
-          "INSTANCE": {
-            "houseCount": 0,
-            "priceForHouse": 4000,
-            "cost": 6000,
-            "rent": 0,
-            "rentLevels": [
-              550,
-              2600,
-              7800,
-              18000,
-              22000,
-              25000
-            ],
-            "superOwned": false,
-            "mortgaged": false,
-            "colorGroup": "yellow",
-            "name": "Vimmelskaftet",
-            "index": 32,
-            "observers": []
-          }
-        },
+        "targetIndex": 32,
         "targetType": "SPACE",
         "text": "Ryk frem til Vimmelskaftet. Hvis De passerer \"START\", indkassér da kr. 4000."
       }
@@ -840,29 +821,7 @@
     {
       "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
-        "target": {
-          "CLASSNAME": "game.model.properties.RealEstate",
-          "INSTANCE": {
-            "houseCount": 0,
-            "priceForHouse": 2000,
-            "cost": 4000,
-            "rent": 0,
-            "rentLevels": [
-              350,
-              1600,
-              4400,
-              12000,
-              16000,
-              20000
-            ],
-            "superOwned": false,
-            "mortgaged": false,
-            "colorGroup": "darkgrey",
-            "name": "Strandvej",
-            "index": 19,
-            "observers": []
-          }
-        },
+        "targetIndex": 19,
         "targetType": "SPACE",
         "text": "Ryk frem til Strandvej. Hvis De passerer \"START\", indkassér da kr. 4000."
       }
@@ -870,29 +829,7 @@
     {
       "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
-        "target": {
-          "CLASSNAME": "game.model.properties.RealEstate",
-          "INSTANCE": {
-            "houseCount": 0,
-            "priceForHouse": 3000,
-            "cost": 4800,
-            "rent": 0,
-            "rentLevels": [
-              400,
-              2000,
-              6000,
-              15000,
-              18500,
-              22000
-            ],
-            "superOwned": false,
-            "mortgaged": false,
-            "colorGroup": "red",
-            "name": "Grønningen",
-            "index": 24,
-            "observers": []
-          }
-        },
+        "targetIndex": 24,
         "targetType": "SPACE",
         "text": "Ryk frem til Grønningen. Hvis De passerer \"START\", indkassér da kr. 4000."
       }
@@ -900,25 +837,7 @@
     {
       "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
-        "target": {
-          "CLASSNAME": "game.model.properties.Ship",
-          "INSTANCE": {
-            "cost": 4000,
-            "rent": 0,
-            "rentLevels": [
-              500,
-              1000,
-              2000,
-              4000
-            ],
-            "superOwned": false,
-            "mortgaged": false,
-            "colorGroup": "navy",
-            "name": "D.F.D.S",
-            "index": 15,
-            "observers": []
-          }
-        },
+        "targetIndex": 15,
         "targetType": "SPACE",
         "text": "Tag med D.F.D.S. Flyt brikken frem, og hvis De passerer \"START\", indkassér da kr. 4000."
       }
@@ -926,14 +845,7 @@
     {
       "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
-        "target": {
-          "CLASSNAME": "game.model.NeutralSpace",
-          "INSTANCE": {
-            "name": "Start",
-            "index": 0,
-            "observers": []
-          }
-        },
+        "targetIndex": 0,
         "targetType": "SPACE",
         "text": "Ryk frem til \"START\"."
       }
@@ -941,6 +853,7 @@
     {
       "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
+        "targetIndex": 0,
         "targetType": "THREE_FORWARDS",
         "text": "Ryk tre felter frem."
       }
@@ -948,6 +861,7 @@
     {
       "CLASSNAME": "game.model.cards.MoveEffect",
       "INSTANCE": {
+        "targetIndex": 0,
         "targetType": "THREE_BACKWARDS",
         "text": "Ryk tre felter tilbage."
       }
