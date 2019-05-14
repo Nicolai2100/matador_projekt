@@ -7,7 +7,6 @@ import game.model.Space;
 import game.model.exceptions.GameEndedException;
 import game.model.exceptions.PlayerBrokeException;
 import game.model.properties.Ship;
-import java.util.List;
 
 /**
  * A card that directs the player to a move to a specific space (location) of the game.
@@ -23,15 +22,6 @@ public class MoveEffect extends Card {
 
     public MoveEffect(TargetTypes targetType) {
         this.targetType = targetType;
-    }
-
-    /**
-     * Returns the target space to which this card directs the player to go.
-     *
-     * @return the target of the move
-     */
-    public int getTarget() {
-        return targetIndex;
     }
 
     /**
@@ -74,7 +64,6 @@ public class MoveEffect extends Card {
                     break;
                 default:
                     controller.moveToSpace(player, target);
-                    //controller.moveToSpace(player, controller.getGame().getSpaces().get(target));
                     break;
             }
         } finally {
