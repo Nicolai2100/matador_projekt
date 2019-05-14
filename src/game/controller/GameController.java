@@ -347,15 +347,17 @@ public class GameController {
     }
 
     /**
-     * Terminates the game, so that the user will return to the "main menu"
-     * (where you can start a game, load a game or exit).
-     * Disposes all open JFrames (the GUI and all player panels), and then opens a new GUI.
+     * Terminates the game, so that the user will return to the "main menu".
      */
 
     private void terminateGame() {
         terminated = true;
     }
 
+    /**
+     * Disposes the view and closes all open JFrames (the GUI and player panels).
+     * Lastly instantiates a new gui and initializes it.
+     */
     private void resetViewAndGUI() {
         view.dispose();
         view = null;
