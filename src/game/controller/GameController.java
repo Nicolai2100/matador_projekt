@@ -54,7 +54,6 @@ public class GameController {
 
     JSONUtility ju = new JSONUtility();
 
-    private Game gameBase;
     private Game game;
     private GameStub gameStub;
     private GUI gui;
