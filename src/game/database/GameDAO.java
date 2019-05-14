@@ -99,7 +99,7 @@ public class GameDAO implements IGameDAO {
                 insertPLayers.setBoolean(6, player.isBroke());
                 insertPLayers.setInt(7, gameid);
                 insertPLayers.setInt(8, player.getColor().getRGB());
-                insertPLayers.setString(9, player.getToken());
+                insertPLayers.setString(9, player.getCarType().toString());
                 insertPLayers.executeUpdate();
                 insertPLayers.clearParameters();
 
@@ -204,10 +204,14 @@ public class GameDAO implements IGameDAO {
                 p.setInPrison(playerRS.getBoolean("injail"));
                 p.setBroke(playerRS.getBoolean("isbroke"));
                 p.setColor(new Color(playerRS.getInt("color")));
-                p.setToken(playerRS.getString("token"));
+                p.setCarType(Player.CarType.getCarTypeFromString(playerRS.getString("token")));
+                //TODO: Set Cards for player as well!
                 listOfPlayers.add(playerRS.getInt("playerid"), p);
             }
             game.setPlayers(listOfPlayers);
+
+            //TODO: What about the cards in the game? Should they be saved and loaded as well?
+            //Maybe we can just subtract a getOutOfJail-card for each card, that a player owns.
 
             game.setCurrentPlayer(game.getPlayers().get(curplayerid));
 

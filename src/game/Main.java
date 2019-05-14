@@ -16,8 +16,8 @@ public class Main {
      * main metoden ændret af Nicolai L
      */
     public static void main(String[] args) {
-        JSONUtility ju = new JSONUtility();
-        Game game = ju.createGame();
+        //JSONUtility ju = new JSONUtility();
+        //Game game = ju.createGame();
 
         /*
         //midlertidigt bare så det virker
@@ -29,7 +29,7 @@ public class Main {
         game.setCardDeck(temp);
         //*/
 
-        GameController controller = new GameController(game);
+        GameController controller = new GameController();
         controller.playOrLoadGame();
     }
 }
