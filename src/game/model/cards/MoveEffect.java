@@ -11,41 +11,42 @@ import java.util.List;
 
 /**
  * A card that directs the player to a move to a specific space (location) of the game.
- * 
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
- * 
+ *
  */
 public class MoveEffect extends Card {
-	
-	private Space target;
-	public enum TargetTypes {SPACE, NEAREST_SHIP_1, NEAREST_SHIP_2, GO_TO_JAIL, THREE_FORWARDS, THREE_BACKWARDS}
-	private TargetTypes targetType;
 
-	public MoveEffect(TargetTypes targetType) {
-	    this.targetType = targetType;
+    private int targetIndex;
+    public enum TargetTypes {SPACE, NEAREST_SHIP_1, NEAREST_SHIP_2, GO_TO_JAIL, THREE_FORWARDS, THREE_BACKWARDS}
+    private TargetTypes targetType;
+
+    public MoveEffect(TargetTypes targetType) {
+        this.targetType = targetType;
     }
 
-	/** 
-	 * Returns the target space to which this card directs the player to go.
-	 * 
-	 * @return the target of the move
-	 */
-	public Space getTarget() {
-		return target;
-	}
+    /**
+     * Returns the target space to which this card directs the player to go.
+     *
+     * @return the target of the move
+     */
+    public int getTarget() {
+        return targetIndex;
+    }
 
-	/**
-	 * Sets the target space of this card.
-	 * 
-	 * @param target the new target of the move 
-	 */
-	public void setTarget(Space target) {
-		this.target = target;
-	}
-	
-	@Override
-	public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
-		try {
+    /**
+     * Sets the target space of this card.
+     *
+     * @param targetIndex the new target of the move
+     */
+    public void setTarget(int targetIndex) {
+        this.targetIndex = targetIndex;
+    }
+
+    @Override
+    public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
+        Space target = controller.getGame().getSpaces().get(targetIndex);
+        try {
             switch (targetType) {
                 case NEAREST_SHIP_1:
                     setTargetToNearestShip(controller, player);
@@ -65,29 +66,29 @@ public class MoveEffect extends Card {
                     controller.moveToSpace(player, controller.getGame().getSpaces().get((player.getCurrentPosition().getIndex() + 3) % 40));
                     break;
                 case THREE_BACKWARDS:
-                    //TODO: Ændre eventuelt i View, så spilleren rent faktisk rykker bagud, og ikke hele pladen rundt,
+                    //TODO: Ændre eventuel i View, så spilleren rent faktisk rykker bagud, og ikke hele pladen rundt,
                     // til han ender tre felter bag, hvor han først var.
-                    player.setCurrentPosition(controller.getGame().getSpaces().get((player.getCurrentPosition().getIndex() - 3 + 40) % 40));
+                    Space space = controller.getGame().getSpaces().get((player.getCurrentPosition().getIndex() - 3 + 40) % 40);
+                    player.setCurrentPosition(space);
+                    space.doAction(controller, player);
                     break;
                 default:
                     controller.moveToSpace(player, target);
+                    //controller.moveToSpace(player, controller.getGame().getSpaces().get(target));
                     break;
             }
         } finally {
-		    super.doAction(controller, player);
+            super.doAction(controller, player);
         }
-	}
+    }
 
-	private void setTargetToNearestShip(GameController controller, Player player) {
+    private void setTargetToNearestShip(GameController controller, Player player) {
         Space space = null;
         int i = 1;
         while (!(space instanceof Ship)) {
             space = controller.getGame().getSpaces().get((player.getCurrentPosition().getIndex() + i) % 40);
             i++;
         }
-        target = space;
+        targetIndex = space.getIndex();
     }
-	
-
-	
 }
