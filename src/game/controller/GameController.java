@@ -216,7 +216,7 @@ public class GameController {
                     if (!terminated) this.makeMove(player);
                 } catch (PlayerBrokeException e) {
                 } catch (GameEndedException w) {
-                    gui.showMessage(w.getMessage());
+                    //gui.showMessage(w.getMessage());
                     if (winner())
                         terminated = true;
                 } finally {
@@ -230,9 +230,7 @@ public class GameController {
 
         //When the game is terminated (either by ending og exiting), the view is disposed,
         //and then a new game is instantiated, ready to be started either as a new game or a loaded game.
-        view.dispose();
-        view = null;
-        game = ju.createGame();
+        resetViewAndGUI();
     }
 
     /**
@@ -273,7 +271,7 @@ public class GameController {
                     saveGame();
                     break;
                 case "Luk spil":
-                    closeGame();
+                    terminateGame();
                     continueChoosing = false;
                     break;
                 default:
@@ -353,8 +351,14 @@ public class GameController {
      * (where you can start a game, load a game or exit).
      * Disposes all open JFrames (the GUI and all player panels), and then opens a new GUI.
      */
-    private void closeGame() {
+
+    private void terminateGame() {
         terminated = true;
+    }
+
+    private void resetViewAndGUI() {
+        view.dispose();
+        view = null;
         Frame[] frames = Frame.getFrames();
         for (Frame frame : frames) {
             frame.dispose();
