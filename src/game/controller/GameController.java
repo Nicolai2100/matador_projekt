@@ -112,6 +112,9 @@ public class GameController {
     }
 
     /**
+     * This method calls the GUI to show the first dialogue with the user.
+     * Shows a menu, where the user can choose to either start a new game, load a game, or exit the application.
+     * The method recurses infinitly, so that the menu is automatically shown when a game is ended og exited.
      * @author Nicolai L, Nicolai W
      */
     public void playOrLoadGame() {
@@ -138,6 +141,11 @@ public class GameController {
         playOrLoadGame();
     }
 
+    /**
+     * Asks the user how many players, they are.
+     * Then asks each player for their name, their chosen color and chosen type of vehicle.
+     * Sets the data for each player object according to their choices.
+     */
     private void createPlayers() {
         //Ask for number of players with -chooseFromOptions- 3 to 6 players
         ArrayList<Integer> options = new ArrayList<>(Arrays.asList(3, 4, 5, 6));
@@ -217,12 +225,18 @@ public class GameController {
             game.setCurrentPlayer(players.get(current));
         }
 
+        //When the game is terminated (either by ending og exiting), the view is disposed,
+        //and then a new game is instantiated, ready to be started either as a new game or a loaded game.
         view.dispose();
         view = null;
         game = ju.createGame();
     }
 
     /**
+     * Shows a menu with different buttons for each function of the game, which is:
+     * Build houses/hotels, trade, sell houses, mortgage/unmortage, save game,
+     * close game, and "drive" (as in throw the dice and move the token).
+     * Each player (in real life) may use these options whenever they wish.
      * @param player
      * @author Nicolai Wulff, s185036
      */
@@ -262,6 +276,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Saves the game in the database.
+     */
     public void saveGame() {
         if (game.getGameId() < 0) {
             gameDb.saveGame(game);
@@ -272,6 +289,10 @@ public class GameController {
         gui.showMessage("Spillet blev gemt!");
     }
 
+    /**
+     * Calculates how many players are broke.
+     * @return returns true if one or less players are broke, which means the game will end.
+     */
     public boolean gameEnds() {
         boolean returnBool = false;
 
@@ -288,6 +309,11 @@ public class GameController {
         return returnBool;
     }
 
+    /**
+     * Checks whether we have a winner.
+     * Shows a message according to the situation.
+     * @return return true if a winner is found.
+     */
     public boolean winner() {
         // Check whether we have a winner
         boolean returnBool = false;
@@ -315,6 +341,11 @@ public class GameController {
         return returnBool;
     }
 
+    /**
+     * Terminates the game, so that the user will return to the "main menu"
+     * (where you can start a game, load a game or exit).
+     * Disposes all open JFrames (the GUI and all player panels), and then opens a new GUI.
+     */
     private void closeGame() {
         terminated = true;
         Frame[] frames = Frame.getFrames();
@@ -326,7 +357,7 @@ public class GameController {
     }
 
     /**
-     * This method implements a activity of asingle move of the given player.
+     * This method implements a activity of a single move of the given player.
      * It throws a {@link PlayerBrokeException}
      * if the player goes broke in this move. Note that this is still a very
      * basic implementation of the move of a player; many aspects are still
@@ -398,8 +429,13 @@ public class GameController {
         } while (castDouble);
     }
 
+    /**
+     * Used when a player wants to pay to get out of jail.
+     * @param player
+     */
     private void payToGetOut(Player player) {
         try {
+            //TODO: The 1000 should probably not be hardcoded.
             paymentToBank(player, 1000);
         } catch (PlayerBrokeException e) {
             return;
@@ -410,6 +446,10 @@ public class GameController {
         gui.showMessage(player + "blev løsladt fra fængsel og må nu rykke frem!");
     }
 
+    /**
+     * Used when a player uses an owned getOutOfJail-card to get out of jail.
+     * @param player
+     */
     private void useCardToGetOut(Player player) {
         try {
             ArrayList<Card> ownedCards = new ArrayList<>(player.getOwnedCards());
@@ -470,7 +510,6 @@ public class GameController {
      */
     public void takeChanceCard(Player player) throws PlayerBrokeException, GameEndedException {
 
-        //todo få metoden til at virke!
         Card card = game.drawCardFromDeck();
 
         gui.displayChanceCard(card.getText());
@@ -505,6 +544,10 @@ public class GameController {
      *
      * @param player the player
      * @param amount the amount the player should have available after the act
+     * @param beforePurchase when set to true, this method handles the situation, where a player
+     *                       wants to try to obtain cash before purchasing a property.
+     *                       When false, handles the situation where a player is about to
+     *                       go broke.
      * @author Nicolai Wulff s185036
      */
     public boolean obtainCash(Player player, int amount, boolean beforePurchase) {
@@ -517,6 +560,8 @@ public class GameController {
                 gui.showMessage(player + ", du har desværre intet tilbage, du kan sælge, og må derfor erklæres konkurs.");
                 return false;
             }
+
+            //Shows a menu and message that correspond to the situation of the player.
             String choice;
             if (!beforePurchase) {
                 if (player.getBalance() < amount) {
@@ -686,7 +731,7 @@ public class GameController {
      * This method implements the activity of auctioning a property.
      *
      * @param property the property which is for auction
-     * @author Jeppe s170196, Mads s170185
+     * @author Jeppe s170196, Mads s170185, Nicolai W s185036
      */
     public void auction(Property property) throws GameEndedException {
         List<Player> bidders = new ArrayList<>();
@@ -940,6 +985,8 @@ public class GameController {
     }
 
     /**
+     * Asks the user which player wants to sell houses and which property he/she wants to sell houses from.
+     * @param player if not null, the player is then already chosen, and the user will not be prompted to choose player.
      * @author Nicolai Wulff s185036
      */
     private void sellHouseAction(Player player) {
@@ -981,6 +1028,10 @@ public class GameController {
     }
 
     /**
+     * This method implements the activity of trading between two players.
+     * This method assumes that the players negotiate the deal in real life. Thereafter, they
+     * may enter what the deal is (how many money, properties and cards will be traded).
+     * @param firstParty if not null, the first party of the trade will already be chosen, when the method is called.
      * @author Nicolai Wulff, s185036
      */
     private void trade(Player firstParty) {
@@ -1116,7 +1167,7 @@ public class GameController {
      * @param giver
      * @param property
      * @param receiver
-     * @author Nicolai Wulff s185036
+     * @author Nicolai W s185036
      */
     private void transferProperty(Player giver, Property property, Player receiver) {
         property.setOwner(null);
@@ -1125,6 +1176,12 @@ public class GameController {
         receiver.addOwnedProperty(property);
     }
 
+    /**
+     * Transfers a card from one player (giver) to another (receiver).
+     * @param giver
+     * @param receiver
+     * @author Nicolai W s185036
+     */
     private void transferCard(Player giver, Player receiver) {
         ArrayList<Card> giverCards = new ArrayList<>(giver.getOwnedCards());
         ArrayList<Card> receiverCards = new ArrayList<>(receiver.getOwnedCards());
@@ -1142,6 +1199,13 @@ public class GameController {
 
     }
 
+    /**
+     * Shows a menu where the user may choose to mortage properties,
+     * if he/she owns any properties, that are not mortgaged.
+     * Assures that the player has sold all houses/hotels from real estate, before mortgaging.
+     * @param player
+     * @author Nicolai W s185036
+     */
     private void mortgageAction(Player player) {
         if (player == null) player = choosePlayer("Hvilken spiller ønsker at pantsætte?", null, false);
         if (player == null) return;
@@ -1193,9 +1257,10 @@ public class GameController {
     }
 
     /**
+     * Implements the activity where a player mortages a property.
      * @param player
      * @param property
-     * @author Nicolai Wulff s185036
+     * @author Nicolai w s185036
      */
     private void mortgage(Player player, Property property) {
         property.setMortgaged(true);
@@ -1203,7 +1268,9 @@ public class GameController {
     }
 
     /**
-     * Nicolai Wulff s185036
+     * Shows a menu where a player may choose to "unmortgage" (buy back) a property from the bank,
+     * if he/she has any mortgaged properties.
+     * Nicolai w s185036
      */
     private void unmortgageAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", null, false);
@@ -1237,9 +1304,10 @@ public class GameController {
     }
 
     /**
+     * Implements the activity where a player buys a mortgaged property back from the bank.
      * @param player
      * @param property
-     * @author Nicolai Wulff s185036
+     * @author Nicolai w s185036
      */
     private void unmortgage(Player player, Property property) {
         if (player.getBalance() >= property.getCost() / 2) {
@@ -1264,7 +1332,7 @@ public class GameController {
      * @param excludedPlayer Exlude a specific player.
      * @param mayBeInPrison  If true, include players in prison. If false, exclude players in prison.
      * @return the chosen player.
-     * @author Nicolai Wulff s185036
+     * @author Nicolai W s185036
      */
     private Player choosePlayer(String msg, Player excludedPlayer, boolean mayBeInPrison) {
         //Make list of active players, that either may be or may not be in prison (depending on mayBeInPrison).
@@ -1329,10 +1397,19 @@ public class GameController {
         gui.showMessage(message);
     }
 
+    /**
+     * Used by breweries to get the current sum of the dies, used to
+     * calculate the rent, when a player lands on the brewery.
+     * @return
+     */
     public int getSumOfDies() {
         return sumOfDies;
     }
 
+    /**
+     * This method is used to play a sound, which is located in the resources/sounds directory.
+     * @param fileName filename of the sound.
+     */
     public void playSound(String fileName) {
         try {
             File f = new File("src/resources/sounds/" + fileName);
@@ -1344,6 +1421,11 @@ public class GameController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Used by properties and cards to get acces to the game object.
+     * @return
+     */
     public Game getGame() {
         return game;
     }
