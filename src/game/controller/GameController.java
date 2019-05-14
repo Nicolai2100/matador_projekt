@@ -157,14 +157,17 @@ public class GameController {
             for (int i = 0; i < numOfPlayers; i++) {
                 Player player = game.getPlayers().get(i);
                 boolean validInput = false;
-                while (!validInput) {
+                while(!validInput) {
+                    //Enter names of current of player in for loop TODO input validation
                     String name = gui.getUserString("Indtast navn på spiller " + (i + 1) + ":");
                     if (name.length() > 0) {
                         player.setName(name);
                         validInput = true;
                     }
                 }
-                //Choose colour of player -
+                //Choose colour of player in for loop
+                //Creates new array of colour options, without the chosen colours
+                //Then allows player to choose from new array.
                 ArrayList<String> colorOptions = new ArrayList<>();
                 for (Player.PlayerColor color : Player.PlayerColor.values()) {
                     if (!colorsChosen.contains(color)) {
@@ -175,7 +178,7 @@ public class GameController {
                 Player.PlayerColor chosenColor = Player.PlayerColor.getColorFromString(playerColor);
                 colorsChosen.add(chosenColor);
                 player.setColorEnumType(chosenColor);
-
+                //Here the player choose car type.
                 String[] carTypes = new String[Player.CarType.values().length];
                 for (int j = 0; j < carTypes.length; j++) {
                     carTypes[j] = Player.CarType.values()[j].toString();
@@ -233,11 +236,15 @@ public class GameController {
     }
 
     /**
+     * Show the basic turn menu to player.
+     *
+     * Menu consists of: bygge, sælge, handle and pantsætte, save game and close game.
      * Shows a menu with different buttons for each function of the game, which is:
      * Build houses/hotels, trade, sell houses, mortgage/unmortage, save game,
      * close game, and "drive" (as in throw the dice and move the token).
      * Each player (in real life) may use these options whenever they wish.
-     * @param player
+     *
+     * @param player the player passed in to take turn.
      * @author Nicolai Wulff, s185036
      */
     public void showTurnMenu(Player player) {
@@ -277,7 +284,7 @@ public class GameController {
     }
 
     /**
-     * Saves the game in the database.
+     * Saves the current game to the database
      */
     public void saveGame() {
         if (game.getGameId() < 0) {
@@ -290,8 +297,8 @@ public class GameController {
     }
 
     /**
-     * Calculates how many players are broke.
-     * @return returns true if one or less players are broke, which means the game will end.
+     * Checks if one or less players are broke
+     * @return boolean This returns true when the game is over.
      */
     public boolean gameEnds() {
         boolean returnBool = false;
@@ -310,9 +317,9 @@ public class GameController {
     }
 
     /**
-     * Checks whether we have a winner.
-     * Shows a message according to the situation.
-     * @return return true if a winner is found.
+     * Checks whether there is a player that isn't broke.
+     * displays message with specific message when activated.
+     * @return boolean, This returns true when there is a winner
      */
     public boolean winner() {
         // Check whether we have a winner
@@ -359,9 +366,10 @@ public class GameController {
     /**
      * This method implements a activity of a single move of the given player.
      * It throws a {@link PlayerBrokeException}
-     * if the player goes broke in this move. Note that this is still a very
-     * basic implementation of the move of a player; many aspects are still
-     * missing.
+     * if the player goes broke in this move.
+     * Takes into account actions required if player is in prison.
+     * Rolls the dice
+     *
      *
      * @param player the player making the move
      * @throws PlayerBrokeException if the player goes broke during the move
@@ -430,8 +438,8 @@ public class GameController {
     }
 
     /**
-     * Used when a player wants to pay to get out of jail.
-     * @param player
+     * This method is called by the makeamove when a player wants to pay to get out of jail.
+     * @param player that has chosen to pay to get out of jail.
      */
     private void payToGetOut(Player player) {
         try {
@@ -468,6 +476,7 @@ public class GameController {
      * @param player the moved player
      * @param space  the space to which the player moves
      * @throws PlayerBrokeException when the player goes broke doing the action on that space
+     * @throws GameEndedException if the game ends
      */
     public void moveToSpace(Player player, Space space) throws PlayerBrokeException, GameEndedException {
         int posOld = player.getCurrentPosition().getIndex();
@@ -697,7 +706,7 @@ public class GameController {
      * the bank.
      *
      * @param player the player receiving the money
-     * @param amount the amount
+     * @param amount the amount recieved from the bank
      */
     public void paymentFromBank(Player player, int amount) {
         player.receiveMoney(amount);
@@ -890,8 +899,8 @@ public class GameController {
     /**
      * Buys a house, if the player can afford it.
      *
-     * @param player
-     * @param re
+     * @param player player that is buying the property
+     * @param re Realestate object of property that is being bought
      * @Author Nicolai Wulff s185036
      */
     private void buyHouse(Player player, RealEstate re) {
@@ -921,8 +930,8 @@ public class GameController {
     }
 
     /**
-     * @param player
-     * @param re
+     * @param player player that is selling the property
+     * @param re Realestate object of property that is being sold
      * @author Nicolai Wulff s185036
      */
     private void sellHouse(Player player, RealEstate re) {
