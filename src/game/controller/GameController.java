@@ -12,6 +12,7 @@ import game.model.properties.Ship;
 import game.view.View;
 import gui_fields.GUI_Car;
 import gui_main.GUI;
+import json.JSONUtility;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -51,6 +52,9 @@ import static gui_fields.GUI_Car.Type.*;
  */
 public class GameController {
 
+    JSONUtility ju = new JSONUtility();
+
+    private Game gameBase;
     private Game game;
     private GameStub gameStub;
     private GUI gui;
@@ -59,16 +63,16 @@ public class GameController {
 
     private View view;
 
+    boolean terminated;
     private boolean disposed = false;
 
     /**
      * Constructor for a controller of a game.
      *
-     * @param game the game
      */
-    public GameController(Game game) {
+    public GameController() {
         super();
-        this.game = game;
+        game = ju.createGame();
         gui = new GUI();
         initializeGUI();
         gameDb = new GameDAO();
@@ -132,6 +136,9 @@ public class GameController {
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             game.shuffleCardDeck();
             createPlayers();
+            view = new View(game, gui);
+            view.createPlayers();
+            play();
         } else if (userSelection.equals("Afslut")) {
             System.exit(0);
         } else {
@@ -186,10 +193,6 @@ public class GameController {
                 String playerCar = gui.getUserSelection("Vælg køretøj:", carTypes);
                 player.setCarType(Player.CarType.getCarTypeFromString(playerCar));
             }
-
-            view = new View(game, gui);
-            view.createPlayers();
-            play();
         }
     }
 
@@ -210,14 +213,14 @@ public class GameController {
             }
         }
 
-        boolean terminated = false;
+        terminated = false;
         while (!terminated) {
             Player player = players.get(current);
 
             if (!player.isBroke()) {
                 try {
                     showTurnMenu(player);
-                    this.makeMove(player);
+                    if (!terminated) this.makeMove(player);
                 } catch (PlayerBrokeException e) {
                 } catch (GameEndedException w) {
                     gui.showMessage(w.getMessage());
@@ -233,7 +236,10 @@ public class GameController {
             game.setCurrentPlayer(players.get(current));
         }
 
-        dispose();
+        view.dispose();
+        view = null;
+        game = ju.createGame();
+        //dispose();
     }
 
     /**
@@ -243,7 +249,7 @@ public class GameController {
     public void showTurnMenu(Player player) {
         boolean continueChoosing = true;
         while (continueChoosing) {
-            String choice = gui.getUserButtonPressed("Det er " + player.getName() + "'s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?" , "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil", "Kør");
+            String choice = gui.getUserButtonPressed("Det er " + player.getName() + "'s tur. Alle spillere må bygge, sælge, handle og pantsætte. Hvad skal der ske?" , "Byg huse", "Sælg huse", "Handel", "Pantsættelser", "Gem spil", "Afslut", "Kør");
             switch (choice) {
                 case "Byg huse":
                     buyHouseAction();
@@ -264,6 +270,10 @@ public class GameController {
                     break;
                 case "Gem spil":
                     saveGame();
+                    break;
+                case "Afslut":
+                    closeGame();
+                    continueChoosing = false;
                     break;
                 default:
                     continueChoosing = false;
@@ -323,6 +333,16 @@ public class GameController {
             returnBool = false;
         }
         return returnBool;
+    }
+
+    private void closeGame() {
+        terminated = true;
+        Frame[] frames = Frame.getFrames();
+        for (Frame frame : frames) {
+            frame.dispose();
+        }
+        gui = new GUI();
+        initializeGUI();
     }
 
     /**
@@ -394,6 +414,7 @@ public class GameController {
                 if (castDouble) {
                     gui.showMessage( player + " har kastet to ens og får derfor en ekstra tur.");
                     showTurnMenu(player);
+                    if (terminated) return;
                 }
             }
         } while (castDouble);
@@ -839,8 +860,7 @@ public class GameController {
         if (!disposed && view != null) {
             disposed = true;
             if (view != null) {
-                view.dispose();
-                view = null;
+
             }
             // TODO we should also dispose of the GUI here. But this works only
             //      for my private version of the GUI and not for the GUI currently

@@ -6,7 +6,6 @@ import game.model.*;
 import game.model.properties.Brewery;
 import game.model.properties.RealEstate;
 import gui_fields.*;
-import gui_fields.GUI_Car.Type;
 import gui_main.GUI;
 
 import java.awt.*;
@@ -185,6 +184,10 @@ public class View implements Observer, Runnable {
             for (Space space : game.getSpaces()) {
                 space.detach(this);
             }
+            /*
+            for (GUI_Player guiPlayer : player2GuiPlayer.values()) {
+                gui.getFields()[0].setCar(guiPlayer, false);
+            }*/
         }
     }
 
