@@ -24,17 +24,16 @@ import java.util.List;
  */
 public class GameDAO implements IGameDAO {
 
-    private Connection c;
+    private static Connection connection;
 
     public GameDAO() {
         try {
-            c = createConnection();
+            connection = createConnection();
             initializeDataBase();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
     /**
      * Metoden opretter en forbindelse til databasen, som gemmes som i en lokal variabel.
      * Den er gjort public for at kunne bruges i test.
@@ -42,11 +41,22 @@ public class GameDAO implements IGameDAO {
      * @return
      * @throws SQLException
      */
-    public Connection createConnection() throws SQLException {
+    public static Connection createConnection() throws SQLException {
         String url = "jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020";
         String user = "s185020";
         String password = "iEFSqK2BFP60YWMPlw77I";
         return DriverManager.getConnection(url, user, password);
+    }
+
+    public static Connection getConnection(){
+        try {
+            if (connection == null || connection.isClosed()) {
+                connection = createConnection();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
     }
     /**
      * Metoden bruges til at gemme et spil i databasen
@@ -57,15 +67,15 @@ public class GameDAO implements IGameDAO {
     public void saveGame(Game game) {
         long performance = System.currentTimeMillis();
         try {
-            c.setAutoCommit(false);
-            PreparedStatement insertGame = c.prepareStatement(
+            getConnection().setAutoCommit(false);
+            PreparedStatement insertGame = getConnection().prepareStatement(
                     "INSERT INTO game (curplayerid, date) " +
                             "VALUES(?,?);", Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement insertPLayers = c.prepareStatement(
+            PreparedStatement insertPLayers = getConnection().prepareStatement(
                     "INSERT INTO player " +
                             "VALUES(?,?,?,?,?,?,?,?,?);");
 
-            PreparedStatement insertProperties = c.prepareStatement(
+            PreparedStatement insertProperties = getConnection().prepareStatement(
                     "INSERT INTO property " +
                             "VALUES(?,?,?,?,?,?);");
             int curPlayer = game.getPlayers().indexOf(game.getCurrentPlayer());
@@ -122,7 +132,7 @@ public class GameDAO implements IGameDAO {
                     }
                 }
             }
-            c.commit();
+            getConnection().commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -148,7 +158,7 @@ public class GameDAO implements IGameDAO {
     @Override
     public void deleteGame(Game game) {
         try {
-            PreparedStatement gameStm = c.prepareStatement("DELETE FROM game WHERE gameid = ?");
+            PreparedStatement gameStm = getConnection().prepareStatement("DELETE FROM game WHERE gameid = ?");
             gameStm.setInt(1, game.getGameId());
             gameStm.executeUpdate();
 
@@ -168,8 +178,8 @@ public class GameDAO implements IGameDAO {
     public Game loadGame(Game game, String dateOfGameToLoad) {
         long performance = System.currentTimeMillis();
         try {
-            PreparedStatement playerStm = c.prepareStatement("SELECT * FROM game NATURAL JOIN player WHERE date=?");
-            PreparedStatement propertyStm = c.prepareStatement("SELECT * FROM game NATURAL JOIN property WHERE date=?");
+            PreparedStatement playerStm = getConnection().prepareStatement("SELECT * FROM game NATURAL JOIN player WHERE date=?");
+            PreparedStatement propertyStm = getConnection().prepareStatement("SELECT * FROM game NATURAL JOIN property WHERE date=?");
 
             playerStm.setString(1, dateOfGameToLoad);
             propertyStm.setString(1, dateOfGameToLoad);
@@ -226,7 +236,6 @@ public class GameDAO implements IGameDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         System.out.println("Tid det tog at hente spillet i databasen:" + (System.currentTimeMillis() - performance) + "ms");
         return game;
     }
@@ -240,8 +249,7 @@ public class GameDAO implements IGameDAO {
         List gameList = new ArrayList<String>();
 
         try {
-            PreparedStatement gameStm = c.prepareStatement("SELECT * FROM game ORDER BY gameid DESC");
-
+            PreparedStatement gameStm = getConnection().prepareStatement("SELECT * FROM game ORDER BY gameid DESC");
             ResultSet gameRS = gameStm.executeQuery();
             while (gameRS.next()) {
                 gameList.add(gameRS.getString("date"));
@@ -259,15 +267,15 @@ public class GameDAO implements IGameDAO {
      */
     public void initializeDataBase() {
         try {
-            c.setAutoCommit(false);
-            PreparedStatement createTableGame = c.prepareStatement(
+            getConnection().setAutoCommit(false);
+            PreparedStatement createTableGame = getConnection().prepareStatement(
                     "CREATE TABLE if NOT EXISTS game " +
                             "(gameid int NOT NULL AUTO_INCREMENT, " +
                             "date VARCHAR(20) NOT NULL, " +
                             "curplayerid int, " +
                             "primary key (gameid));");
 
-            PreparedStatement createTablePlayer = c.prepareStatement(
+            PreparedStatement createTablePlayer = getConnection().prepareStatement(
                     "CREATE TABLE if NOT EXISTS player " +
                             "(playerid int, " +
                             "name varchar(20), " +
@@ -282,7 +290,7 @@ public class GameDAO implements IGameDAO {
                             "FOREIGN KEY (gameid) REFERENCES game (gameid) " +
                             "ON DELETE CASCADE);");
 
-            PreparedStatement createTableProperty = c.prepareStatement(
+            PreparedStatement createTableProperty = getConnection().prepareStatement(
                     "CREATE TABLE if NOT EXISTS property " +
                             "(posonboard int, " +
                             "numofhouses int, " +
@@ -297,40 +305,8 @@ public class GameDAO implements IGameDAO {
             createTableGame.execute();
             createTablePlayer.execute();
             createTableProperty.execute();
-            c.commit();
+            getConnection().commit();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Metoden er kun brugt ifm udarbejdning af databasen - for hurtigt at kunne slette og oprette tabellerne ved fejl.
-     *
-     * @author Nicolai s185020
-     */
-    public void dropAllTables(int deleteTable) {
-        try {
-            PreparedStatement dropTableGame = c.prepareStatement(
-                    "drop table game;"
-            );
-            PreparedStatement dropTablePlayer = c.prepareStatement(
-                    "drop table player;"
-            );
-            PreparedStatement dropTableProperty = c.prepareStatement(
-                    "DROP TABLE property;"
-            );
-            if (deleteTable == 1) {
-                dropTableGame.execute();
-            } else if (deleteTable == 2) {
-                dropTablePlayer.execute();
-            } else if (deleteTable == 3) {
-                dropTableProperty.execute();
-            } else if (deleteTable == 0) {
-                dropTableProperty.execute();
-                dropTablePlayer.execute();
-                dropTableGame.execute();
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
