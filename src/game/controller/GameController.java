@@ -47,14 +47,13 @@ import java.util.List;
  */
 public class GameController {
 
-    JSONUtility ju = new JSONUtility();
-
+    private JSONUtility ju = new JSONUtility();
     private Game game;
     private GUI gui;
     private GameDAO gameDb;
     private int sumOfDies;
     private View view;
-    boolean terminated;
+    private boolean terminated;
     private boolean disposed = false;
 
     /**
