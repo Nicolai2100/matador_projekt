@@ -1,8 +1,6 @@
 package game;
 
-import json.JSONUtility;
 import game.controller.GameController;
-import game.model.Game;
 
 /**
  * @author Ekkart Kindler, ekki@dtu.dk
@@ -19,7 +17,6 @@ public class Main {
         //JSONUtility ju = new JSONUtility();
         //Game game = ju.createGame();
 
-        GameController controller = new GameController();
-        controller.playOrLoadGame();
+        new GameController().playOrLoadGame();
     }
 }
