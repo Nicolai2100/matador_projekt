@@ -1307,7 +1307,7 @@ public class GameController {
             }
 
             ArrayList<Integer> debts = new ArrayList<>();
-            for (Property p : potentialProperties) debts.add(p.getCost() / 2);
+            for (Property p : potentialProperties) debts.add((int)(p.getCost() / 2 * 1.1));
             Property property = chooseFromOptions(
                     potentialProperties,
                     "Hvilken pantsat grund vil du tilbagebetale?",
@@ -1327,9 +1327,9 @@ public class GameController {
      * @author Nicolai w s185036
      */
     private void unmortgage(Player player, Property property) {
-        if (player.getBalance() >= property.getCost() / 2) {
+        if (player.getBalance() >= property.getCost() / 2 * 1.1) {
             try {
-                paymentToBank(player, property.getCost() / 2);
+                paymentToBank(player, (int)(property.getCost() / 2 * 1.1));
                 property.setMortgaged(false);
             } catch (PlayerBrokeException e) {
                 e.printStackTrace();
