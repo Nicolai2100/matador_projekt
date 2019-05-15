@@ -242,7 +242,7 @@ public class GameController {
      * Each player (in real life) may use these options whenever they wish.
      *
      * @param player the player passed in to take turn.
-     * @author Nicolai Wulff, s185036
+     * @author Nicolai W s185036
      */
     public void showTurnMenu(Player player) {
         boolean continueChoosing = true;
@@ -431,7 +431,7 @@ public class GameController {
                 List<Space> spaces = game.getSpaces();
                 int newPos = (pos + die1 + die2) % spaces.size();
                 Space space = spaces.get(newPos);
-                playSound("engine.wav");
+                playSound("engine.mp3");
                 moveToSpace(player, space);
                 if (castDouble) {
                     gui.showMessage(player + " har kastet to ens og får derfor en ekstra tur.");
