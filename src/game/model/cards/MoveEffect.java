@@ -17,6 +17,7 @@ import game.model.properties.Ship;
 public class MoveEffect extends Card {
 
     private int targetIndex;
+    private Space target;
     public enum TargetTypes {SPACE, NEAREST_SHIP_1, NEAREST_SHIP_2, GO_TO_JAIL, THREE_FORWARDS, THREE_BACKWARDS}
     private TargetTypes targetType;
 
@@ -35,7 +36,7 @@ public class MoveEffect extends Card {
 
     @Override
     public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
-        Space target = controller.getGame().getSpaces().get(targetIndex);
+        target = controller.getGame().getSpaces().get(targetIndex);
         try {
             switch (targetType) {
                 case NEAREST_SHIP_1:
@@ -74,10 +75,14 @@ public class MoveEffect extends Card {
     private void setTargetToNearestShip(GameController controller, Player player) {
         Space space = null;
         int i = 1;
-        while (!(space instanceof Ship)) {
+        boolean isShip = false;
+        while (!isShip) {
             space = controller.getGame().getSpaces().get((player.getCurrentPosition().getIndex() + i) % 40);
+            if (space instanceof Ship) isShip = true;
             i++;
         }
         targetIndex = space.getIndex();
+        target = space;
+
     }
 }
