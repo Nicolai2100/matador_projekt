@@ -61,7 +61,6 @@ public class JSONUtility {
         game.addSpace(indkomstskat);
 
         Ship oeresund = new Ship();
-        //TODO ændr alle utilities til enten Ship eller Brewery (som kan have begyndelsespris sat fra start)
         oeresund.setName("Øresund");
         oeresund.setCost(4000);
         rentLevels = new int[]{500, 1000, 2000, 4000};

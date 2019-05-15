@@ -130,19 +130,6 @@ public class Property extends Space {
             controller.showMessage(player + "skal ikke betale leje til " + owner.getName() + ", fordi " + owner.getName() + " er i fængsel!");
         } else if (!owner.equals(player) && mortgaged) {
             controller.showMessage(this.getName() + " er pantsat, og " + player.getName() + " skal derfor ikke betale leje.");
-        /*
-        if (owner == player) {
-            if (this instanceof RealEstate) {
-                RealEstate realEstate = (RealEstate) this;
-                realEstate.computeRent();
-            }
-        */
-
         }
-
-
     }
-
-    //todo opret abstrakt metode til at beregne lejen
-
 }

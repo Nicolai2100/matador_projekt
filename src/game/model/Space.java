@@ -72,7 +72,6 @@ public abstract class Space extends Subject {
 		// per default there is no action for a space
 	};
 
-	//NJL
 	@Override
 	public String toString() {
 		return getName();
