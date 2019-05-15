@@ -873,18 +873,21 @@ public class GameController {
      *
      * @param player the broke player
      */
-    public void playerBrokeToBank(Player player) {
+    public void playerBrokeToBank(Player player) throws GameEndedException {
 
         player.setBalance(0);
         player.setBroke(true);
 
-        for (Property property : player.getOwnedProperties()) {
-            property.setOwner(null);
-        }
         player.removeAllProperties();
 
         playSound("trombones.wav");
         gui.showMessage(player + " er gået konkurs.");
+
+        for (Property property : player.getOwnedProperties()) {
+            property.setOwner(null);
+            if (property.getMortgaged()) property.setMortgaged(false);
+            auction(property);
+        }
 
         while (!player.getOwnedCards().isEmpty()) {
             game.returnCardToDeck(player.getOwnedCards().get(0));
