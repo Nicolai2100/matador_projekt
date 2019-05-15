@@ -153,15 +153,19 @@ public class GameController {
             game.createPlayers(numOfPlayers);
 
             ArrayList<Player.PlayerColor> colorsChosen = new ArrayList<>();
+            ArrayList<String> namesChosen = new ArrayList<>();
             for (int i = 0; i < numOfPlayers; i++) {
                 Player player = game.getPlayers().get(i);
                 boolean validInput = false;
                 while(!validInput) {
                     //Enter names of current of player in for loop TODO input validation
                     String name = gui.getUserString("Indtast navn på spiller " + (i + 1) + ":");
-                    if (name.length() > 0) {
+                    if (name.length() > 0 && !namesChosen.contains(name)) {
                         player.setName(name);
+                        namesChosen.add(name);
                         validInput = true;
+                    } else if (namesChosen.contains(name)) {
+                        gui.showMessage("Dette navn er allerede taget. Vælg et andet.");
                     }
                 }
                 //Choose colour of player in for loop
