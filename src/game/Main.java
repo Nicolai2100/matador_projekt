@@ -29,7 +29,9 @@ public class Main {
         game.setCardDeck(temp);
         //*/
 
-        GameController controller = new GameController();
+/*        GameController controller = new GameController();
         controller.playOrLoadGame();
+        */
+        new GameController().playOrLoadGame();
     }
 }
