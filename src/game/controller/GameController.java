@@ -47,14 +47,13 @@ import java.util.List;
  */
 public class GameController {
 
-    JSONUtility ju = new JSONUtility();
-
+    private JSONUtility ju = new JSONUtility();
     private Game game;
     private GUI gui;
     private GameDAO gameDb;
     private int sumOfDies;
     private View view;
-    boolean terminated;
+    private boolean terminated;
     private boolean disposed = false;
 
     /**
@@ -154,15 +153,19 @@ public class GameController {
             game.createPlayers(numOfPlayers);
 
             ArrayList<Player.PlayerColor> colorsChosen = new ArrayList<>();
+            ArrayList<String> namesChosen = new ArrayList<>();
             for (int i = 0; i < numOfPlayers; i++) {
                 Player player = game.getPlayers().get(i);
                 boolean validInput = false;
                 while(!validInput) {
                     //Enter names of current of player in for loop TODO input validation
                     String name = gui.getUserString("Indtast navn på spiller " + (i + 1) + ":");
-                    if (name.length() > 0) {
+                    if (name.length() > 0 && !namesChosen.contains(name)) {
                         player.setName(name);
+                        namesChosen.add(name);
                         validInput = true;
+                    } else if (namesChosen.contains(name)) {
+                        gui.showMessage("Dette navn er allerede taget. Vælg et andet.");
                     }
                 }
                 //Choose colour of player in for loop
@@ -243,7 +246,7 @@ public class GameController {
      * Each player (in real life) may use these options whenever they wish.
      *
      * @param player the player passed in to take turn.
-     * @author Nicolai Wulff, s185036
+     * @author Nicolai W s185036
      */
     public void showTurnMenu(Player player) {
         boolean continueChoosing = true;
@@ -432,7 +435,7 @@ public class GameController {
                 List<Space> spaces = game.getSpaces();
                 int newPos = (pos + die1 + die2) % spaces.size();
                 Space space = spaces.get(newPos);
-                playSound("engine.wav");
+                playSound("engine.mp3");
                 moveToSpace(player, space);
                 if (castDouble) {
                     gui.showMessage(player + " har kastet to ens og får derfor en ekstra tur.");
@@ -873,18 +876,21 @@ public class GameController {
      *
      * @param player the broke player
      */
-    public void playerBrokeToBank(Player player) {
+    public void playerBrokeToBank(Player player) throws GameEndedException {
 
         player.setBalance(0);
         player.setBroke(true);
 
-        for (Property property : player.getOwnedProperties()) {
-            property.setOwner(null);
-        }
         player.removeAllProperties();
 
         playSound("trombones.wav");
         gui.showMessage(player + " er gået konkurs.");
+
+        for (Property property : player.getOwnedProperties()) {
+            property.setOwner(null);
+            if (property.getMortgaged()) property.setMortgaged(false);
+            auction(property);
+        }
 
         while (!player.getOwnedCards().isEmpty()) {
             game.returnCardToDeck(player.getOwnedCards().get(0));
@@ -1305,7 +1311,7 @@ public class GameController {
             }
 
             ArrayList<Integer> debts = new ArrayList<>();
-            for (Property p : potentialProperties) debts.add(p.getCost() / 2);
+            for (Property p : potentialProperties) debts.add((int)(p.getCost() / 2 * 1.1));
             Property property = chooseFromOptions(
                     potentialProperties,
                     "Hvilken pantsat grund vil du tilbagebetale?",
@@ -1325,9 +1331,9 @@ public class GameController {
      * @author Nicolai w s185036
      */
     private void unmortgage(Player player, Property property) {
-        if (player.getBalance() >= property.getCost() / 2) {
+        if (player.getBalance() >= property.getCost() / 2 * 1.1) {
             try {
-                paymentToBank(player, property.getCost() / 2);
+                paymentToBank(player, (int)(property.getCost() / 2 * 1.1));
                 property.setMortgaged(false);
             } catch (PlayerBrokeException e) {
                 e.printStackTrace();
