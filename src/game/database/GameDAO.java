@@ -38,7 +38,7 @@ public class GameDAO implements IGameDAO {
      * @return
      * @throws SQLException
      */
-    private static Connection getConnection() {
+    public static Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
                 connection = DriverManager.getConnection(url, user, password);
