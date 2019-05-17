@@ -1458,14 +1458,14 @@ public class GameController {
     }
 
     public void sortPlayerBalances() {
-        Comparator networthComparator = new Comparator<Player>() {
+        Comparator netWorthComparator = new Comparator<Player>() {
             @Override
             public int compare(Player p1, Player p2) {
-                return Integer.compare(p1.getBalance(), p2.getBalance());
+                return Integer.compare(p1.calculateNetWorth(), p2.calculateNetWorth());
             }
         };
 
-        for (Object p : quickSort(game.getPlayers(), networthComparator)) {
+        for (Object p : quickSort(game.getPlayers(), netWorthComparator)) {
             System.out.println(p.toString());
         }
     }
