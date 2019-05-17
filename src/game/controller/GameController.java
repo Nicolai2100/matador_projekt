@@ -1493,8 +1493,7 @@ public class GameController {
      * The method could be further developed into a feature, where
      * the user could choose to display various sorted information about the
      * state of the game somewhere in the GUI, eg:
-     *      1. How the players rank according to their total net worth
-     *          (balance + worth of properties and houses).
+     *      1. How the players rank according to their total assets.
      *      2. How all properties rank according to their current rent.
      *      3. Or something else.
      * Different comparators should be defined in this method.
@@ -1506,10 +1505,10 @@ public class GameController {
 
         //TODO: Display a menu with options to display different sorted information.
 
-        Comparator netWorthComparator = new Comparator<Player>() {
+        Comparator totalAssetsComparator = new Comparator<Player>() {
             @Override
             public int compare(Player p1, Player p2) {
-                return Integer.compare(p1.calculateNetWorth(false), p2.calculateNetWorth(false));
+                return Integer.compare(p1.calculateTotalAssets(false), p2.calculateTotalAssets(false));
             }
         };
 
@@ -1523,7 +1522,7 @@ public class GameController {
         //Todo: add more comparators. Use quickSort to sort some data, and finally display it.
 
         //Example of how to use the quicksort-method. Here, it prints a sorted list to the console:
-        for (Object p : quickSort(game.getPlayers(), netWorthComparator)) {
+        for (Object p : quickSort(game.getPlayers(), totalAssetsComparator)) {
             System.out.println(p.toString());
         }
     }
