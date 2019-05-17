@@ -1452,49 +1452,6 @@ public class GameController {
         return game;
     }
 
-    public GUI getGui() {
-        return gui;
-    }
-
-    /**
-     * This method is yet to be finished or utilized in the code.
-     * The method could be further developed into a feature, where
-     * the user could choose to display various sorted information about the
-     * state of the game somewhere in the GUI, eg:
-     *      1. How the players rank according to their total net worth
-     *          (balance + worth of properties and houses).
-     *      2. How all properties rank according to their current rent.
-     *      3. Or something else.
-     * Different comparators should be defined in this method.
-     * This method uses the quickSort-method (see underneath), which is passed a
-     * collection and a comparator, and then returns a sorted arrayList.
-     */
-    public void displaySortedInfo() {
-
-        //TODO: Display a menu with options to display different sorted information.
-
-        Comparator netWorthComparator = new Comparator<Player>() {
-            @Override
-            public int compare(Player p1, Player p2) {
-                return Integer.compare(p1.calculateNetWorth(false), p2.calculateNetWorth(false));
-            }
-        };
-
-        Comparator rentComparator = new Comparator<Property>() {
-            @Override
-            public int compare(Property p1, Property p2) {
-                return Integer.compare(p1.getRent(), p2.getRent());
-            }
-        };
-
-        //Todo: add more comparators. Use quickSort to sort some data, and finally display it.
-
-        //Example of how to use the quicksort-method. Here, it prints a sorted list to the console:
-        for (Object p : quickSort(game.getPlayers(), netWorthComparator)) {
-            System.out.println(p.toString());
-        }
-    }
-
     /**
      * An implementation of the quickSort-algorithm, used to sort data.
      * @param c Collection of generic type, T. The data to be sorted.
@@ -1530,5 +1487,45 @@ public class GameController {
         ArrayList<T> arr = new ArrayList<>(c);
         qs.sort(arr, comparator, 0, arr.size() - 1);
         return arr;
+    }
+
+    /**
+     * This method is yet to be finished or utilized in the code.
+     * The method could be further developed into a feature, where
+     * the user could choose to display various sorted information about the
+     * state of the game somewhere in the GUI, eg:
+     *      1. How the players rank according to their total net worth
+     *          (balance + worth of properties and houses).
+     *      2. How all properties rank according to their current rent.
+     *      3. Or something else.
+     * Different comparators should be defined in this method.
+     * This method uses the quickSort-method (see above), which is passed a
+     * collection and a comparator, and then returns a sorted arrayList.
+     */
+
+    public void displaySortedInfo() {
+
+        //TODO: Display a menu with options to display different sorted information.
+
+        Comparator netWorthComparator = new Comparator<Player>() {
+            @Override
+            public int compare(Player p1, Player p2) {
+                return Integer.compare(p1.calculateNetWorth(false), p2.calculateNetWorth(false));
+            }
+        };
+
+        Comparator rentComparator = new Comparator<Property>() {
+            @Override
+            public int compare(Property p1, Property p2) {
+                return Integer.compare(p1.getRent(), p2.getRent());
+            }
+        };
+
+        //Todo: add more comparators. Use quickSort to sort some data, and finally display it.
+
+        //Example of how to use the quicksort-method. Here, it prints a sorted list to the console:
+        for (Object p : quickSort(game.getPlayers(), netWorthComparator)) {
+            System.out.println(p.toString());
+        }
     }
 }
