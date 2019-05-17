@@ -385,6 +385,7 @@ public class GameController {
      * @throws PlayerBrokeException if the player goes broke during the move
      */
     public void makeMove(Player player) throws PlayerBrokeException, GameEndedException {
+        displaySortedInfo();
         boolean castDouble;
         int doublesCount = 0;
 
@@ -1462,7 +1463,7 @@ public class GameController {
      */
     private <T> ArrayList<T> quickSort(Collection<T> c, Comparator<T> comparator) {
         class QuickSorter {
-            private void sort(ArrayList<T> arr, Comparator<T> comparator, int lower, int upper) {
+            private void sort(ArrayList<T> arr, int lower, int upper) {
                 if (lower < upper) {
                     int i = lower, j = upper;
                     T pivot = arr.get((i + j) / 2);
@@ -1477,14 +1478,14 @@ public class GameController {
                             j--;
                         }
                     } while (i <= j);
-                    sort(arr, comparator, lower, j);
-                    sort(arr, comparator, i, upper);
+                    sort(arr, lower, j);
+                    sort(arr, i, upper);
                 }
             }
         }
         QuickSorter qs = new QuickSorter();
         ArrayList<T> arr = new ArrayList<>(c);
-        qs.sort(arr, comparator, 0, arr.size() - 1);
+        qs.sort(arr, 0, arr.size() - 1);
         return arr;
     }
 
