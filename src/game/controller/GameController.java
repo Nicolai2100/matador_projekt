@@ -16,8 +16,11 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
+import java.util.function.IntBinaryOperator;
 
 /**
  * The overall controller of a Monopoly game. It provides access
@@ -385,6 +388,8 @@ public class GameController {
      */
     public void makeMove(Player player) throws PlayerBrokeException, GameEndedException {
 
+        sortPlayerBalances();
+
         boolean castDouble;
         int doublesCount = 0;
 
@@ -435,7 +440,7 @@ public class GameController {
                 List<Space> spaces = game.getSpaces();
                 int newPos = (pos + die1 + die2) % spaces.size();
                 Space space = spaces.get(newPos);
-                playSound("engine.mp3");
+                playSound("engine.wav");
                 moveToSpace(player, space);
                 if (castDouble) {
                     gui.showMessage(player + " har kastet to ens og får derfor en ekstra tur.");
@@ -1449,5 +1454,44 @@ public class GameController {
      */
     public Game getGame() {
         return game;
+    }
+
+    public void sortPlayerBalances() {
+
+        Player[] players = game.getPlayers().toArray(new Player[game.getPlayers().size()]);
+
+        Comparator comparator = new Comparator<Player>() {
+            @Override
+            public int compare(Player p1, Player p2) {
+                return Integer.compare(p1.getBalance(), p2.getBalance());
+            }
+        };
+
+        quickSort(players, comparator, 0, players.length - 1);
+
+        for (Player p : players) {
+            System.out.println(p.toString());
+        }
+
+    }
+
+    private <T> void quickSort(T[] arr, Comparator<T> comparator, int lower, int upper) {
+        if (lower < upper) {
+            int i = lower, j = upper;
+            T pivot = arr[(i + j) / 2];
+            do {
+                while (comparator.compare(arr[i], pivot) < 0) i++;
+                while (comparator.compare(pivot, arr[j]) < 0) j--;
+                if (i <= j) {
+                    T temp = (T) arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                    i++;
+                    j--;
+                }
+            } while (i <= j);
+            quickSort(arr, comparator, lower, j);
+            quickSort(arr, comparator, i, upper);
+        }
     }
 }
