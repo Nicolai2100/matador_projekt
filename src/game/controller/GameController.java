@@ -1456,7 +1456,24 @@ public class GameController {
         return gui;
     }
 
+    /**
+     * This method is yet to be finished or utilized in the code.
+     * The method could be further developed into a feature, where
+     * the user could choose to display various sorted information about the
+     * state of the game somewhere in the GUI, eg:
+     *      1. How the players rank according to their total net worth
+     *          (balance + worth of properties and houses).
+     *      2. How all properties rank according to their current rent.
+     *      3. Or something else.
+     * Different comparators should be defined in this method.
+     * This method uses the quickSort-method (see underneath), which is passed a
+     * collection and a comparator, and then returns a sorted arrayList.
+     */
     public void displaySortedInfo() {
+        /*
+        * TODO: Display a menu with options to display different sorted information.
+        */
+
         Comparator netWorthComparator = new Comparator<Player>() {
             @Override
             public int compare(Player p1, Player p2) {
@@ -1471,11 +1488,23 @@ public class GameController {
             }
         };
 
+        //Todo: add more comparators. Use quickSort to sort som data, and finally display it.
+
+        //Example of how to use the quicksort-method. Here, it prints a sorted list to the console:
         for (Object p : quickSort(game.getPlayers(), netWorthComparator)) {
             System.out.println(p.toString());
         }
     }
 
+    /**
+     * An implementation of the quickSort-algorithm, used to sort data.
+     * @param c Collection of generic type, T. The data to be sorted.
+     * @param comparator Comparator. Contains to definition of how to compare the type of data.
+     * @param <T> Generic type.
+     * @return ArrayList of generic type, T. The sorted list of data.
+     * @author This method is inspired by a quicksort-implementation by Ekkart Kindler, ekki@dtu.dk.
+     *         It is then changed and further developed upon by Nicolai W s185036.
+     */
     private <T> ArrayList<T> quickSort(Collection<T> c, Comparator<T> comparator) {
         class QuickSorter {
             private void sort(ArrayList<T> arr, Comparator<T> comparator, int lower, int upper) {
