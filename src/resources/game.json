@@ -63,7 +63,7 @@
       }
     },
     {
-      "CLASSNAME": "game.model.Tax",
+      "CLASSNAME": "game.model.Tax2",
       "INSTANCE": {
         "name": "Indkomstskat",
         "index": 4,

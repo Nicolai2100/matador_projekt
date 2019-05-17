@@ -106,7 +106,8 @@ public class GameController {
             if (space.getIndex() == 10) gui.getFields()[i].setSubText("Fængsel");
             if (space instanceof GoToJail) gui.getFields()[i].setSubText("Gå i fængsel");
             if (space instanceof Chance) gui.getFields()[i].setSubText("Prøv lykken");
-            //if (space instanceof Tax2) gui.getFields()[i].setSubText("");
+            if (space instanceof Tax1) gui.getFields()[i].setSubText("10% el. 4000");
+            if (space instanceof Tax2) gui.getFields()[i].setSubText("Betal 2000");
             i++;
         }
     }
