@@ -63,7 +63,7 @@
       }
     },
     {
-      "CLASSNAME": "game.model.Tax1",
+      "CLASSNAME": "game.model.Tax",
       "INSTANCE": {
         "name": "Indkomstskat",
         "index": 4,
@@ -682,7 +682,7 @@
       }
     },
     {
-      "CLASSNAME": "game.model.Tax2",
+      "CLASSNAME": "game.model.Tax",
       "INSTANCE": {
         "name": "Ekstraordinær statsskat",
         "index": 38,
