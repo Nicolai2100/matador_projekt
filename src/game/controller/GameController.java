@@ -106,6 +106,8 @@ public class GameController {
             if (space.getIndex() == 10) gui.getFields()[i].setSubText("Fængsel");
             if (space instanceof GoToJail) gui.getFields()[i].setSubText("Gå i fængsel");
             if (space instanceof Chance) gui.getFields()[i].setSubText("Prøv lykken");
+            if (space instanceof Tax1) gui.getFields()[i].setSubText("10% el. 4000");
+            if (space instanceof Tax) gui.getFields()[i].setSubText("Betal 2000");
             i++;
         }
     }
@@ -384,7 +386,6 @@ public class GameController {
      * @throws PlayerBrokeException if the player goes broke during the move
      */
     public void makeMove(Player player) throws PlayerBrokeException, GameEndedException {
-
         boolean castDouble;
         int doublesCount = 0;
 
@@ -435,7 +436,7 @@ public class GameController {
                 List<Space> spaces = game.getSpaces();
                 int newPos = (pos + die1 + die2) % spaces.size();
                 Space space = spaces.get(newPos);
-                playSound("engine.mp3");
+                playSound("engine.wav");
                 moveToSpace(player, space);
                 if (castDouble) {
                     gui.showMessage(player + " har kastet to ens og får derfor en ekstra tur.");
@@ -1449,5 +1450,82 @@ public class GameController {
      */
     public Game getGame() {
         return game;
+    }
+
+    /**
+     * An implementation of the quickSort-algorithm, used to sort data.
+     * @param c Collection of generic type, T. The data to be sorted.
+     * @param comparator Comparator. Contains to definition of how to compare the type of data.
+     * @param <T> Generic type.
+     * @return ArrayList of generic type, T. The sorted list of data.
+     * @author This method is inspired by a quicksort-implementation by Ekkart Kindler, ekki@dtu.dk.
+     *         It is then changed and further developed upon by Nicolai W s185036.
+     */
+    private <T> ArrayList<T> quickSort(Collection<T> c, Comparator<T> comparator) {
+        class QuickSorter {
+            private void sort(ArrayList<T> arr, Comparator<T> comparator, int lower, int upper) {
+                if (lower < upper) {
+                    int i = lower, j = upper;
+                    T pivot = arr.get((i + j) / 2);
+                    do {
+                        while (comparator.compare(arr.get(i), pivot) < 0) i++;
+                        while (comparator.compare(pivot, arr.get(j)) < 0) j--;
+                        if (i <= j) {
+                            T temp = arr.get(i);
+                            arr.set(i, arr.get(j));
+                            arr.set(j, temp);
+                            i++;
+                            j--;
+                        }
+                    } while (i <= j);
+                    sort(arr, comparator, lower, j);
+                    sort(arr, comparator, i, upper);
+                }
+            }
+        }
+        QuickSorter qs = new QuickSorter();
+        ArrayList<T> arr = new ArrayList<>(c);
+        qs.sort(arr, comparator, 0, arr.size() - 1);
+        return arr;
+    }
+
+    /**
+     * This method is yet to be finished or utilized in the code.
+     * The method could be further developed into a feature, where
+     * the user could choose to display various sorted information about the
+     * state of the game somewhere in the GUI, eg:
+     *      1. How the players rank according to their total net worth
+     *          (balance + worth of properties and houses).
+     *      2. How all properties rank according to their current rent.
+     *      3. Or something else.
+     * Different comparators should be defined in this method.
+     * This method uses the quickSort-method (see above), which is passed a
+     * collection and a comparator, and then returns a sorted arrayList.
+     */
+
+    public void displaySortedInfo() {
+
+        //TODO: Display a menu with options to display different sorted information.
+
+        Comparator netWorthComparator = new Comparator<Player>() {
+            @Override
+            public int compare(Player p1, Player p2) {
+                return Integer.compare(p1.calculateNetWorth(false), p2.calculateNetWorth(false));
+            }
+        };
+
+        Comparator rentComparator = new Comparator<Property>() {
+            @Override
+            public int compare(Property p1, Property p2) {
+                return Integer.compare(p1.getRent(), p2.getRent());
+            }
+        };
+
+        //Todo: add more comparators. Use quickSort to sort some data, and finally display it.
+
+        //Example of how to use the quicksort-method. Here, it prints a sorted list to the console:
+        for (Object p : quickSort(game.getPlayers(), netWorthComparator)) {
+            System.out.println(p.toString());
+        }
     }
 }
