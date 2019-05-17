@@ -107,7 +107,7 @@ public class GameController {
             if (space instanceof GoToJail) gui.getFields()[i].setSubText("Gå i fængsel");
             if (space instanceof Chance) gui.getFields()[i].setSubText("Prøv lykken");
             if (space instanceof Tax1) gui.getFields()[i].setSubText("10% el. 4000");
-            if (space instanceof Tax2) gui.getFields()[i].setSubText("Betal 2000");
+            if (space instanceof Tax) gui.getFields()[i].setSubText("Betal 2000");
             i++;
         }
     }
@@ -1470,9 +1470,8 @@ public class GameController {
      * collection and a comparator, and then returns a sorted arrayList.
      */
     public void displaySortedInfo() {
-        /*
-        * TODO: Display a menu with options to display different sorted information.
-        */
+
+        //TODO: Display a menu with options to display different sorted information.
 
         Comparator netWorthComparator = new Comparator<Player>() {
             @Override
@@ -1488,7 +1487,7 @@ public class GameController {
             }
         };
 
-        //Todo: add more comparators. Use quickSort to sort som data, and finally display it.
+        //Todo: add more comparators. Use quickSort to sort some data, and finally display it.
 
         //Example of how to use the quicksort-method. Here, it prints a sorted list to the console:
         for (Object p : quickSort(game.getPlayers(), netWorthComparator)) {
