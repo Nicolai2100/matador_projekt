@@ -16,6 +16,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -1460,19 +1461,33 @@ public class GameController {
 
         Player[] players = game.getPlayers().toArray(new Player[game.getPlayers().size()]);
 
-        Comparator comparator = new Comparator<Player>() {
+        Comparator networthComparator = new Comparator<Player>() {
             @Override
             public int compare(Player p1, Player p2) {
                 return Integer.compare(p1.getBalance(), p2.getBalance());
             }
         };
 
-        quickSort(players, comparator, 0, players.length - 1);
+        Comparator comparator2 = (Comparator<Property>) (p1, p2) -> Integer.compare(p1.getCost(), p2.getCost());
+
+        quickSort(players, networthComparator, 0, players.length - 1);
 
         for (Player p : players) {
-            System.out.println(p.toString());
+            //System.out.println(p.toString());
         }
 
+        Set properties = game.getPlayers().get(0).getOwnedProperties();
+        Object[] propArr = properties.toArray(new Object[properties.size()]);
+        quickSort(propArr, comparator2, 0, propArr.length - 1);
+        for (Object o : propArr) {
+            //System.out.println(o.toString());
+        }
+
+        //ArrayList<Player> ps = (ArrayList<Player>) ((ArrayList<Player>) game.getPlayers()).clone();
+        //quickSort2(ps, networthComparator, 0, ps.size() - 1);
+        for (Object p : getQuickSortedList(game.getPlayers(), networthComparator)) {
+            System.out.println(p.toString());
+        }
     }
 
     private <T> void quickSort(T[] arr, Comparator<T> comparator, int lower, int upper) {
@@ -1494,4 +1509,58 @@ public class GameController {
             quickSort(arr, comparator, i, upper);
         }
     }
+
+    private <T> ArrayList<T> getQuickSortedList(Collection<T> c, Comparator<T> comparator) {
+        class QuickSorter {
+            void sort(ArrayList<T> arr, Comparator<T> comparator, int lower, int upper) {
+                if (lower < upper) {
+                    int i = lower, j = upper;
+                    T pivot = arr.get((i + j) / 2);
+                    do {
+                        while (comparator.compare(arr.get(i), pivot) < 0) i++;
+                        while (comparator.compare(pivot, arr.get(j)) < 0) j--;
+                        if (i <= j) {
+                            T temp = arr.get(i);
+                            arr.set(i, arr.get(j));
+                            arr.set(j, temp);
+                            //arr[i] = arr[j];
+                            //arr[j] = temp;
+                            i++;
+                            j--;
+                        }
+                    } while (i <= j);
+                    sort(arr, comparator, lower, j);
+                    sort(arr, comparator, i, upper);
+                }
+            }
+        }
+        QuickSorter qs = new QuickSorter();
+        ArrayList<T> arr = new ArrayList<>(c);
+        qs.sort(arr, comparator, 0, arr.size() - 1);
+        //quickSort2(arr, comparator, 0, arr.size() - 1);
+
+        return arr;
+    }
+/*
+    private <T> void quickSort2(ArrayList<T> arr, Comparator<T> comparator, int lower, int upper) {
+        if (lower < upper) {
+            int i = lower, j = upper;
+            T pivot = arr.get((i + j) / 2);
+            do {
+                while (comparator.compare(arr.get(i), pivot) < 0) i++;
+                while (comparator.compare(pivot, arr.get(j)) < 0) j--;
+                if (i <= j) {
+                    T temp = arr.get(i);
+                    arr.set(i, arr.get(j));
+                    arr.set(j, temp);
+                    //arr[i] = arr[j];
+                    //arr[j] = temp;
+                    i++;
+                    j--;
+                }
+            } while (i <= j);
+            quickSort2(arr, comparator, lower, j);
+            quickSort2(arr, comparator, i, upper);
+        }
+    }*/
 }
