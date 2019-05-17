@@ -16,12 +16,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.io.File;
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
-import java.util.function.IntBinaryOperator;
 
 /**
  * The overall controller of a Monopoly game. It provides access
@@ -110,6 +106,7 @@ public class GameController {
             if (space.getIndex() == 10) gui.getFields()[i].setSubText("Fængsel");
             if (space instanceof GoToJail) gui.getFields()[i].setSubText("Gå i fængsel");
             if (space instanceof Chance) gui.getFields()[i].setSubText("Prøv lykken");
+            //if (space instanceof Tax2) gui.getFields()[i].setSubText("");
             i++;
         }
     }
@@ -389,7 +386,7 @@ public class GameController {
      */
     public void makeMove(Player player) throws PlayerBrokeException, GameEndedException {
 
-        sortPlayerBalances();
+        displaySortedInfo();
 
         boolean castDouble;
         int doublesCount = 0;
@@ -1457,11 +1454,22 @@ public class GameController {
         return game;
     }
 
-    public void sortPlayerBalances() {
+    public GUI getGui() {
+        return gui;
+    }
+
+    public void displaySortedInfo() {
         Comparator netWorthComparator = new Comparator<Player>() {
             @Override
             public int compare(Player p1, Player p2) {
-                return Integer.compare(p1.calculateNetWorth(), p2.calculateNetWorth());
+                return Integer.compare(p1.calculateNetWorth(false), p2.calculateNetWorth(false));
+            }
+        };
+
+        Comparator rentComparator = new Comparator<Property>() {
+            @Override
+            public int compare(Property p1, Property p2) {
+                return Integer.compare(p1.getRent(), p2.getRent());
             }
         };
 

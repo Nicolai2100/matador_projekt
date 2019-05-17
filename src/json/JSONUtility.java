@@ -56,7 +56,7 @@ public class JSONUtility {
         hvidovrevej.setPriceForHouse(1000);
         game.addSpace(hvidovrevej);
 
-        Space indkomstskat = new Tax();
+        Space indkomstskat = new Tax2();
         indkomstskat.setName("Indkomstskat");
         game.addSpace(indkomstskat);
 

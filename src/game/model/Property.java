@@ -123,7 +123,6 @@ public class Property extends Space {
     public void doAction(GameController controller, Player player) throws PlayerBrokeException, GameEndedException {
         if (owner == null) {
             controller.offerToBuy(this, player);
-
         } else if (!owner.equals(player) && !mortgaged && !owner.isInPrison()) {
             controller.payment(player, rent, owner);
         } else if (!owner.equals(player) && owner.isInPrison()) {

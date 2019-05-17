@@ -429,13 +429,15 @@ public class Player extends Subject {
         }
     }
 
-    public int calculateNetWorth() {
+    public int calculateNetWorth(boolean includeMortgages) {
         int netWorth = 0;
         netWorth += balance;
         for (Property prop : ownedProperties) {
-            netWorth += prop.getCost();
-            if (prop instanceof RealEstate) {
-                netWorth += ((RealEstate) prop).getHouseCount() * ((RealEstate) prop).getPriceForHouse();
+            if (includeMortgages || !prop.getMortgaged()) {
+                netWorth += prop.getCost();
+                if (prop instanceof RealEstate) {
+                    netWorth += ((RealEstate) prop).getHouseCount() * ((RealEstate) prop).getPriceForHouse();
+                }
             }
         }
         return netWorth;
