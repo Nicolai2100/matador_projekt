@@ -386,9 +386,6 @@ public class GameController {
      * @throws PlayerBrokeException if the player goes broke during the move
      */
     public void makeMove(Player player) throws PlayerBrokeException, GameEndedException {
-
-        displaySortedInfo();
-
         boolean castDouble;
         int doublesCount = 0;
 
