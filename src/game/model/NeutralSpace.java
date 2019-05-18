@@ -8,7 +8,7 @@ import game.model.exceptions.PlayerBrokeException;
 /**
  * Represents a space that has no action associated with it.
  * This class is needed in order to allow the Space-class to be abstract, which makes the JSON-adapter work.
- * @author s185039
+ * @author Malte B. Kristensen,s185039@student.dtu.dk
  * @author Ekkart Kindler, ekki@dtu.dk
  */
 public class NeutralSpace extends Space {

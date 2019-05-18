@@ -187,7 +187,7 @@ public class Game extends Subject {
      * @param prisonIgnored if true, it returns only players that are not broke.
      *                      If false, it returns players that are not broke or in prison.
      * @return
-     * @Author Nicolai Wulff, s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     public List<Player> getActivePlayers(Boolean prisonIgnored) {
         List<Player> activePlayers = new ArrayList<>();
@@ -204,6 +204,7 @@ public class Game extends Subject {
     /**
      * This method will be called before the game is started to create
      * the participating players.
+     * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
      */
     public void createPlayers(int numOfPlayers) {
         for (int i = 0; i < numOfPlayers; i++) {

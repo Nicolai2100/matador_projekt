@@ -237,6 +237,13 @@ public class Player extends Subject {
         }
     }
 
+
+    /**
+     * Checks rent level
+     *
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
+     * @author Neal P. Norman, 	s060527@student.dtu.dk
+     */
     public void checkRentLevel() {
         ArrayList<Ship> ships = new ArrayList<>();
         ArrayList<Brewery> breweries = new ArrayList<>();

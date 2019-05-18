@@ -44,6 +44,13 @@ import java.util.List;
  * based
  *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Malte B. Kristensen, s185039@student.dtu.dk
+ * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
+ * @author Neal P. Norman, 	    s060527@student.dtu.dk
+ * @author Jeppe K. Larsen, 	s170196@student.dtu.dk
+ * @author Mads M. D. Hemer, 	s170185@student.dtu.dk
+ * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
+ *
  */
 public class GameController {
 
@@ -72,6 +79,7 @@ public class GameController {
      * assumes that the spaces of the game fit to the fields of the GUI;
      * this could eventually be changed, by creating the GUI fields
      * based on the underlying game's spaces (fields).
+     *
      */
     public void initializeGUI() {
         int i = 0;
@@ -287,6 +295,7 @@ public class GameController {
 
     /**
      * Saves the current game to the database
+     *
      */
     public void saveGame() {
         if (game.getGameId() < 0) {
@@ -383,6 +392,8 @@ public class GameController {
      *
      * @param player the player making the move
      * @throws PlayerBrokeException if the player goes broke during the move
+     * @author Neal P. Norman, 	s060527@student.dtu.dk
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     public void makeMove(Player player) throws PlayerBrokeException, GameEndedException {
         displaySortedInfo();
@@ -450,6 +461,8 @@ public class GameController {
     /**
      * This method is called by the makeamove when a player wants to pay to get out of jail.
      * @param player that has chosen to pay to get out of jail.
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
+     * @author Neal P. Norman, 	s060527@student.dtu.dk
      */
     private void payToGetOut(Player player) {
         try {
@@ -467,6 +480,7 @@ public class GameController {
     /**
      * Used when a player uses an owned getOutOfJail-card to get out of jail.
      * @param player
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void useCardToGetOut(Player player) {
         try {
@@ -567,7 +581,8 @@ public class GameController {
      *                       wants to try to obtain cash before purchasing a property.
      *                       When false, handles the situation where a player is about to
      *                       go broke.
-     * @author Nicolai Wulff s185036
+     * @author Nicolai Wulff, s185036@student.dtu.dk
+     *
      */
     public boolean obtainCash(Player player, int amount, boolean beforePurchase) {
         boolean tryToObtain = true;
@@ -644,6 +659,7 @@ public class GameController {
      * @param property the property to be sold
      * @param player   the player the property is offered to
      * @throws PlayerBrokeException when the player chooses to buy but could not afford it
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     public void offerToBuy(Property property, Player player) throws PlayerBrokeException, GameEndedException {
 
@@ -750,7 +766,11 @@ public class GameController {
      * This method implements the activity of auctioning a property.
      *
      * @param property the property which is for auction
-     * @author Jeppe s170196, Mads s170185, Nicolai W s185036
+     *
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
+     * @author Jeppe K. Larsen, 	s170196@student.dtu.dk
+     * @author Mads M. D. Hemer, 	s170185@student.dtu.dk
+     *
      */
     public void auction(Property property) throws GameEndedException {
         List<Player> bidders = new ArrayList<>();
@@ -847,6 +867,7 @@ public class GameController {
      *
      * @param brokePlayer the broke player
      * @param benificiary the player who receives the money and assets
+     *
      */
     public void playerBrokeTo(Player brokePlayer, Player benificiary) {
         int amount = brokePlayer.getBalance();
@@ -876,6 +897,7 @@ public class GameController {
      * Action handling the situation when a player is broke to the bank.
      *
      * @param player the broke player
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     public void playerBrokeToBank(Player player) throws GameEndedException {
 
@@ -914,7 +936,7 @@ public class GameController {
      *
      * @param player player that is buying the property
      * @param re Realestate object of property that is being bought
-     * @Author Nicolai Wulff s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void buyHouse(Player player, RealEstate re) {
         int lowestHouseCount = 5;
@@ -945,7 +967,7 @@ public class GameController {
     /**
      * @param player player that is selling the property
      * @param re Realestate object of property that is being sold
-     * @author Nicolai Wulff s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void sellHouse(Player player, RealEstate re) {
         int highestHouseCount = 0;
@@ -967,7 +989,7 @@ public class GameController {
     /**
      * Asks the player, if he/she wants to build houses, if the player owns any real estate.
      *
-     * @Author Nicolai Wulff s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void buyHouseAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at købe huse?", null, false);
@@ -1009,7 +1031,7 @@ public class GameController {
     /**
      * Asks the user which player wants to sell houses and which property he/she wants to sell houses from.
      * @param player if not null, the player is then already chosen, and the user will not be prompted to choose player.
-     * @author Nicolai Wulff s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void sellHouseAction(Player player) {
         if (player == null) player = choosePlayer("Hvilken spiller ønsker at sælge huse?", null, false);
@@ -1054,7 +1076,7 @@ public class GameController {
      * This method assumes that the players negotiate the deal in real life. Thereafter, they
      * may enter what the deal is (how many money, properties and cards will be traded).
      * @param firstParty if not null, the first party of the trade will already be chosen, when the method is called.
-     * @author Nicolai Wulff, s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void trade(Player firstParty) {
         Player[] tradingPlayers = new Player[2];
@@ -1189,7 +1211,7 @@ public class GameController {
      * @param giver
      * @param property
      * @param receiver
-     * @author Nicolai W s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void transferProperty(Player giver, Property property, Player receiver) {
         property.setOwner(null);
@@ -1202,7 +1224,7 @@ public class GameController {
      * Transfers a card from one player (giver) to another (receiver).
      * @param giver
      * @param receiver
-     * @author Nicolai W s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void transferCard(Player giver, Player receiver) {
         ArrayList<Card> giverCards = new ArrayList<>(giver.getOwnedCards());
@@ -1226,7 +1248,7 @@ public class GameController {
      * if he/she owns any properties, that are not mortgaged.
      * Assures that the player has sold all houses/hotels from real estate, before mortgaging.
      * @param player
-     * @author Nicolai W s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void mortgageAction(Player player) {
         if (player == null) player = choosePlayer("Hvilken spiller ønsker at pantsætte?", null, false);
@@ -1282,7 +1304,7 @@ public class GameController {
      * Implements the activity where a player mortages a property.
      * @param player
      * @param property
-     * @author Nicolai w s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void mortgage(Player player, Property property) {
         property.setMortgaged(true);
@@ -1292,7 +1314,7 @@ public class GameController {
     /**
      * Shows a menu where a player may choose to "unmortgage" (buy back) a property from the bank,
      * if he/she has any mortgaged properties.
-     * Nicolai w s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void unmortgageAction() {
         Player player = choosePlayer("Hvilken spiller ønsker at indfri sin gæld i pantsættelser?", null, false);
@@ -1329,7 +1351,7 @@ public class GameController {
      * Implements the activity where a player buys a mortgaged property back from the bank.
      * @param player
      * @param property
-     * @author Nicolai w s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private void unmortgage(Player player, Property property) {
         if (player.getBalance() >= property.getCost() / 2 * 1.1) {
@@ -1354,7 +1376,7 @@ public class GameController {
      * @param excludedPlayer Exlude a specific player.
      * @param mayBeInPrison  If true, include players in prison. If false, exclude players in prison.
      * @return the chosen player.
-     * @author Nicolai W s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private Player choosePlayer(String msg, Player excludedPlayer, boolean mayBeInPrison) {
         //Make list of active players, that either may be or may not be in prison (depending on mayBeInPrison).
@@ -1382,11 +1404,12 @@ public class GameController {
      *                   to the end of the element of the collection with the same index.
      * @param <T>        Type of the objects listed.
      * @return The chosen option of type T.
-     * @author Nicolai Wulff s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private <T> T chooseFromOptions(Collection<T> c, String msg, String stopOption, String addToEnd1, ArrayList values, Object addToEnd2) {
         String[] options = new String[c.size() + 1];
         Iterator iterator = c.iterator();
+        String suffix = "";
         for (int i = 0; i < options.length - 1; i++) {
             if (addToEnd1 == null) addToEnd1 = "";
             if (values != null && addToEnd2 instanceof String) {
@@ -1396,6 +1419,10 @@ public class GameController {
             } else {
                 options[i] = iterator.next().toString();
             }
+
+            // String prefix = Integer.toString(i) + ". ";
+            suffix += " ";
+            options[i] = options[i] + suffix;
         }
         options[options.length - 1] = stopOption;
 
@@ -1500,6 +1527,7 @@ public class GameController {
      * Different comparators should be defined in this method.
      * This method uses the quickSort-method (see above), which is passed a
      * collection and a comparator, and then returns a sorted arrayList.
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
 
     public void displaySortedInfo() {
