@@ -566,6 +566,7 @@ public class JSONUtility {
      * Load a Game-object from a corresponding JSON-file.
      * @return Fully configured Game-object. Should return an empty game-object if something goes wrong.
      * @author Malte B. Kristensen,s185039@student.dtu.dk
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     public Game createGame() {
 /*
