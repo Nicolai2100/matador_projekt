@@ -24,6 +24,7 @@ import com.google.gson.JsonSerializer;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  * @param <E> The top of the class hierarchy
+ * @author Malte B. Kristensen,s185039@student.dtu.dk
  */
 public class Adapter<E> implements JsonSerializer<E>, JsonDeserializer<E>{
 

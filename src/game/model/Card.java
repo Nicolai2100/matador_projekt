@@ -33,7 +33,7 @@ public abstract class Card {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
+
 	/**
 	 * The action involved with this card.
 	 * 
@@ -45,6 +45,6 @@ public abstract class Card {
 		// Most cards should return the card to the deck, when the card action
 		// is executed. Subclasses and call the super method to achieve this.
 		controller.returnChanceCardToDeck(this);
-	};	
+	}
 
 }

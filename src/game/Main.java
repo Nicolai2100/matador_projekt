@@ -11,12 +11,9 @@ public class Main {
      * cards, creates players, and then starts the game. Note
      * that, eventually, the game could be loaded from a database.
      *
-     * main metoden ændret af Nicolai L
+     * main metoden ændret af Nicolai J. Larsen, s185020@student.dtu.dk
      */
     public static void main(String[] args) {
-        //JSONUtility ju = new JSONUtility();
-        //Game game = ju.createGame();
-
         new GameController().playOrLoadGame();
     }
 }

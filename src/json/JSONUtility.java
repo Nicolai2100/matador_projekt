@@ -21,7 +21,46 @@ import java.util.ArrayList;
  * Main-method creates data for JSON-file,
  * createGame() loads game configuration from said file
  *
- * @author s185039
+ *
+ * TODO:
+ * Original code: Suffers from unsafe downcasting and re-use of variable 'card', multiple opportunities for mistakes:
+ *
+ *         Card card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
+ *         card.setText("Deres premieobligation er udtrukket. De modtager kr. 1000 af banken.");
+ *         ((EconomicEffect) card).setAmount1(1000);
+ *         cardList.add(card);
+ *
+ * Simple fix: Make a variable for each card and don't downcast:
+ *
+ *         EconomicEffect card37 = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
+ *         card37.setText("Grundet dyrtiden har De fået gageforhøjelse. Modtag kr. 1000.");
+ *         card37.setAmount1(1000);
+ *         cardList.add(card37);
+ *
+ * Better solution:
+ *
+ * You could add the constructor in the EconomicEffect class, moving all the card construction
+ * logic into the constructor.
+ *
+ *     public EconomicEffect(EffectType effectType, String text, int amount1) {
+ * 	    this.effectType = effectType;
+ * 	    this.setText(text);
+ * 	    this.setAmount1(amount1);
+ *     }
+ *
+ * And in JSONUtility you can use that constructor to add new instances without
+ * re-using variables and without having a bunch of different variables and without\\
+ * downcasting:
+ *
+ *        cardList.add(new EconomicEffect(
+ *                 EconomicEffect.EffectType.FROM_BANK,
+ *                 "Deres premieobligation er udtrukket. De modtager kr. 1000 af banken.",
+ *                 1000));
+ *
+ *  @author Neal Patrick Norman, s060527@student.dtu.dk
+ *
+ *
+ * @author Malte B. Kristensen,s185039@student.dtu.dk
  */
 
 public class JSONUtility {
@@ -528,6 +567,7 @@ public class JSONUtility {
     /**
      * Load a Game-object from a corresponding JSON-file.
      * @return Fully configured Game-object. Should return an empty game-object if something goes wrong.
+     * @author Malte B. Kristensen,s185039@student.dtu.dk
      */
     public Game createGame() {
 
