@@ -65,6 +65,11 @@ public class GameController {
 
     /**
      * Constructor for a controller of a game.
+     *  TODO: There is a call to super();, but GameController has no superclass, so this call is pointless.
+     *  also consider standardising the constructor. Stick to one convention create object in constructor:
+     *  private JSONUtility ju = new JSONUtility(); > constructor
+     *  @author Neal P. Norman, 	    s060527@student.dtu.dk
+     *
      */
     public GameController() {
         super();
