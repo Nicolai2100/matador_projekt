@@ -62,6 +62,7 @@ public class GameController {
     private View view;
     private boolean terminated;
     private boolean disposed = false;
+    private IDiceCup diceCup;
 
     /**
      * Constructor for a controller of a game.
@@ -77,14 +78,16 @@ public class GameController {
         gui = new GUI();
         initializeGUI();
         gameDb = new GameDAO();
+        diceCup = new DiceCup();
     }
 
     /**
+     * TODO: This method should be moved to the View class, possibly as a part of the existing initializeGUI-method in that class.
      * This method will initialize the GUI by adding descriptions to all properties. As of now, the initialization
      * assumes that the spaces of the game fit to the fields of the GUI;
      * this could eventually be changed, by creating the GUI fields
      * based on the underlying game's spaces (fields).
-     *
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     public void initializeGUI() {
         int i = 0;
@@ -133,10 +136,7 @@ public class GameController {
     public void playOrLoadGame() {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil", "Afslut");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
-            game.shuffleCardDeck();
             createPlayers();
-            view = new View(game, gui);
-            view.initializeGUI();
             play();
         } else if (userSelection.equals("Afslut")) {
             System.exit(0);
@@ -144,10 +144,6 @@ public class GameController {
             String gameSelection = chooseFromOptions(gameDb.getGamesList(), "Vælg spil:", "Annuller", null, null, null);
             if (gameSelection != null) {
                 game = gameDb.loadGame(game, gameSelection);
-                //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
-                game.shuffleCardDeck();
-                view = new View(game, gui);
-                view.initializeGUI();
                 play();
             }
         }
@@ -158,8 +154,12 @@ public class GameController {
      * Asks the user how many players, they are.
      * Then asks each player for their name, their chosen color and chosen type of vehicle.
      * Sets the data for each player object according to their choices.
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
+     * @author Neal P. Norman, 	    s060527@student.dtu.dk
      */
     private void createPlayers() {
+        //Create a new game.
+        game = ju.createGame();
         //Ask for number of players with -chooseFromOptions- 3 to 6 players
         ArrayList<Integer> options = new ArrayList<>(Arrays.asList(3, 4, 5, 6));
         Integer numOfPlayers = chooseFromOptions(options, "Hvor mange spillere?", "Annuller", null, null, null);
@@ -212,6 +212,12 @@ public class GameController {
      * game at any point.
      */
     public void play() {
+
+        //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
+        game.shuffleCardDeck();
+        view = new View(game, gui);
+        view.initializeGUI();
+
         List<Player> players = game.getPlayers();
         Player c = game.getCurrentPlayer();
 
@@ -416,8 +422,9 @@ public class GameController {
             gui.showMessage(player + ", hvis du ikke slår to ens denne gang, skal du betale bøden på 1000 kr og derefter rykke frem.");
         }
         do {
-            int die1 = (int) (1 + 6.0 * Math.random());
-            int die2 = (int) (1 + 6.0 * Math.random());
+            diceCup.rollDice();
+            int die1 = diceCup.getDice()[0];
+            int die2 = diceCup.getDice()[1];
             sumOfDies = die1 + die2;
             castDouble = (die1 == die2);
             gui.setDice(die1, die2);
@@ -1479,6 +1486,14 @@ public class GameController {
      */
     public Game getGame() {
         return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public void setDiceCup(IDiceCup diceCup) {
+        this.diceCup = diceCup;
     }
 
     /**

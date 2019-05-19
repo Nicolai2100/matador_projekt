@@ -207,6 +207,7 @@ public class Game extends Subject {
      * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
      */
     public void createPlayers(int numOfPlayers) {
+        players.clear();
         for (int i = 0; i < numOfPlayers; i++) {
             Player player = new Player();
             int numOfPlayer = i + 1;
