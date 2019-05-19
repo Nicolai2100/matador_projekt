@@ -82,11 +82,12 @@ public class GameController {
     }
 
     /**
+     * TODO: This method should be moved to the View class, possibly as a part of the existing initializeGUI-method in that class.
      * This method will initialize the GUI by adding descriptions to all properties. As of now, the initialization
      * assumes that the spaces of the game fit to the fields of the GUI;
      * this could eventually be changed, by creating the GUI fields
      * based on the underlying game's spaces (fields).
-     *
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     public void initializeGUI() {
         int i = 0;
@@ -153,8 +154,12 @@ public class GameController {
      * Asks the user how many players, they are.
      * Then asks each player for their name, their chosen color and chosen type of vehicle.
      * Sets the data for each player object according to their choices.
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
+     * @author Neal P. Norman, 	    s060527@student.dtu.dk
      */
     private void createPlayers() {
+        //Create a new game.
+        game = ju.createGame();
         //Ask for number of players with -chooseFromOptions- 3 to 6 players
         ArrayList<Integer> options = new ArrayList<>(Arrays.asList(3, 4, 5, 6));
         Integer numOfPlayers = chooseFromOptions(options, "Hvor mange spillere?", "Annuller", null, null, null);
@@ -211,7 +216,7 @@ public class GameController {
         //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
         game.shuffleCardDeck();
         view = new View(game, gui);
-        view.initializePlayers();
+        view.initializeGUI();
 
         List<Player> players = game.getPlayers();
         Player c = game.getCurrentPlayer();
