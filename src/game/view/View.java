@@ -54,8 +54,9 @@ public class View implements Observer, Runnable {
     }
 
     /**
-     *  This method is used to decide which part of the view have to be updated as a response
-     *  to a change in the state of a model object.
+     * This method is used to decide which part of the view have to be updated as a response
+     * to a change in the state of a model object.
+     *
      * @param subject the subject which changed
      */
     @Override
@@ -69,14 +70,15 @@ public class View implements Observer, Runnable {
                 updateProperty((Property) subject);
             }
             if (subject instanceof Game) {
-                initializePlayers();
+                initializeGUI();
             }
         }
     }
 
     /**
-     *  This method is used to update the GUI when a Property-object have
-     *  changed its state.
+     * This method is used to update the GUI when a Property-object have
+     * changed its state.
+     *
      * @param property
      */
     public void updateProperty(Property property) {
@@ -151,6 +153,7 @@ public class View implements Observer, Runnable {
     /**
      * This method is used to calculate the number of spaces a players token have to move on the gameboard
      * to get to the new position.
+     *
      * @param player
      * @return
      * @author Nicolai J. Larsen
@@ -195,7 +198,7 @@ public class View implements Observer, Runnable {
      * a new game or loading a saved game.
      * @author Nicolai J. Larsen
      */
-    public void initializePlayers() {
+    public void initializeGUI() {
         for (Player player : game.getPlayers()) {
             if (player.getColorEnumType() != null) player.setColor(transformPlayerColor(player.getColorEnumType()));
             GUI_Car car = new GUI_Car(player.getColor(), Color.BLUE, transformCarType(player.getCarType()), GUI_Car.Pattern.FILL);
@@ -213,10 +216,17 @@ public class View implements Observer, Runnable {
             space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
             player.attach(this);
         }
+
+        for (Space space : game.getSpaces()) {
+            if (space instanceof Property)
+                if (((Property) space).getOwner() != null)
+                updateProperty((Property) space);
+        }
     }
 
     /**
      * This method is used for visualizing that the players token is moved stepwise.
+     *
      * @author Nicolai J. Larsen
      */
     @Override
@@ -230,6 +240,7 @@ public class View implements Observer, Runnable {
     /**
      * This method is used to return a color from the Color-class, which corresponds
      * to the choice the player made, when choosing his color.
+     *
      * @param playerColor
      * @return
      * @author Nicolai d T. Wulff
@@ -256,6 +267,7 @@ public class View implements Observer, Runnable {
     /**
      * This method is used to return an enum that corresponds to the choice of token
      * the player have chosen.
+     *
      * @param carType
      * @return
      * @author Nicolai d T. Wulff

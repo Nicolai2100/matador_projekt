@@ -136,7 +136,7 @@ public class GameController {
             game.shuffleCardDeck();
             createPlayers();
             view = new View(game, gui);
-            view.initializePlayers();
+            view.initializeGUI();
             play();
         } else if (userSelection.equals("Afslut")) {
             System.exit(0);
@@ -147,7 +147,7 @@ public class GameController {
                 //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
                 game.shuffleCardDeck();
                 view = new View(game, gui);
-                view.initializePlayers();
+                view.initializeGUI();
                 play();
             }
         }
