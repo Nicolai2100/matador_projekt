@@ -143,6 +143,7 @@ public class GameController {
         } else {
             String gameSelection = chooseFromOptions(gameDb.getGamesList(), "Vælg spil:", "Annuller", null, null, null);
             if (gameSelection != null) {
+                game = ju.createGame();
                 game = gameDb.loadGame(game, gameSelection);
                 play();
             }
@@ -252,6 +253,7 @@ public class GameController {
         //When the game is terminated (either by ending og exiting), the view is disposed,
         //and then a new game is instantiated, ready to be started either as a new game or a loaded game.
         resetViewAndGUI();
+        game = null;
     }
 
     /**
