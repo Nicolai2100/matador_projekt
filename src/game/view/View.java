@@ -22,8 +22,8 @@ import java.util.Map;
  * the state of the game (model) changes.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- * @author Nicolai J. Larsen
- * @author Nicolai d T. Wulff
+ * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
+ * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
  */
 public class View implements Observer, Runnable {
     private Game game;
@@ -118,7 +118,7 @@ public class View implements Observer, Runnable {
      * @param player the player who's state is to be updated
      * @author Ekkart Kindler, ekki@dtu.dk
      * edited by
-     * @author Nicolai J. Larsen
+     * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
      */
     private void updatePlayer(Player player) {
         GUI_Player guiPlayer = this.player2GuiPlayer.get(player);
@@ -156,7 +156,7 @@ public class View implements Observer, Runnable {
      *
      * @param player
      * @return
-     * @author Nicolai J. Larsen
+     * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
      */
     public int calcNumOfMoves(Player player) {
         Integer oldPos = player2position.get(player);
@@ -196,7 +196,7 @@ public class View implements Observer, Runnable {
     /**
      * This method is used to create the games Player-objects in the GUI. It is only used when starting
      * a new game or loading a saved game.
-     * @author Nicolai J. Larsen
+     * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
      */
     public void initializeGUI() {
         for (Player player : game.getPlayers()) {
@@ -227,7 +227,7 @@ public class View implements Observer, Runnable {
     /**
      * This method is used for visualizing that the players token is moved stepwise.
      *
-     * @author Nicolai J. Larsen
+     * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
      */
     @Override
     public void run() {
@@ -243,7 +243,7 @@ public class View implements Observer, Runnable {
      *
      * @param playerColor
      * @return
-     * @author Nicolai d T. Wulff
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private Color transformPlayerColor(Player.PlayerColor playerColor) {
         switch (playerColor) {
@@ -270,7 +270,7 @@ public class View implements Observer, Runnable {
      *
      * @param carType
      * @return
-     * @author Nicolai d T. Wulff
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     private GUI_Car.Type transformCarType(Player.CarType carType) {
         switch (carType) {

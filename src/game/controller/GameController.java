@@ -133,7 +133,8 @@ public class GameController {
      * This method calls the GUI to show the first dialogue with the user.
      * Shows a menu, where the user can choose to either start a new game, load a game, or exit the application.
      * The method recurses infinitly, so that the menu is automatically shown when a game is ended og exited.
-     * @author Nicolai L, Nicolai W
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
+     * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
      */
     public void playOrLoadGame() {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil", "Afslut");
@@ -268,7 +269,7 @@ public class GameController {
      * Each player (in real life) may use these options whenever they wish.
      *
      * @param player the player passed in to take turn.
-     * @author Nicolai W s185036
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     public void showTurnMenu(Player player) {
         boolean continueChoosing = true;
@@ -1507,7 +1508,7 @@ public class GameController {
      * @param <T> Generic type.
      * @return ArrayList of generic type, T. The sorted list of data.
      * @author This method is inspired by a quicksort-implementation by Ekkart Kindler, ekki@dtu.dk.
-     *         It is then changed and further developed upon by Nicolai W s185036.
+     *         It is then changed and further developed upon by Nicolai d T. Wulff,	s185036@student.dtu.dk.
      */
     private <T> ArrayList<T> quickSort(Collection<T> c, Comparator<T> comparator) {
         class QuickSorter {

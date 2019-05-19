@@ -57,7 +57,7 @@ import java.util.ArrayList;
  *                 "Deres premieobligation er udtrukket. De modtager kr. 1000 af banken.",
  *                 1000));
  *
- *  @author Neal Patrick Norman, s060527@student.dtu.dk
+ * @author Neal Patrick Norman, s060527@student.dtu.dk
  *
  *
  * @author Malte B. Kristensen,s185039@student.dtu.dk
