@@ -1,1 +1,1 @@
-start javaw -jar matador_projekt.jar
+start javaw -Dfile.encoding=utf-8 -jar matador_projekt.jar
