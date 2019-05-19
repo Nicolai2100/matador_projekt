@@ -130,10 +130,7 @@ public class GameController {
     public void playOrLoadGame() {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil", "Afslut");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
-            game.shuffleCardDeck();
             createPlayers();
-            view = new View(game, gui);
-            view.initializePlayers();
             play();
         } else if (userSelection.equals("Afslut")) {
             System.exit(0);
@@ -141,10 +138,6 @@ public class GameController {
             String gameSelection = chooseFromOptions(gameDb.getGamesList(), "Vælg spil:", "Annuller", null, null, null);
             if (gameSelection != null) {
                 game = gameDb.loadGame(game, gameSelection);
-                //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
-                game.shuffleCardDeck();
-                view = new View(game, gui);
-                view.initializePlayers();
                 play();
             }
         }
@@ -209,6 +202,12 @@ public class GameController {
      * game at any point.
      */
     public void play() {
+
+        //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
+        game.shuffleCardDeck();
+        view = new View(game, gui);
+        view.initializePlayers();
+
         List<Player> players = game.getPlayers();
         Player c = game.getCurrentPlayer();
 
@@ -1480,6 +1479,14 @@ public class GameController {
      */
     public Game getGame() {
         return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public void setDiceCup(IDiceCup diceCup) {
+        this.diceCup = diceCup;
     }
 
     /**

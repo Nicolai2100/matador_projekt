@@ -3,6 +3,11 @@ package test;
 import game.model.DiceCup;
 import game.model.IDiceCup;
 
+/**
+ * This class is a "fake" dice cup, that can be used when
+ * testing the game. This dice cup differs from the regular
+ * in that it can set predetermined values through the constructor
+ */
 public class MockDiceCup implements IDiceCup {
 
     private int[] dice = new int[2];
