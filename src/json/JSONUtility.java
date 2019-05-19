@@ -13,6 +13,7 @@ import game.model.properties.RealEstate;
 import game.model.properties.Ship;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -583,7 +584,7 @@ public class JSONUtility {
         Game game = new Game();
         try {
             InputStream in = getClass().getResourceAsStream("/game.json");
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
             GsonBuilder builder = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(Space.class, new Adapter<Space>()).registerTypeAdapter(Card.class, new Adapter<Card>());
 
