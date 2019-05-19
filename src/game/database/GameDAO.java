@@ -25,9 +25,10 @@ import java.util.List;
  * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
  */
 public class GameDAO implements IGameDAO {
-    private static final String url = "jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020";
-    private static final String user = "s185020";
-    private static final String password = "iEFSqK2BFP60YWMPlw77I";
+
+    private static final String URL = "jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020";
+    private static final String USER = "s185020";
+    private static final String PASSWORD = "iEFSqK2BFP60YWMPlw77I";
     private static Connection connection;
 
     public GameDAO() {
@@ -44,7 +45,7 @@ public class GameDAO implements IGameDAO {
     public static Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
-                connection = DriverManager.getConnection(url, user, password);
+                connection = DriverManager.getConnection(URL, USER, PASSWORD);
             }
         } catch (SQLException e) {
             e.printStackTrace();
