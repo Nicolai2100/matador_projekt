@@ -62,6 +62,7 @@ public class GameController {
     private View view;
     private boolean terminated;
     private boolean disposed = false;
+    private IDiceCup diceCup;
 
     /**
      * Constructor for a controller of a game.
@@ -77,6 +78,7 @@ public class GameController {
         gui = new GUI();
         initializeGUI();
         gameDb = new GameDAO();
+        diceCup = new DiceCup();
     }
 
     /**
@@ -133,10 +135,7 @@ public class GameController {
     public void playOrLoadGame() {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil", "Afslut");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
-            game.shuffleCardDeck();
             createPlayers();
-            view = new View(game, gui);
-            view.initializeGUI();
             play();
         } else if (userSelection.equals("Afslut")) {
             System.exit(0);
@@ -144,10 +143,6 @@ public class GameController {
             String gameSelection = chooseFromOptions(gameDb.getGamesList(), "Vælg spil:", "Annuller", null, null, null);
             if (gameSelection != null) {
                 game = gameDb.loadGame(game, gameSelection);
-                //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
-                game.shuffleCardDeck();
-                view = new View(game, gui);
-                view.initializeGUI();
                 play();
             }
         }
@@ -212,6 +207,12 @@ public class GameController {
      * game at any point.
      */
     public void play() {
+
+        //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
+        game.shuffleCardDeck();
+        view = new View(game, gui);
+        view.initializePlayers();
+
         List<Player> players = game.getPlayers();
         Player c = game.getCurrentPlayer();
 
@@ -416,8 +417,9 @@ public class GameController {
             gui.showMessage(player + ", hvis du ikke slår to ens denne gang, skal du betale bøden på 1000 kr og derefter rykke frem.");
         }
         do {
-            int die1 = (int) (1 + 6.0 * Math.random());
-            int die2 = (int) (1 + 6.0 * Math.random());
+            diceCup.rollDice();
+            int die1 = diceCup.getDice()[0];
+            int die2 = diceCup.getDice()[1];
             sumOfDies = die1 + die2;
             castDouble = (die1 == die2);
             gui.setDice(die1, die2);
@@ -1479,6 +1481,14 @@ public class GameController {
      */
     public Game getGame() {
         return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public void setDiceCup(IDiceCup diceCup) {
+        this.diceCup = diceCup;
     }
 
     /**
