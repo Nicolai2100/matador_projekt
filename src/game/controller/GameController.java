@@ -62,6 +62,7 @@ public class GameController {
     private View view;
     private boolean terminated;
     private boolean disposed = false;
+    private IDiceCup diceCup;
 
     /**
      * Constructor for a controller of a game.
@@ -72,6 +73,7 @@ public class GameController {
         gui = new GUI();
         initializeGUI();
         gameDb = new GameDAO();
+        diceCup = new DiceCup();
     }
 
     /**
@@ -414,8 +416,9 @@ public class GameController {
         }
 
         do {
-            int die1 = (int) (1 + 6.0 * Math.random());
-            int die2 = (int) (1 + 6.0 * Math.random());
+            diceCup.rollDice();
+            int die1 = diceCup.getDice()[0];
+            int die2 = diceCup.getDice()[1];
             sumOfDies = die1 + die2;
             castDouble = (die1 == die2);
             gui.setDice(die1, die2);
