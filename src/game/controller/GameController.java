@@ -15,7 +15,9 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 
@@ -1472,8 +1474,8 @@ public class GameController {
      */
     public void playSound(String fileName) {
         try {
-            File f = new File("src/resources/sounds/" + fileName);
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+            InputStream is = getClass().getResourceAsStream("/sounds/" + fileName);
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
             clip.start();

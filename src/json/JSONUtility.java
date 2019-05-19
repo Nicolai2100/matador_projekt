@@ -568,7 +568,7 @@ public class JSONUtility {
      * @author Malte B. Kristensen,s185039@student.dtu.dk
      */
     public Game createGame() {
-
+/*
         File file = new File("src/resources/game.json");
 
         if (!file.exists()) {
@@ -577,18 +577,18 @@ public class JSONUtility {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
         Game game = new Game();
-
         try {
-            FileReader fileReader = new FileReader("src/resources/game.json");
+            InputStream in = getClass().getResourceAsStream("/game.json");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
             GsonBuilder builder = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(Space.class, new Adapter<Space>()).registerTypeAdapter(Card.class, new Adapter<Card>());
 
             Gson gson = builder.create();
 
-            JsonReader reader = gson.newJsonReader(fileReader);
+            JsonReader reader = gson.newJsonReader(bufferedReader);
 
             game = gson.fromJson(reader, Game.class);
 
