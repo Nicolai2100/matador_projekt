@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Jeppe s170196, Nicolai s185036, Nicolai L s185020
+ * @author Jeppe s170196, Nicolai s185036, Nicolai Larsen s185020
  */
 public class GameDAO implements IGameDAO {
     private static final String url = "jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020";
@@ -37,6 +37,8 @@ public class GameDAO implements IGameDAO {
      *
      * @return
      * @throws SQLException
+     * @author Jeppe s170196
+     * @author Nicolai J. Larsen
      */
     public static Connection getConnection() {
         try {
@@ -52,7 +54,8 @@ public class GameDAO implements IGameDAO {
     /**
      * Metoden bruges til at gemme et spil i databasen
      *
-     * @author Jeppe s170196, Nicolai s185020
+     * @author Jeppe s170196
+     * @author Nicolai J. Larsen
      */
     @Override
     public void saveGame(Game game) {
@@ -142,8 +145,7 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     * Metoden bruges til at slette et spil fra databasen
-     *
+     * Metoden bruges til at slette et spil fra databasen.
      * @author Jeppe s170196
      */
     @Override
@@ -253,8 +255,7 @@ public class GameDAO implements IGameDAO {
 
     /**
      * Metoden sætter alle tabellerne op, hvis de ikke allerede ligger i databasen.
-     *
-     * @author Nicolai s185020
+     * @author Nicolai J. Larsen
      */
     public void initializeDataBase() {
         try {
