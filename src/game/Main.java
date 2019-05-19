@@ -14,6 +14,7 @@ public class Main {
      * main metoden ændret af Nicolai J. Larsen, s185020@student.dtu.dk
      */
     public static void main(String[] args) {
+        //System.setProperty("file.encoding", "UTF-8");
         new GameController().playOrLoadGame();
     }
 }
