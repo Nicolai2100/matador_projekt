@@ -6,7 +6,9 @@ import game.model.IDiceCup;
 /**
  * This class is a "fake" dice cup, that can be used when
  * testing the game. This dice cup differs from the regular
- * in that it can set predetermined values through the constructor
+ * in that it can set predetermined values through the constructor.
+ * When all predetermined values have been used, the dice cup
+ * will then begin to act like a regular dice cup.
  */
 public class MockDiceCup implements IDiceCup {
 
