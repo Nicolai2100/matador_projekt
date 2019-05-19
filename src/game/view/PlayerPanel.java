@@ -14,7 +14,11 @@ import java.util.HashSet;
 import java.util.Map;
 
 /**
- * @Malte, Nicolai L og Nicolai W
+ * This class is used to represent the state of each Player-objects in the game. It will change in response
+ * to the changes in the Player-objects states.
+ * @author Malte B. Kristensen, s185039@student.dtu.dk
+ * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
+ * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
  */
 public class PlayerPanel extends JFrame implements MouseListener {
     private Game game;
@@ -43,9 +47,13 @@ public class PlayerPanel extends JFrame implements MouseListener {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         this.getContentPane().add(mainPanel);
         update();
-
     }
 
+    /**
+     * This method is updating the frame and panel that represents the state of a Player-object.
+     * It is used every time a Player-objects state have changed. First all the panels are removed from
+     * the main panel in the PlayerPanel-JFrame, then all the JPanels are rebuild.
+     */
     public void update() {
         mainPanel.removeAll();
         colorGroup2JPanel = new HashMap<>();
@@ -78,7 +86,6 @@ public class PlayerPanel extends JFrame implements MouseListener {
         cardLabel.setMinimumSize(smallPanelDimension);
         cardLabel.setMaximumSize(smallPanelDimension);
         cardLabel.setPreferredSize(smallPanelDimension);
-
 
         playerPanel.add(colorPanel);
         playerPanel.add(nameLabel);
@@ -133,6 +140,14 @@ public class PlayerPanel extends JFrame implements MouseListener {
         this.repaint();
     }
 
+    /**
+     * This method is used to make a JPanel that contains all the Property-objects belonging
+     * to the same color group owned by the Player-object.
+     * @param color
+     * @return
+     * @author Malte B. Kristensen
+     * @author Nicolai J. Larsen
+     */
     public JPanel panelMaker(ColorGroup color) {
         JPanel colorGroupPanel = new JPanel();
         colorGroupPanel.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
@@ -149,23 +164,32 @@ public class PlayerPanel extends JFrame implements MouseListener {
         colorPanel.setPreferredSize(new Dimension(64,20));
         colorPanel.setBackground(ColorGroup.colorGroupTransformer(color));
         colorGroupPanel.add(colorPanel);
-//      colorGroupPanel.setBackground(ColorGroup.colorGroupTransformer(color));
         mainPanel.add(colorGroupPanel);
         return colorGroupPanel;
     }
 
+    /**
+     * This method is used to make the labels representing the Properties owned by the Player.
+     * @param jPanel
+     * @param property
+     * @author Malte B. Kristensen
+     * @author Nicolai J. Larsen
+     * @author Nicolai d T. Wulff
+     */
     public void labelMaker(JPanel jPanel, Property property) {
         if (!property.getMortgaged()) {
             JLabel jLabel = new JLabel(property.getName());
-/*
-            jLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-*/
-
             jLabel.addMouseListener(this);
             jPanel.add(jLabel);
         }
     }
 
+    /**
+     *
+     * @param jPanel
+     * @param property
+     * @author Nicolai d T. Wulff
+     */
     public void pawnedLabelMaker(JPanel jPanel, Property property) {
         if (property.getMortgaged()) {
             JLabel jLabel = new JLabel(property.getName());
@@ -174,6 +198,13 @@ public class PlayerPanel extends JFrame implements MouseListener {
         }
     }
 
+    /**
+     * The next methods are used to give the players information about the properties in the PlayerPanels.
+     * By clicking on the labels representing an owned Property, these methods responds by showing the information
+     * about the Property in the middle of the GUI.
+     * @param e
+     * @author Nicolai d T. Wulff
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         JLabel jl = ((JLabel) e.getSource());

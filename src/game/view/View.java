@@ -22,13 +22,12 @@ import java.util.Map;
  * the state of the game (model) changes.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- * Sørg for at udvide klassen View, så at dens metode
+ * @author Nicolai J. Larsen
+ * @author Nicolai d T. Wulff
  */
 public class View implements Observer, Runnable {
-
     private Game game;
     private GUI gui;
-
     private Map<Player, GUI_Player> player2GuiPlayer = new HashMap<Player, GUI_Player>();
     private Map<Player, Integer> player2position = new HashMap<Player, Integer>();
     private Map<Space, GUI_Field> space2GuiField = new HashMap<Space, GUI_Field>();
@@ -45,20 +44,20 @@ public class View implements Observer, Runnable {
     public View(Game game, GUI gui) {
         this.game = game;
         this.gui = gui;
-
         GUI_Field[] guiFields = gui.getFields();
-
         int i = 0;
         for (Space space : game.getSpaces()) {
-            // TODO, here we assume that the games fields fit to the GUI's fields;
-            // the GUI fields should actually be created according to the game's
-            // fields
             space2GuiField.put(space, guiFields[i]);
             space.attach(this);
             i++;
         }
     }
 
+    /**
+     *  This method is used to decide which part of the view have to be updated as a response
+     *  to a change in the state of a model object.
+     * @param subject the subject which changed
+     */
     @Override
     public void update(Subject subject) {
         if (!disposed) {
@@ -75,6 +74,11 @@ public class View implements Observer, Runnable {
         }
     }
 
+    /**
+     *  This method is used to update the GUI when a Property-object have
+     *  changed its state.
+     * @param property
+     */
     public void updateProperty(Property property) {
         GUI_Field gui_field = this.space2GuiField.get(property);
         if (gui_field instanceof GUI_Ownable) {
@@ -87,7 +91,6 @@ public class View implements Observer, Runnable {
                 gui_ownable.setBorder(null);
                 gui_ownable.setOwnerName(null);
             }
-
             gui_ownable.setRent(property.getRent() + "");
         }
         if (property instanceof RealEstate) {
@@ -98,25 +101,22 @@ public class View implements Observer, Runnable {
             } else if (((RealEstate) property).getHouseCount() == 5) {
                 street.setHotel(true);
             }
-            //street.setRent(property.getRent() + "");
         }
-
         if (property instanceof Brewery) {
             ((GUI_Ownable) gui_field).setRent(property.getRent() + " gange øjnene.");
         }
-
         if (property.getOwner() != null) {
             player2PlayerPanel.get(property.getOwner()).update();
         }
     }
 
     /**
-     * This method updates a player's state in the GUI. Right now, this
-     * concerns the players position and balance only. But, this should
-     * also include other information (being i prison, available cards,
-     * ...)
+     * This method updates a player's state in the GUI.
      *
      * @param player the player who's state is to be updated
+     * @author Ekkart Kindler, ekki@dtu.dk
+     * edited by
+     * @author Nicolai J. Larsen
      */
     private void updatePlayer(Player player) {
         GUI_Player guiPlayer = this.player2GuiPlayer.get(player);
@@ -147,10 +147,13 @@ public class View implements Observer, Runnable {
             player2PlayerPanel.get(player).update();
         }
     }
+
     /**
+     * This method is used to calculate the number of spaces a players token have to move on the gameboard
+     * to get to the new position.
      * @param player
      * @return
-     * @author Nicolai L
+     * @author Nicolai J. Larsen
      */
     public int calcNumOfMoves(Player player) {
         Integer oldPos = player2position.get(player);
@@ -171,6 +174,9 @@ public class View implements Observer, Runnable {
         return moves;
     }
 
+    /**
+     * This method is used to remove the View-class as an observer for the game's Player- and Space-objects.
+     */
     public void dispose() {
         if (!disposed) {
             disposed = true;
@@ -185,7 +191,9 @@ public class View implements Observer, Runnable {
     }
 
     /**
-     * Nicolai L
+     * This method is used to create the games Player-objects in the GUI. It is only used when starting
+     * a new game or loading a saved game.
+     * @author Nicolai J. Larsen
      */
     public void initializePlayers() {
         for (Player player : game.getPlayers()) {
@@ -200,7 +208,6 @@ public class View implements Observer, Runnable {
             } else {
                 player2position.put(player, 0);
             }
-
             PlayerPanel playerPanel = new PlayerPanel(game, player, gui);
             player2PlayerPanel.put(player, playerPanel);
             space2GuiField.get(player.getCurrentPosition()).setCar(player2GuiPlayer.get(player), true);
@@ -208,6 +215,10 @@ public class View implements Observer, Runnable {
         }
     }
 
+    /**
+     * This method is used for visualizing that the players token is moved stepwise.
+     * @author Nicolai J. Larsen
+     */
     @Override
     public void run() {
         try {
@@ -216,6 +227,13 @@ public class View implements Observer, Runnable {
         }
     }
 
+    /**
+     * This method is used to return a color from the Color-class, which corresponds
+     * to the choice the player made, when choosing his color.
+     * @param playerColor
+     * @return
+     * @author Nicolai d T. Wulff
+     */
     private Color transformPlayerColor(Player.PlayerColor playerColor) {
         switch (playerColor) {
             case GREY:
@@ -235,6 +253,13 @@ public class View implements Observer, Runnable {
         }
     }
 
+    /**
+     * This method is used to return an enum that corresponds to the choice of token
+     * the player have chosen.
+     * @param carType
+     * @return
+     * @author Nicolai d T. Wulff
+     */
     private GUI_Car.Type transformCarType(Player.CarType carType) {
         switch (carType) {
             case CAR:

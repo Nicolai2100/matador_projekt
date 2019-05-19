@@ -217,8 +217,9 @@ public class Player extends Subject {
     }
 
     /**
-     * Nicolai L - checks whether a player have obtained the full colorgroup and is able
+     * Checks whether a player have obtained the full colorgroup and is able
      * to build houses.
+     * @author Nicolai J. Larsen
      */
     public void checkIsSuperOwned(Property property) {
         int ownedNum = 0;

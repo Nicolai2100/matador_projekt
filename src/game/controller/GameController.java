@@ -221,7 +221,6 @@ public class GameController {
         terminated = false;
         while (!terminated) {
             Player player = players.get(current);
-
             if (!player.isBroke()) {
                 try {
                     showTurnMenu(player);
@@ -235,7 +234,6 @@ public class GameController {
 
                 }
             }
-
             current = (current + 1) % players.size();
             game.setCurrentPlayer(players.get(current));
         }
@@ -412,7 +410,6 @@ public class GameController {
         } else if (player.isInPrison() && player.getDoubleAttempts() == 3) {
             gui.showMessage(player + ", hvis du ikke slår to ens denne gang, skal du betale bøden på 1000 kr og derefter rykke frem.");
         }
-
         do {
             int die1 = (int) (1 + 6.0 * Math.random());
             int die2 = (int) (1 + 6.0 * Math.random());
