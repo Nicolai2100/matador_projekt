@@ -1,0 +1,1 @@
+start javaw -jar matador_projekt.jar
