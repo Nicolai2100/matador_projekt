@@ -1445,7 +1445,7 @@ public class GameController {
     }
 
     /**
-     * Used by properties and cards to get acces to the game object.
+     * Used by properties and cards to get access to the game object.
      * @return
      */
     public Game getGame() {
