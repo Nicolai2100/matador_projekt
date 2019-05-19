@@ -396,7 +396,6 @@ public class GameController {
      * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     public void makeMove(Player player) throws PlayerBrokeException, GameEndedException {
-        displaySortedInfo();
         boolean castDouble;
         int doublesCount = 0;
 
@@ -1458,6 +1457,7 @@ public class GameController {
     /**
      * This method is used to play a sound, which is located in the resources/sounds directory.
      * @param fileName filename of the sound.
+     * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      */
     public void playSound(String fileName) {
         try {

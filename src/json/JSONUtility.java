@@ -61,6 +61,7 @@ import java.util.ArrayList;
  *
  *
  * @author Malte B. Kristensen,s185039@student.dtu.dk
+ * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
  */
 
 public class JSONUtility {
@@ -375,13 +376,11 @@ public class JSONUtility {
         ((EconomicEffect) card).setAmount1(200);
         cardList.add(card);
 
-        //2
         card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("Grundet dyrtiden har De fået gageforhøjelse. Modtag kr. 1000.");
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        //2
         card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("De modtager Deres aktieudbytte. Modtag kr. 1000 af banken.");
         ((EconomicEffect) card).setAmount1(1000);
@@ -392,7 +391,6 @@ public class JSONUtility {
         ((EconomicEffect) card).setAmount1(1000);
         cardList.add(card);
 
-        //2
         card = new EconomicEffect(EconomicEffect.EffectType.FROM_BANK);
         card.setText("De har vundet i Klasselotterliet. Modtag kr. 500.");
         ((EconomicEffect) card).setAmount1(500);

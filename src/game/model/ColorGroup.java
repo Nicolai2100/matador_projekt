@@ -4,7 +4,6 @@ package game.model;
  * This is the color model for property colors
  *
  * @author Malte B. Kristensen,s185039@student.dtu.dk
- * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
  * @author Neal P. Norman, 	s060527@student.dtu.dk
  *
  */
