@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"designpattern"},{"l":"game"},{"l":"game.controller"},{"l":"game.database"},{"l":"game.model"},{"l":"game.model.cards"},{"l":"game.model.exceptions"},{"l":"game.model.properties"},{"l":"game.view"},{"l":"json"},{"l":"test"}]

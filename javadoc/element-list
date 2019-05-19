@@ -1,0 +1,11 @@
+designpattern
+game
+game.controller
+game.database
+game.model
+game.model.cards
+game.model.exceptions
+game.model.properties
+game.view
+json
+test
