@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Jeppe s170196, Nicolai s185036, Nicolai Larsen s185020
+ * @author Jeppe K. Larsen, 	s170196@student.dtu.dk
+ * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
+ * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
  */
 public class GameDAO implements IGameDAO {
     private static final String url = "jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185020";
@@ -33,11 +35,10 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     * Metoden opretter en forbindelse til databasen, som gemmes som i en lokal variabel.
-     *
+     * This method either returns an open connection to the database, or creates and returns a new connection.
      * @return
      * @throws SQLException
-     * @author Jeppe s170196
+     * @author Jeppe K. Larsen
      * @author Nicolai J. Larsen
      */
     public static Connection getConnection() {
@@ -52,9 +53,8 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     * Metoden bruges til at gemme et spil i databasen
-     *
-     * @author Jeppe s170196
+     * This method is used to insert a game in the database.
+     * @author Jeppe K. Larsen
      * @author Nicolai J. Larsen
      */
     @Override
@@ -134,9 +134,8 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     * Metoden "opdaterer" et allerede gemt spil.
-     *
-     * @author Jeppe s170196
+     * This method is updating a already saved game in the database by deleting it and inserting it again.
+     * @author Jeppe K. Larsen
      */
     @Override
     public void updateGame(Game game) {
@@ -145,8 +144,8 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     * Metoden bruges til at slette et spil fra databasen.
-     * @author Jeppe s170196
+     * This method is used to delete a game from the database
+     * @author Jeppe K. Larsen, s170196
      */
     @Override
     public void deleteGame(Game game) {
@@ -161,11 +160,10 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     * Metoden bruges til at hente et gemt spil fra databasen
-     *
+     * This method is used to download a saved game from the database.
      * @param game
      * @return a game
-     * @author Jeppe s170196
+     * @author Jeppe K. Larsen
      */
     @Override
     public Game loadGame(Game game, String dateOfGameToLoad) {
@@ -234,7 +232,9 @@ public class GameDAO implements IGameDAO {
     }
 
     /**
-     * @author Jeppe s170196
+     * This method is used to return a list of dates of all the saved games in the database.
+     * Each date implies a specific saved game.
+     * @author Jeppe K. Larsen
      */
     @Override
     public List<String> getGamesList() {
@@ -252,12 +252,12 @@ public class GameDAO implements IGameDAO {
         }
         return gameList;
     }
-
     /**
-     * Metoden sætter alle tabellerne op, hvis de ikke allerede ligger i databasen.
+     * This method creates the all the tables needed to save and load the game
+     * if the tables are not already created.
      * @author Nicolai J. Larsen
      */
-    public void initializeDataBase() {
+    private void initializeDataBase() {
         try {
             getConnection().setAutoCommit(false);
             PreparedStatement createTableGame = getConnection().prepareStatement(
