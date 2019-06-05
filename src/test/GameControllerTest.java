@@ -264,17 +264,23 @@ class GameControllerTest {
         prop = (Property) game.getSpaces().get(35);
         p.addOwnedProperty(prop);
         prop.setOwner(p);
+
+        Card card1 = new GetOutOfJail();
+        card1.setText("I anledningen af kongens fødselsdag benådes De herved for fængsel. Dette kort kan opbevares, indtil De får brug for det, eller De kan sælge det.");
+        ArrayList<Card> ownedCards = new ArrayList<>();
+        ownedCards.add(card1);
+        p.setOwnedCards(ownedCards);
         //p.setBroke(true);
 
         int[] diceValues = {3, 4};
         MockDiceCup diceCup = new MockDiceCup(diceValues);
 
-        Card card = new MoveEffect(MoveEffect.TargetTypes.THREE_FORWARDS);
-        card.setText("Ryk tre felter frem.");
+        Card card2 = new MoveEffect(MoveEffect.TargetTypes.THREE_FORWARDS);
+        card2.setText("Ryk tre felter frem.");
 
         game.shuffleCardDeck();
         List<Card> deck = new ArrayList<>(game.getCardDeck());
-        deck.add(0, card);
+        deck.add(0, card2);
         game.setCardDeck(deck);
 
         GameController controller = new GameController();
@@ -307,7 +313,11 @@ class GameControllerTest {
         List<Card> deck = new ArrayList<>(game.getCardDeck());
         game.shuffleCardDeck();
 
-        Card card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS);
+        Card card = new MoveEffect(MoveEffect.TargetTypes.THREE_FORWARDS);
+        card.setText("Ryk tre felter frem.");
+        deck.add(0, card);
+
+        card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS);
         card.setText("De har lagt penge ud til et sammenskudsgilde. Mærkværdigvis betaler alle straks. Modtag fra hver medspiller kr. 500.");
         ((EconomicEffect) card).setAmount1(500);
         deck.add(0, card);
@@ -322,7 +332,8 @@ class GameControllerTest {
 
         game.setCardDeck(deck);
 
-        int[] diceValues = {3, 5, 1, 1, 3, 3, 6, 6, 3, 4, 1, 3, 3, 4};
+        //int[] diceValues = {3, 5, 1, 1, 3, 3, 6, 6, 3, 4, 1, 3, 6, 3, 3, 4};
+        int[] diceValues = {3, 5, 1, 1, 3, 3, 6, 6, 3, 4, 1, 3, 6, 3, 6, 1, 3, 4};
         MockDiceCup diceCup = new MockDiceCup(diceValues);
         GameController controller = new GameController();
         controller.setDiceCup(diceCup);
