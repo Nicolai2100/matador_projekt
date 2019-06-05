@@ -1,11 +1,21 @@
 package test;
 
 import game.controller.GameController;
+import game.model.Card;
 import game.model.Game;
 import game.model.Player;
+import game.model.Property;
+import game.model.cards.EconomicEffect;
+import game.model.cards.GetOutOfJail;
+import game.model.cards.MoveEffect;
 import game.model.properties.Brewery;
+import game.model.properties.RealEstate;
 import json.JSONUtility;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -66,7 +76,7 @@ class GameControllerTest {
     void threeDoublesInARowTest() {
         int[] diceValues = {3, 3, 4, 4, 5, 5};
         GameController controller = setupTestGame(3, diceValues);
-        controller.play();
+        controller.play(true);
     }
 
     /**
@@ -80,7 +90,7 @@ class GameControllerTest {
     void landOnChance() {
         int[] diceValues = {3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 6, 4, 6, 4, 6, 4, 6, 4, 6, 4, 6, 4, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3};
         GameController controller = setupTestGame(6, diceValues);
-        controller.play();
+        controller.play(true);
     }
 
     /**
@@ -98,7 +108,7 @@ class GameControllerTest {
         Brewery brewery = (Brewery) game.getSpaces().get(12);
         brewery.setOwner(p2);
         p2.addOwnedProperty(brewery);
-        controller.play();
+        controller.play(true);
     }
 
     /**
@@ -119,6 +129,203 @@ class GameControllerTest {
         p2.addOwnedProperty(brewery1);
         brewery2.setOwner(p2);
         p2.addOwnedProperty(brewery2);
-        controller.play();
+        controller.play(true);
+    }
+
+    @Test
+    void setupDemoGame() {
+        JSONUtility ju = new JSONUtility();
+        Game game = ju.createGame();
+        game.createPlayers(3);
+        List<Player> players = game.getPlayers();
+
+        Player p = players.get(0);
+        p.setName("Nicolai");
+        p.setColorEnumType(Player.PlayerColor.RED);
+        p.setCarType(Player.CarType.CAR);
+        Property prop = (Property) game.getSpaces().get(1);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        ((RealEstate) prop).setHouseCount(5);
+        prop = (Property) game.getSpaces().get(3);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        ((RealEstate) prop).setHouseCount(5);
+        prop = (Property) game.getSpaces().get(16);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        ((RealEstate) prop).setHouseCount(4);
+        prop = (Property) game.getSpaces().get(18);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        ((RealEstate) prop).setHouseCount(4);
+        prop = (Property) game.getSpaces().get(19);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        ((RealEstate) prop).setHouseCount(3);
+        prop = (Property) game.getSpaces().get(26);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(27);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(29);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        //prop = (Property) game.getSpaces().get(23);
+        //p.addOwnedProperty(prop);
+        //prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(31);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(34);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(25);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(12);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        p.setBalance(14600);
+
+        p = players.get(1);
+        p.setName("Neal");
+        p.setColorEnumType(Player.PlayerColor.GREEN);
+        p.setCarType(Player.CarType.RACECAR);
+        p.setCurrentPosition(game.getSpaces().get(12));
+        p.setBalance(12750);
+        prop = (Property) game.getSpaces().get(37);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        ((RealEstate) prop).setHouseCount(4);
+        prop = (Property) game.getSpaces().get(39);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        ((RealEstate) prop).setHouseCount(5);
+        prop = (Property) game.getSpaces().get(6);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(8);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(9);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(11);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(13);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(14);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        //prop = (Property) game.getSpaces().get(21);
+        //p.addOwnedProperty(prop);
+        //prop.setOwner(p);
+        //prop = (Property) game.getSpaces().get(24);
+        //p.addOwnedProperty(prop);
+        //prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(32);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(28);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(15);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+
+
+
+
+        p = players.get(2);
+        p.setName("Malte");
+        p.setColorEnumType(Player.PlayerColor.YELLOW);
+        p.setCarType(Player.CarType.UFO);
+        p.setBalance(5000);
+        p.setCurrentPosition(game.getSpaces().get(32));
+        prop = (Property) game.getSpaces().get(21);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        ((RealEstate) prop).setHouseCount(2);
+        prop = (Property) game.getSpaces().get(23);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        ((RealEstate) prop).setHouseCount(2);
+        prop = (Property) game.getSpaces().get(24);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        ((RealEstate) prop).setHouseCount(2);
+        prop = (Property) game.getSpaces().get(5);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        prop = (Property) game.getSpaces().get(35);
+        p.addOwnedProperty(prop);
+        prop.setOwner(p);
+        //p.setBroke(true);
+
+        int[] diceValues = {3, 4};
+        MockDiceCup diceCup = new MockDiceCup(diceValues);
+
+        Card card = new MoveEffect(MoveEffect.TargetTypes.THREE_FORWARDS);
+        card.setText("Ryk tre felter frem.");
+
+        game.shuffleCardDeck();
+        List<Card> deck = new ArrayList<>(game.getCardDeck());
+        deck.add(0, card);
+        game.setCardDeck(deck);
+
+        GameController controller = new GameController();
+        controller.setDiceCup(diceCup);
+        controller.setGame(game);
+        game.setCurrentPlayer(players.get(2));
+        controller.play(false);
+    }
+
+    @Test
+    void demoGame() {
+        JSONUtility ju = new JSONUtility();
+        Game game = ju.createGame();
+        game.createPlayers(3);
+        List<Player> players = game.getPlayers();
+
+        Player p = players.get(0);
+        p.setName("Nicolai W");
+        p.setCarType(Player.CarType.CAR);
+        p.setColorEnumType(Player.PlayerColor.GREY);
+        p = players.get(1);
+        p.setName("Neal");
+        p.setCarType(Player.CarType.RACECAR);
+        p.setColorEnumType(Player.PlayerColor.BlUE);
+        p = players.get(2);
+        p.setName("Malte");
+        p.setColorEnumType(Player.PlayerColor.YELLOW);
+        p.setCarType(Player.CarType.TRACTOR);
+
+        List<Card> deck = new ArrayList<>(game.getCardDeck());
+        game.shuffleCardDeck();
+
+        Card card = new EconomicEffect(EconomicEffect.EffectType.FROM_OTHER_PLAYERS);
+        card.setText("De har lagt penge ud til et sammenskudsgilde. Mærkværdigvis betaler alle straks. Modtag fra hver medspiller kr. 500.");
+        ((EconomicEffect) card).setAmount1(500);
+        deck.add(0, card);
+
+        card = new MoveEffect(MoveEffect.TargetTypes.NEAREST_SHIP_2);
+        card.setText("Tag med den nærmeste færge. Flyt brikken frem, og hvis De passerer \"START\", indkassér da kr. 4000.");
+        deck.add(0, card);
+
+        card = new GetOutOfJail();
+        card.setText("I anledningen af kongens fødselsdag benådes De herved for fængsel. Dette kort kan opbevares, indtil De får brug for det, eller De kan sælge det.");
+        deck.add(0, card);
+
+        game.setCardDeck(deck);
+
+        int[] diceValues = {3, 5, 1, 1, 3, 3, 6, 6, 3, 4, 1, 3, 3, 4};
+        MockDiceCup diceCup = new MockDiceCup(diceValues);
+        GameController controller = new GameController();
+        controller.setDiceCup(diceCup);
+        controller.playOrLoadGame(game);
     }
 }

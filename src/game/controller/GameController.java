@@ -137,11 +137,16 @@ public class GameController {
      * @author Nicolai d T. Wulff,	s185036@student.dtu.dk
      * @author Nicolai J. Larsen, 	s185020@student.dtu.dk
      */
-    public void playOrLoadGame() {
+    public void playOrLoadGame(Game demoGame) {
         String userSelection = gui.getUserButtonPressed("", "Start nyt spil", "Hent spil", "Afslut");
         if (userSelection.substring(0, 5).equalsIgnoreCase("start")) {
             createPlayers();
-            play();
+            if (demoGame != null) {
+                setGame(demoGame);
+                play(false);
+            } else {
+                play(true);
+            }
         } else if (userSelection.equals("Afslut")) {
             System.exit(0);
         } else {
@@ -149,10 +154,10 @@ public class GameController {
             if (gameSelection != null) {
                 game = ju.createGame();
                 game = gameDb.loadGame(game, gameSelection);
-                play();
+                play(true);
             }
         }
-        playOrLoadGame();
+        playOrLoadGame(null);
     }
 
     /**
@@ -216,10 +221,10 @@ public class GameController {
      * current player of the game; this makes it possible to resume a
      * game at any point.
      */
-    public void play() {
+    public void play(boolean shuffle) {
 
         //TODO: Maybe the cards should not be shuffled when loading a game – but loaded from the database?
-        game.shuffleCardDeck();
+        if (shuffle) game.shuffleCardDeck();
         view = new View(game, gui);
         view.initializeGUI();
 
@@ -502,6 +507,7 @@ public class GameController {
             returnChanceCardToDeck(ownedCards.get(0));
             ownedCards.remove(0);
             player.setOwnedCards(ownedCards);
+            player.setInPrison(false);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
