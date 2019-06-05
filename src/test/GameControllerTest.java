@@ -237,9 +237,6 @@ class GameControllerTest {
         p.addOwnedProperty(prop);
         prop.setOwner(p);
 
-
-
-
         p = players.get(2);
         p.setName("Malte");
         p.setColorEnumType(Player.PlayerColor.YELLOW);
